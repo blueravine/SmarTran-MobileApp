@@ -12,11 +12,13 @@ import Icons from 'react-native-vector-icons/FontAwesome5';
 import Iccons from 'react-native-vector-icons/Foundation'
 import BottomNavigation, {
     ShiftingTab
-} from 'react-native-material-bottom-navigation'
+} from 'react-native-material-bottom-navigation';
 
-import Drawer from 'react-native-drawer'
-import DatePicker from 'react-native-datepicker'
-const ICON_SIZE = 24
+import Drawer from 'react-native-drawer';
+import DatePicker from 'react-native-datepicker';
+import ModalFilterPicker from 'react-native-modal-filter-picker';
+import { TextField } from 'react-native-material-textfield';
+const ICON_SIZE = 24;
 import { Actions, ActionConst } from 'react-native-router-flux'; // 4.0.0-beta.31
 import Toast from 'react-native-simple-toast';
 
@@ -43,36 +45,98 @@ var params;
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
-}
-// import {BoxShadow} from 'react-native-shadow';
-// import Switch from 'react-native-customisable-switch';
-import AutoComplete from "react-native-autocomplete";
+};
 
-// import DropDown, {
-//     Select,
-//     Option,
-//     OptionList,
-// } from 'react-native-selectme';
+var poi = [
+    {
+        id: "1212",
+        code:"CNTLGCB",
+        name: "Hyderabad Central Gachibowli"
+    },
+    {
+        id: "1213",
+        code:"RDISSON",
+        name: "Radisson Hotel Gachibowli"
+    },
+    {
+        id: "1214",
+        code:"GCHBWLI",
+        name: "Gachibowli"
+    },
 
+    {
+        id:125,
+        code:"TLCMNGR",
+        name: "TelecomNagar Bus Stop",
+        nearby: [
+            {
+                id: "1212",
+                code:"CNTLGCB",
+                name: "Hyderabad Central Gachibowli"
+            },
+            {
+                id: "1213",
+                code:"RDISSON",
+                name: "Radisson Hotel Gachibowli"
+            },
+            {
+                id: "1214",
+                code:"GCHBWLI",
+                name: "Gachibowli"
+            }
+        ]
+    },
+];
 
-// const options = [
-//     // ...
-//     { value: 'Jedimetla', label: 'Jed' },
-//     { label:"Ko", value:"Koti"},
-//     {label:"Ga", value:"Gachibowli"},
-//     {label:"Jub," ,value:"JublieeHills"},
-//     {label:"Meh", value:"Mehdipatnam"},
-//     {label:"Meh", value:"Mehboobnagar"},
-//     {label:"Kot", value:"Kothaguda"},
-//     {label:"Mi" ,value:"Miyapur" },
-//     // ...
-// ];
-// const filterOptions = createFilterOptions({ options });
+var options = [    {
+    key: 'kenya',
+    label: 'Kenya',
+    searchKey: 'Africa',
+},
+    {
+        key: 'uganda',
+        label: 'Uganda',
+        searchKey: 'Africa',
+    },
+    {
+        key: 'libya',
+        label: 'Libya',
+        searchKey: 'Africa',
+    },
+    {
+        key: 'japan',
+        label: 'Japan',
+        searchKey: 'Asia',
+    },
+    {
+        key: 'estonia',
+        label: 'Estonia',
+        searchKey: 'Europe',
+    }];
 
 export default class Home extends Component {
-    // state = {
-    //     activeTab: 'home'
-    // }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeTab: 'home',
+            isDateTimePickerVisible: false,
+            selectedItem: undefined,
+            selected2: '',
+            results: {
+                items: []
+            },
+            pickervisible1: false,
+            pickervisible2: false,
+            picked1: '',
+            picked2: '',
+            date: new Date(),
+            selected1: '',
+        };
+    }
+
+
     tabs = [
         {
             key:"home",
@@ -106,7 +170,8 @@ export default class Home extends Component {
             barColor: '#2eacde',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
-    ]
+    ];
+
 
     // state = {
     //     activeTab: this.tabs[0].key
@@ -114,7 +179,7 @@ export default class Home extends Component {
     renderIcon = icon => ({ isActive }) => (
         <Icon size={24} color="white" name={icon} />
 
-    )
+    );
 
 
     renderTab = ({ tab, isActive }) => (
@@ -124,67 +189,14 @@ export default class Home extends Component {
             label={tab.label}
             renderIcon={this.renderIcon(tab.icon)}
         />
-    )
+    );
     // static propTypes = {
     //     // array of strings, will be list items of Menu
     //     // actions:  PropTypes.arrayOf(PropTypes.string).isRequired,
     //     onPress: PropTypes.func.isRequired
     // }
 
-    state = {
-        isDateTimePickerVisible: false,
-    };
 
-
-    constructor() {
-        super();
-
-        // this.state = {
-        //     icon: null
-        // }
-
-        this.state = { date: new Date() };
-        this.state ={
-            showacimage:false
-        };
-        this.state ={
-            shownonacimage:false
-        };
-        this.state ={
-            showasearchimage:false
-        };
-        // this.setState = { date: new Date() };
-
-        // this.state= {
-        //     active:'search',
-        // };
-        this.state= {
-            activeTab: 'home',
-        };
-        // this.state = {
-        //     selected: "Je",
-        //
-        // };
-
-        this.state = {
-            selectedItem: undefined,
-            selected1: '',
-            results: {
-                items: []
-            }
-        }
-        this.state = {
-            selectedItem: undefined,
-            selected2: '',
-            results: {
-                items: []
-            }
-        }
-        // this.state = {
-        //     canada: ''
-        // };
-
-    }
     closeControlPanel = () => {
         this._drawer.close()
     };
@@ -216,42 +228,8 @@ export default class Home extends Component {
     }
     _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
 
-    changeACLogo() {
-        var imgsource = this.state.showacimage ? ac_icon_blue : ac_icon_grey;
-        return (
 
-            <Image source={imgsource} style={{height: 30, width: 30,alignItems:'center'}}/>
-
-        );
-    }
-    changebottomLogo() {
-        var imgsourcesearch = this.state.showasearchimage ? search_magnifier_blue : search_magnifier_black;
-        return (
-
-            <Image source={imgsourcesearch} style={{height: 30, width: 30,alignItems:'center'}}/>
-
-        );
-    }
-    // onError () {
-    //     console.log('Popup Error')
-    // }
-    // onPress = () => {
-    //     if (this.state.icon) {
-    //         UIManager.showPopupMenu(
-    //             findNodeHandle(),
-    //            this.props.actions,
-    //             this.onError,
-    //            this.props.onPress
-    //         )
-    //     }
-    // }
-    // onRef = icon => {
-    //     if (!this.state.icon) {
-    //         this.setState({icon})
-    //     }
-    // }
-
-    _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
+    _hideDateTimePicker = () => {this.setState({ isDateTimePickerVisible: false })};
 
     _handleDatePicked = (date) => {
         this.setState({
@@ -259,41 +237,17 @@ export default class Home extends Component {
         });
         this._hideDateTimePicker();
     };
-    // _handleTimePicked = (time) => {
-    //     this.setState({
-    //         time :  time
-    //     });
-    //     this._hideDateTimePicker();
-    // };
+
     handleChange(value: string) {
         this.setState({
             selected: value
         });
-    }
-    state = {
-        isOnDefaultToggleSwitch: true,
-        isOnLargeToggleSwitch: false,
-        isOnBlueToggleSwitch: false,
     };
 
-    onToggle(isOn){
-        // alert('Changed to ' + isOn)
-        this.state=false;
-    }
-    onToggle(isOff){
-        // alert('Changed to ' + isOn)
-        this.state=true;
-    }
-
     _SwapPickerText(){
-        // var pickertext = fromloc;
-        // fromloc = toloc;
-        // toloc = pickertext;
-        //
-        // return(fromloc,toloc);
-        let temploc=this.state.selected1;
-        this.setState({selected1: this.state.selected2, selected2:temploc});
-    }
+        let temploc=this.state.picked1;
+        this.setState({picked1: this.state.picked2, picked2:temploc});
+    };
 
 
     // sendSMSFunction() {
@@ -325,7 +279,7 @@ export default class Home extends Component {
             default:
 
         }
-    }
+    };
 
     _onSubmit(param) {
         // const { selected1, selected2 } = this.state;
@@ -341,14 +295,52 @@ export default class Home extends Component {
             Actions.searchScreen(param);
         }
         // Alert.alert('Button has been pressed!');
-    }
+    };
+
+    onFromShowpicker = () => {
+        this.setState({ pickervisible1: true });
+    };
+    onToShowpicker = () => {
+        this.setState({ pickervisible2: true });
+    };
+
+    onFromSelectpicker = (picked) => {
+        this.setState({
+            picked1: picked,
+            pickervisible1: false,
+        });
+    };
+    onToSelectpicker = (picked) => {
+        this.setState({
+            picked2: picked,
+            pickervisible2: false,
+        });
+    };
+
+    onFromCancelpicker = () => {
+        this.setState({
+            pickervisible1: false
+        });
+    };
+    onToCancelpicker = () => {
+        this.setState({
+            pickervisible2: false
+        });
+    };
+
     render() {
           params = {};
          params = {
-             fromLoc:this.state.selected1,
-             toLoc:this.state.selected2,
+             fromLoc:this.state.picked1,
+             toLoc:this.state.picked2,
              tripdte:this.state.date,
          };
+
+        // poi.map((currentpoi, index) => {
+        //         options[index].key=currentpoi.name;
+        //         options[index].label=currentpoi.name;
+        //     });
+
         return (
 
             <View style={styles.container}>
@@ -410,6 +402,7 @@ export default class Home extends Component {
                                 {/*/>*/}
                             {/*</View>*/}
                             <View style={{flexDirection:"column",justifyContent:'space-evenly'}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center',marginBottom:20}}>
                                 {/*<Select*/}
                                 {/*width={250}*/}
                                 {/*ref="SELECT1"*/}
@@ -461,72 +454,104 @@ export default class Home extends Component {
                                 {/*filterOptions={filterOptions}*/}
                                 {/*onChange={val => console.log(val)}*/}
                                 {/*/>*/}
-                                <Picker
-                                    placeholder="Select One"
-                                    // prompt="From Location"
-                                    mode="dropdown"
-                                    style={{height:45,width:295,borderWidth:5, borderColor:'#2eacde',justifyContent:'flex-end'}}
-                                    selectedValue={this.state.selected1}
-                                    onValueChange={(itemValue) => this.setState({selected1: itemValue})}>
-                                    {/*<View style={{flexDirection: 'row'}}>*/}
-                                    {/*<Text note style={{fontSize:12,textAlign:'center',backgroundColor:'#2eacde',*/}
-                                    {/*color:'#FFFFFF'}} >JED</Text>*/}
-                                    {/*</View>*/}
-                                    <Item label="From Location" value="" />
-                                    <Item label="JEDIMETLA BUS STOP" value="JEDIMETLA BUS STOP" />
-                                    <Item label="KOTI BUS STOP" value="KOTI BUS STOP" />
-                                    <Item label="HITECH CITY BUS STOP" value="HITECH CITY BUS STOP" />
-                                    <Item label="VANASTALIPURAM" value="VANASTALIPURAM" />
-                                    <Item label="KACHIGUDA BUS STOP" value="KACHIGUDA BUS STOP" />
-                                    <Item label="MEHDIPATNAM BUS STOP" value="MEHDIPATNAM BUS STOP" />
-                                    <Item label="JNTU (KUKATPALLY) BUS STOP" value="JNTU (KUKATPALLY) BUS STOP" />
-                                    <Item label="MIYAPUR X ROADS" value="MIYAPUR X ROADS" />
-                                </Picker>
-                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                    <View style={{
-                                        flex: 10,
-                                        borderBottomColor: 'black',
-                                        borderBottomWidth: 1,
-                                        width: width - 10,}}>
-                                    </View>
-                                    <TouchableOpacity   onPress={this._SwapPickerText.bind(this)}>
-                                    <Icon type='MaterialIcons' name='swap-vertical-circle' size={35} color="#2eacde"/>
-                                    {/*<TouchableOpacity onPress={this._SwapPickerText.bind(this)}>*/}
-                                        {/*<Image source={require('../Images/change_position.png')} style={{height: 35, width: 35,flex:5}}*/}
-                                        {/*/>*/}
-                                    </TouchableOpacity>
-                                    <View style={{
-                                        flex: 1,
-                                        borderBottomColor: 'black',
-                                        borderBottomWidth: 1,
-                                        width: width - 10,}}>
-                                    </View>
-                                </View>
-                                <Picker
-                                    placeholder="Select One"
-                                    mode="dropdown"
-                                    style={{height:45,width:295,borderWidth:5, borderColor:'#2eacde'}}
-                                    selectedValue={this.state.selected2}
-                                    onValueChange={(itemValue) => this.setState({selected2: itemValue})}>
 
-                                    <Item label="To Location" value="" />
-                                    <Item label="MEHDIPATNAM BUS STOP" value="MEHDIPATNAM BUS STOP" />
-                                    <Item label="MIYAPUR X ROADS" value="MIYAPUR X ROADS" />
-                                    <Item label="JNTU (KUKATPALLY) BUS STOP" value="JNTU (KUKATPALLY) BUS STOP" />
-                                    <Item label="JEDIMETLA BUS STOP" value="JEDIMETLA BUS STOP" />
-                                    <Item label="VANASTALIPURAM" value="VANASTALIPURAM" />
-                                    <Item label="KOTI BUS STOP" value="KOTI BUS STOP" />
-                                    <Item label="HITECH CITY BUS STOP" value="HITECH CITY BUS STOP" />
-                                    <Item label="KACHIGUDA BUS STOP" value="KACHIGUDA BUS STOP" />
-                                </Picker>
+                                <TouchableOpacity style={{width:280,justifyContent:'flex-end',flex:8}}
+                                                  onPress={this.onFromShowpicker}>
+                                    {/*<Text>Select Country: {this.state.picked}</Text>*/}
+                                    <TextField label="From Location"
+                                    lineHeight={30}
+                                    value={this.state.picked1}
+                                    editable={false}
+                                    // onChangeText={(itemValue) => {this.setState({selected1: this.findPOI(itemValue)})}}
+                                    containerStyle={{height:55,width:280,justifyContent:'flex-end'}}
+                                    />
+                                </TouchableOpacity>
+                                <ModalFilterPicker
+                                    visible={this.state.pickervisible1}
+                                    onSelect={this.onFromSelectpicker}
+                                    onCancel={this.onFromCancelpicker}
+                                    options={options}
+                                />
+                                {/*<Picker*/}
+                                    {/*placeholder="Select One"*/}
+                                    {/*// prompt="From Location"*/}
+                                    {/*mode="dropdown"*/}
+                                    {/*style={{height:45,width:295,borderWidth:5, borderColor:'#2eacde',justifyContent:'flex-end'}}*/}
+                                    {/*selectedValue={this.state.selected1}*/}
+                                    {/*onValueChange={(itemValue) => this.setState({selected1: itemValue})}>*/}
+                                    {/*/!*<View style={{flexDirection: 'row'}}>*!/*/}
+                                    {/*/!*<Text note style={{fontSize:12,textAlign:'center',backgroundColor:'#2eacde',*!/*/}
+                                    {/*/!*color:'#FFFFFF'}} >JED</Text>*!/*/}
+                                    {/*/!*</View>*!/*/}
+                                    {/*<Item label="From Location" value="" />*/}
+                                    {/*<Item label="JEDIMETLA BUS STOP" value="JEDIMETLA BUS STOP" />*/}
+                                    {/*<Item label="KOTI BUS STOP" value="KOTI BUS STOP" />*/}
+                                    {/*<Item label="HITECH CITY BUS STOP" value="HITECH CITY BUS STOP" />*/}
+                                    {/*<Item label="VANASTALIPURAM" value="VANASTALIPURAM" />*/}
+                                    {/*<Item label="KACHIGUDA BUS STOP" value="KACHIGUDA BUS STOP" />*/}
+                                    {/*<Item label="MEHDIPATNAM BUS STOP" value="MEHDIPATNAM BUS STOP" />*/}
+                                    {/*<Item label="JNTU (KUKATPALLY) BUS STOP" value="JNTU (KUKATPALLY) BUS STOP" />*/}
+                                    {/*<Item label="MIYAPUR X ROADS" value="MIYAPUR X ROADS" />*/}
+                                {/*</Picker>*/}
+                                {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
+                                    {/*<View style={{*/}
+                                        {/*flex: 10,*/}
+                                        {/*borderBottomColor: 'black',*/}
+                                        {/*borderBottomWidth: 1,*/}
+                                        {/*width: width - 10,}}>*/}
+                                    {/*</View>*/}
+                                    <TouchableOpacity  style={{marginTop:20}} onPress={this._SwapPickerText.bind(this)}>
+                                        <Icon type='MaterialIcons' name='swap-vertical-circle' size={35} color="#2eacde"/>
+                                    </TouchableOpacity>
+                                    {/*<View style={{*/}
+                                        {/*flex: 1,*/}
+                                        {/*borderBottomColor: 'black',*/}
+                                        {/*borderBottomWidth: 1,*/}
+                                        {/*width: width - 10,}}>*/}
+                                    {/*</View>*/}
+                                </View>
+                                <TouchableOpacity  style={{width:280,justifyContent:'flex-end'}}
+                                                   onPress={this.onToShowpicker}>
+                                    {/*<Text>Select Country: {this.state.picked}</Text>*/}
+                                <TextField label="To Location"
+                                           lineHeight={30}
+                                           value={this.state.picked2}
+                                           editable={false}
+                                           // onChangeText={(itemValue) => this.setState({selected2: itemValue})}
+                                           containerStyle={{height:55,width:280,marginTop:10,justifyContent:'flex-end'}}/>
+                                </TouchableOpacity>
+                                <ModalFilterPicker
+                                    visible={this.state.pickervisible2}
+                                    onSelect={this.onToSelectpicker}
+                                    onCancel={this.onToCancelpicker}
+                                    options={options}
+                                />
+
+                                {/*<Picker*/}
+                                    {/*placeholder="Select One"*/}
+                                    {/*mode="dropdown"*/}
+                                    {/*style={{height:45,width:295,borderWidth:5, borderColor:'#2eacde'}}*/}
+                                    {/*selectedValue={this.state.selected2}*/}
+                                    {/*onValueChange={(itemValue) => this.setState({selected2: itemValue})}>*/}
+
+                                    {/*<Item label="To Location" value="" />*/}
+                                    {/*<Item label="MEHDIPATNAM BUS STOP" value="MEHDIPATNAM BUS STOP" />*/}
+                                    {/*<Item label="MIYAPUR X ROADS" value="MIYAPUR X ROADS" />*/}
+                                    {/*<Item label="JNTU (KUKATPALLY) BUS STOP" value="JNTU (KUKATPALLY) BUS STOP" />*/}
+                                    {/*<Item label="JEDIMETLA BUS STOP" value="JEDIMETLA BUS STOP" />*/}
+                                    {/*<Item label="VANASTALIPURAM" value="VANASTALIPURAM" />*/}
+                                    {/*<Item label="KOTI BUS STOP" value="KOTI BUS STOP" />*/}
+                                    {/*<Item label="HITECH CITY BUS STOP" value="HITECH CITY BUS STOP" />*/}
+                                    {/*<Item label="KACHIGUDA BUS STOP" value="KACHIGUDA BUS STOP" />*/}
+                                {/*</Picker>*/}
 
                             </View>
                         </View>
-                        <View style={{
-                            borderBottomColor: 'black',
-                            borderBottomWidth: 1,
-                            width: width - 10,}}>
-                        </View>
+                        {/*<View style={{*/}
+                            {/*borderBottomColor: 'black',*/}
+                            {/*borderBottomWidth: 1,*/}
+                            {/*width: width - 10,}}>*/}
+                        {/*</View>*/}
                         {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
 
                         {/*<View style={{flex:.5}}>*/}
@@ -682,10 +707,10 @@ export default class Home extends Component {
                         <Button style={{height:60,width:width-10,backgroundColor: '#2eacde',
                             marginTop:10,justifyContent:'space-evenly'}}
                                 onPress={() => {
-                                if(!this.state.selected1 || !this.state.selected2){
+                                if(!this.state.picked1 || !this.state.picked2){
                                     Toast.show(" From or To Location cannot be empty! ",Toast.LONG);
                                 }
-                                else if(this.state.selected1 === this.state.selected2){
+                                else if(this.state.picked1 === this.state.picked2){
                                     Toast.show(" From and To Location cannot be same! ",Toast.LONG);
                                 }
                                 else{
