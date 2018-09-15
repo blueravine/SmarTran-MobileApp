@@ -49,6 +49,7 @@ const drawerStyles = {
 };
 var locationkey={};
 var locationlabel={};
+var poiarray=[];
 var currentpoi;
 var poi = [
     {
@@ -282,6 +283,32 @@ export default class Home extends Component {
 
     onFromShowpicker = () => {
         this.setState({ pickervisible1: true });
+        // fetch("http://35.240.144.134:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+        //     method: 'POST', // USE GET, POST, PUT,ETC
+        //     headers: { //MODIFY HEADERS
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/x-www-form-urlencoded',
+        //         //    application/x-www-form-urlencoded
+        //     },
+        //     body: JSON.stringify({location:"name"})
+        // })
+        //     .then((response) => response.json())
+        //     .then((responseJson) => {
+        //         // alert(responseJson.message);
+        //         if (responseJson.message==="poi found"){ //MAKE YOU VALIDATIONS HERE ) {
+        //
+        //
+        //         }
+        //         else   {
+        //             // Actions.lo({text: this.state.mobiles });
+        //             // Actions.homeScreen();
+        //
+        //         }
+        //
+        //     })
+        //     .catch((error) => {
+        //         console.error(error);
+        //     });
     };
     onToShowpicker = () => {
         this.setState({ pickervisible2: true });
@@ -318,14 +345,36 @@ export default class Home extends Component {
              toLoc:this.state.picked2,
              tripdte:this.state.date,
          };
+        fetch("http://35.240.144.134:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            method: 'POST', // USE GET, POST, PUT,ETC
+            headers: { //MODIFY HEADERS
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                //    application/x-www-form-urlencoded
+            },
+            body: 'name='
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // alert(responseJson.message);
+               // if (responseJson.message==="poi found"){
+
+                    poiarray=responseJson.POI;
+                    options = poiarray.map( (currentpoi) => {
+                        return{
+                            key: currentpoi.name,
+                            label: currentpoi.name,
+                        };
+                    });
+
+               // }
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
 
 
-         options = poi.map( (currentpoi) => {
-             return{
-                 key: currentpoi.name,
-                 label: currentpoi.name,
-             };
-        });
 
         return (
 
