@@ -18,6 +18,7 @@ import Drawer from 'react-native-drawer';
 import DatePicker from 'react-native-datepicker';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
 import { TextField } from 'react-native-material-textfield';
+import Snackbar from 'react-native-snackbar';
 const ICON_SIZE = 24;
 import { Actions, ActionConst } from 'react-native-router-flux'; // 4.0.0-beta.31
 import Toast from 'react-native-simple-toast';
@@ -497,10 +498,18 @@ export default class Home extends Component {
                             marginTop:10,justifyContent:'space-evenly'}}
                                 onPress={() => {
                                 if(!this.state.picked1 || !this.state.picked2){
-                                    Toast.show(" From or To Location cannot be empty! ",Toast.LONG);
+                                    // Toast.show(" From or To Location cannot be empty! ",Toast.LONG);
+                                    Snackbar.show({
+                                        title: 'From or To Location cannot be empty!',
+                                        duration: Snackbar.LENGTH_SHORT,
+                                    });
                                 }
                                 else if(this.state.picked1 === this.state.picked2){
-                                    Toast.show(" From and To Location cannot be same! ",Toast.LONG);
+                                    // Toast.show(" From and To Location cannot be same! ",Toast.LONG);
+                                    Snackbar.show({
+                                        title: 'From and To Location cannot be same!',
+                                        duration: Snackbar.LENGTH_SHORT,
+                                    });
                                 }
                                 else{
                                     Actions.searchScreen(params);
