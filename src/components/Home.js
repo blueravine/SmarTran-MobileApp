@@ -46,7 +46,9 @@ const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
 };
-
+var locationkey={};
+var locationlabel={};
+var currentpoi;
 var poi = [
     {
         id: "1212",
@@ -89,30 +91,35 @@ var poi = [
 ];
 
 var options = [    {
-    key: 'kenya',
-    label: 'Kenya',
-    searchKey: 'Africa',
-},
-    {
-        key: 'uganda',
-        label: 'Uganda',
-        searchKey: 'Africa',
-    },
-    {
-        key: 'libya',
-        label: 'Libya',
-        searchKey: 'Africa',
-    },
-    {
-        key: 'japan',
-        label: 'Japan',
-        searchKey: 'Asia',
-    },
-    {
-        key: 'estonia',
-        label: 'Estonia',
-        searchKey: 'Europe',
-    }];
+    key: '',
+    label: ''
+
+}];
+// var options = [    {
+//     key: 'kenya',
+//     label: 'Kenya',
+//     searchKey: 'Africa',
+// },
+//     {
+//         key: 'uganda',
+//         label: 'Uganda',
+//         searchKey: 'Africa',
+//     },
+//     {
+//         key: 'libya',
+//         label: 'Libya',
+//         searchKey: 'Africa',
+//     },
+//     {
+//         key: 'japan',
+//         label: 'Japan',
+//         searchKey: 'Asia',
+//     },
+//     {
+//         key: 'estonia',
+//         label: 'Estonia',
+//         searchKey: 'Europe',
+//     }];
 
 export default class Home extends Component {
 
@@ -190,31 +197,6 @@ export default class Home extends Component {
             renderIcon={this.renderIcon(tab.icon)}
         />
     );
-    // static propTypes = {
-    //     // array of strings, will be list items of Menu
-    //     // actions:  PropTypes.arrayOf(PropTypes.string).isRequired,
-    //     onPress: PropTypes.func.isRequired
-    // }
-
-
-    closeControlPanel = () => {
-        this._drawer.close()
-    };
-    openControlPanel = () => {
-        this._drawer.open()
-    };
-    // _getOptionList() {
-    //     return this.refs['OPTIONLIST'];
-    // }
-    //
-    //
-    // _canada(province) {
-    //
-    //     this.setState({
-    //         ...this.state,
-    //         canada: province
-    //     });
-    // }
 
     onValueChange (value: string) {
         this.setState({
@@ -336,10 +318,13 @@ export default class Home extends Component {
              tripdte:this.state.date,
          };
 
-        // poi.map((currentpoi, index) => {
-        //         options[index].key=currentpoi.name;
-        //         options[index].label=currentpoi.name;
-        //     });
+
+         options = poi.map( (currentpoi) => {
+             return{
+                 key: currentpoi.name,
+                 label: currentpoi.name,
+             };
+        });
 
         return (
 
@@ -349,37 +334,11 @@ export default class Home extends Component {
                         hidden={false}
                         backgroundColor='#4d6bcb'/>
                 </View>
-                {/*<Drawer*/}
-                    {/*open={true}*/}
-                    {/*ref={(ref) => this._drawer = ref}*/}
-                    {/*type="overlay"*/}
-                    {/*// content={<ControlPanel />}*/}
-                    {/*tapToClose={true}*/}
-                    {/*openDrawerOffset={0.2} // 20% gap on the right side of drawer*/}
-                    {/*panCloseMask={0.2}*/}
-                    {/*closedDrawerOffset={-3}*/}
-                    {/*styles={drawerStyles}*/}
-                    {/*tweenHandler={(ratio) => ({*/}
-                        {/*main: { opacity:(2-ratio)/2 }*/}
-                    {/*})}*/}
-                {/*>*/}
-                    {/*/!*<MainView />*!/*/}
-                {/*</Drawer>*/}
 
-                {/*<ScrollView >*/}
                 <View style={[styles.headerview]}>
-                    {/*<Card>*/}
-                    {/*<Image source={require('../Images/smartranlogowhite.png')} style={{height: 100, width: 100, flex: 1,*/}
-                    {/*marginLeft:125,justifyContent: "center"}}/>*/}
-                    {/*</Card>*/}
-                    {/*<Text note style={{fontSize:18,color:'#FFFFFF',fontWeight:'bold'}} > Plan your trip here !</Text>*/}
-                    {/*<Header />*/}
-
-                    {/*<Content>*/}
 
                     <Card styles={card}>
 
-                        {/*<CardItem cardBody styles={cardItem}>*/}
                         <View style={{flexDirection:"row",marginTop:10}}>
                             <View style={{flexDirection:"column",justifyContent:'space-evenly',marginLeft: 15}}>
                                 {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
@@ -389,71 +348,8 @@ export default class Home extends Component {
                                        style={{width: 25, height: 35, paddingLeft: 5}}/>
 
                             </View>
-                            {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
-                            {/*<Text note style={{fontSize:16,fontWeight:'bold',textAlign:'left'}} > From</Text>*/}
-                            {/*<Text note style={{fontSize:16,fontWeight:'bold',textAlign:'left'}} > To</Text>*/}
-                            {/*</View>*/}
-                            {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
-                                {/*<View*/}
-                                    {/*style={{*/}
-                                        {/*borderLeftWidth: 1,*/}
-                                        {/*borderLeftColor: '#000',*/}
-                                    {/*}}*/}
-                                {/*/>*/}
-                            {/*</View>*/}
                             <View style={{flexDirection:"column",justifyContent:'space-evenly'}}>
                                 <View style={{flexDirection: 'row', alignItems: 'center',marginBottom:20}}>
-                                {/*<Select*/}
-                                {/*width={250}*/}
-                                {/*ref="SELECT1"*/}
-                                {/*optionListRef={this._getOptionList.bind(this)}*/}
-                                {/*defaultValue="From ..."*/}
-                                {/*onSelect={this._canada.bind(this)}>*/}
-                                {/*<Option value = {{id : "Je"}}>Jedimetla</Option>*/}
-                                {/*<Option>Gachibowli</Option>*/}
-                                {/*<Option>Koti</Option>*/}
-                                {/*<Option>JublieeHills</Option>*/}
-                                {/*<Option>Mehdipatnam</Option>*/}
-                                {/*<Option>Raheja IT Park</Option>*/}
-                                {/*<Option>Miyapur</Option>*/}
-                                {/*</Select>*/}
-
-                                {/*<OptionList ref="OPTIONLIST"/>*/}
-
-                                {/*<Select*/}
-                                {/*width={250}*/}
-                                {/*ref="SELECT1"*/}
-                                {/*optionListRef={this._getOptionList.bind(this)}*/}
-                                {/*defaultValue="From ..."*/}
-                                {/*onSelect={this._canada.bind(this)}>*/}
-                                {/*<Option value = {{id : "Me"}}>Mehdipatnam</Option>*/}
-                                {/*<Option>Gachibowli</Option>*/}
-                                {/*<Option>Koti</Option>*/}
-                                {/*<Option>JublieeHills</Option>*/}
-                                {/*<Option>Mehdipatnam</Option>*/}
-                                {/*<Option>Raheja IT Park</Option>*/}
-                                {/*<Option>Miyapur</Option>*/}
-                                {/*</Select>*/}
-
-                                {/*<OptionList ref="OPTIONLIST"/>*/}
-                                {/*<View style={{*/}
-                                {/*borderBottomColor: 'black',*/}
-                                {/*borderBottomWidth: 1,*/}
-                                {/*height: height - 20,}}>*/}
-                                {/*</View>*/}
-                                {/*<View style={{*/}
-                                {/*flex: 1,*/}
-                                {/*borderBottomColor: 'black',*/}
-                                {/*borderBottomWidth: 1,*/}
-                                {/*height: height - 420,}}>*/}
-                                {/*</View>*/}
-                                {/*<Select*/}
-                                {/*name="university"*/}
-                                {/*value="one"*/}
-                                {/*options={options}*/}
-                                {/*filterOptions={filterOptions}*/}
-                                {/*onChange={val => console.log(val)}*/}
-                                {/*/>*/}
 
                                 <TouchableOpacity style={{width:280,justifyContent:'flex-end',flex:8}}
                                                   onPress={this.onFromShowpicker}>
@@ -547,81 +443,6 @@ export default class Home extends Component {
 
                             </View>
                         </View>
-                        {/*<View style={{*/}
-                            {/*borderBottomColor: 'black',*/}
-                            {/*borderBottomWidth: 1,*/}
-                            {/*width: width - 10,}}>*/}
-                        {/*</View>*/}
-                        {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-
-                        {/*<View style={{flex:.5}}>*/}
-
-                        {/*</View>*/}
-                        {/*</View>*/}
-                        {/*<View style={{flex:.1}}>*/}
-                        {/*<Image source={require('../Images/arrow.png')} style = {{ width: 20, height: 20,alignItems:'center',marginTop:10 }}/>*/}
-                        {/*</View>*/}
-
-                        {/*<View style={{flex:.5}}>*/}
-                        {/*<Picker*/}
-                        {/*selectedValue='Meh'*/}
-                        {/*style={{height:35,width:50}}*/}
-                        {/*// label='To'*/}
-                        {/*onValueChange={() => {this.handleChange}}*/}
-                        {/*>*/}
-                        {/*<Item label="Vanastalipuram" value="Va" />*/}
-                        {/*<Item label="Miyapur" value="Mi" />*/}
-                        {/*<Item label="JublieeHills" value="Jub" />*/}
-                        {/*<Item label="Mehdipatnam" value="Meh" />*/}
-                        {/*<Item label="Raheja IT Park" value="Ra" />*/}
-                        {/*<Item label="Gachibowli" value="GA" />*/}
-                        {/*</Picker>*/}
-                        {/*</View>*/}
-                        {/*</View>*/}
-
-                        {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-
-                        {/*<View style={{flex:.5}}>*/}
-
-                        {/*</View>*/}
-                        {/*</View>*/}
-                        {/*<View style={{flex:.1}}>*/}
-                        {/*<Image source={require('../Images/arrow.png')} style = {{ width: 20, height: 20,alignItems:'center',marginTop:10 }}/>*/}
-                        {/*</View>*/}
-
-                        {/*<View style={{flex:.5}}>*/}
-
-                        {/*</View>*/}
-                        {/*</View>*/}
-
-                        {/*</CardItem>*/}
-
-                        {/*<View style={{flexDirection:"row",justifyContent:'space-evenly',marginTop:10}}>*/}
-                        {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
-                        {/*<Text note style={{fontSize:12,textAlign:'center'}} >Tap icon to change date/time</Text>*/}
-                        {/*<TouchableOpacity onPress={this._showDateTimePicker} style={{alignItems:'center'}}>*/}
-                        {/*<Image source={require('../Images/event.png')} style={{height: 30, width: 30}}*/}
-                        {/*/>*/}
-                        {/*</TouchableOpacity>*/}
-                        {/*<DateTimePicker*/}
-                        {/*isVisible={this.state.isDateTimePickerVisible}*/}
-                        {/*mode={'datetime'}*/}
-                        {/*onConfirm={this._handleDatePicked}*/}
-                        {/*onCancel={this._hideDateTimePicker}*/}
-                        {/*/>*/}
-
-                        {/*</View>*/}
-                        {/*<TouchableOpacity onPress={this._showDateTimePicker} style={{alignItems:'center'}}>*/}
-                        {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
-
-                        {/*<Text note style={{fontSize:16,color:'#2eacde',textAlign:'center',fontWeight:'bold'}} > {*/}
-                        {/*Moment(this.state.date).format('DD-MMM-YYYY')} </Text>*/}
-                        {/*<Text note style={{fontSize:16,color:'#2eacde',textAlign:'center',fontWeight:'bold'}} > {*/}
-                        {/*Moment(this.state.date).format('h:mm A')} </Text>*/}
-
-                        {/*</View>*/}
-                        {/*</TouchableOpacity>*/}
-                        {/*</View>*/}
                         <View style={{flexDirection:"row",justifyContent:'flex-start',marginTop:10}}>
 
                             <TouchableOpacity onPress={this._showDateTimePicker} style={{alignItems:'center'}}>
@@ -630,15 +451,7 @@ export default class Home extends Component {
                             </TouchableOpacity>
                             <Text note style={{fontSize:12,textAlign:'center'}} >  Journey Date</Text>
                         </View>
-                        {/*<TouchableOpacity  style={{alignItems:'center'}}*/}
-                        {/*onPress={()=>this.setState({showacimage:!this.state.showacimage})} >*/}
-                        {/*{this.changeACLogo()}*/}
-                        {/*</TouchableOpacity>*/}
-                        {/*<TouchableOpacity  style={{alignItems:'center'}}*/}
-                        {/*onPress={()=>this.setState({shownonacimage:!this.state.shownonacimage})}>*/}
-                        {/*{this.changeNonACLogo()}*/}
 
-                        {/*</TouchableOpacity>*/}
                         <View style={{flexDirection:"row",justifyContent:'flex-start'}}>
                             <TouchableOpacity onPress={this._showDateTimePicker} style={{alignItems:'center'}}>
                                 <DateTimePicker
@@ -649,23 +462,10 @@ export default class Home extends Component {
                                     onCancel={this._hideDateTimePicker}
                                 />
 
-                                {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
 
-                                {/*<Text note style={{fontSize:16,color:'#000',textAlign:'center'}} > {*/}
-                                {/*Moment(this.state.date).format('DD MMM YYYY')} </Text>*/}
-                                {/*/!*<Text note style={{fontSize:16,color:'#2eacde',textAlign:'center',fontWeight:'bold'}} > {*!/*/}
-                                {/*/!*Moment(this.state.date).format('h:mm A')} </Text>*!/*/}
-                                {/*<Text note style={{fontSize:16,color:'#000',textAlign:'right'}} > {*/}
-                                {/*Moment(this.state.date).format('  ')} </Text>*/}
-                                {/*</View>*/}
                             </TouchableOpacity>
 
-                            {/*<TouchableOpacity onPress={() => Actions.searchScreen()} style={{alignItems:'flex-end'}}>*/}
-                            {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
-                            {/*<Image source={require('../Images/magnifier.png')} style={{height: 35, width: 35}}*/}
-                            {/*/>*/}
-                            {/*</View>*/}
-                            {/*</TouchableOpacity>*/}
+
 
                         </View>
                         <TouchableOpacity onPress={this._showDateTimePicker}>
@@ -691,18 +491,7 @@ export default class Home extends Component {
                                     Moment(this.state.date).format('dddd')} </Text>
                             </View>
                         </TouchableOpacity>
-                        {/*<View style={{*/}
-                            {/*borderBottomColor: '#917cb7',*/}
-                            {/*borderBottomWidth: 1,*/}
-                            {/*marginTop:10,*/}
-                            {/*width: width - 10,}}>*/}
-                        {/*</View>*/}
-                        {/*<TouchableOpacity onPress={() => Actions.searchScreen()} style={{alignItems:'flex-end'}}>*/}
-                        {/*<View style={{flexDirection:"column",justifyContent:'space-evenly'}}>*/}
-                        {/*<Image source={require('../Images/magnifier.png')} style={{height: 35, width: 35}}*/}
-                        {/*/>*/}
-                        {/*</View>*/}
-                        {/*</TouchableOpacity>*/}
+
 
                         <Button style={{height:60,width:width-10,backgroundColor: '#2eacde',
                             marginTop:10,justifyContent:'space-evenly'}}
@@ -723,142 +512,12 @@ export default class Home extends Component {
                                     ,textAlign:'center',paddingLeft:10}}>Search</Text>
                             </View>
                         </Button>
-                        {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-
-
-                        {/*<Text note style={{fontSize:14,textAlign:'center'}} > Time</Text>*/}
-                        {/*<Text note style={{fontSize:14,textAlign:'center'}} >A/C</Text>*/}
-                        {/*<Text note style={{fontSize:14,textAlign:'center'}} >Non A/C</Text>*/}
-                        {/*<Text note style={{fontSize:14,textAlign:'center'}} >  Date/Time</Text>*/}
-                        {/*<Text note style={{fontSize:16,textAlign:'center',color:'#0c71b7',fontWeight:'bold'}} >  Search</Text>*/}
-
-
-
-                        {/*</View>*/}
-
-                        {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-                        {/*/!*<Image source={require('../Images/smartranlogowhite.png')} style={{height: 200, width: null, flex: 1}}/>*!/*/}
-                        {/*<Text note style={{fontSize:16,color:'#2eacdeF',textAlign:'center',fontWeight:'bold'}} > Selected Date Time: {*/}
-                        {/*Moment(this.state.date).format('DD-MM-YYYY h:mm a')} </Text>*/}
-
-
-                        {/*/!*<Text style={{paddingLeft:12,fontSize:18}} >My details</Text>*!/*/}
-                        {/*</View>*/}
 
 
                     </Card>
 
-                    {/*<Text note style={{fontSize:18,color:'#FFFFFF',fontWeight:'bold'}} > SmarTran-Your travel made easier ...</Text>*/}
-                    {/*<Card>*/}
-                    {/*<Swiper style={styles.wrapper} height={200} showsButtons={true} >*/}
-                    {/*<View style={styles.slide1}>*/}
-                    {/*<Image resizeMode='stretch' style={styles.image} source={require('../Images/sliderimage.jpg')}*/}
-                    {/*/>*/}
-                    {/*<Text style={styles.text} numberOfLines={1}>Waiting at bus stop is a thing of the past</Text>*/}
-                    {/*</View>*/}
-                    {/*<View style={styles.slide2}>*/}
-                    {/*<Image resizeMode='stretch' style={styles.image} source={require('../Images/sliderimage1.jpg')}*/}
-                    {/*/>*/}
-                    {/*<Text style={styles.text} numberOfLines={1}>No more indefinite wait at bus stop</Text>*/}
-
-                    {/*</View>*/}
-                    {/*<View style={styles.slide3}>*/}
-                    {/*<Image resizeMode='stretch' style={styles.image} source={require('../Images/imageslide2.jpg')}*/}
-                    {/*/>*/}
-                    {/*<Text style={styles.text} numberOfLines={1}>Happy commute is here !</Text>*/}
-                    {/*</View>*/}
-                    {/*</Swiper>*/}
-
-                    {/*</Card>*/}
-
-                    {/*<Text note style={{fontSize:18,color:'#FFFFFF',fontWeight:'bold'}} > Favourites</Text>*/}
-
-                    {/*<TouchableOpacity onPress={() => Actions.searchScreen()}>*/}
-                    {/*<Card  styles={{width: 100,height:300,borderWidth: 3,*/}
-                    {/*borderColor: '#999999', alignItems: 'center',*/}
-                    {/*borderRadius: 5,*/}
-                    {/*overflow: 'hidden',*/}
-
-                    {/*elevation: 1,*/}
-                    {/*padding: 10}}>*/}
-
-                    {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-                    {/*/!*<Image source={require('../Images/smartranlogowhite.png')} style={{height: 200, width: null, flex: 1}}/>*!/*/}
-                    {/*<Text note style={{fontSize:14,textAlign:'center',fontWeight:'bold'}} >Jedimetla.....</Text>*/}
-                    {/*<Image source={require('../Images/arrow.png')} style = {{ width: 25, height: 25,alignItems:'center' }}/>*/}
-                    {/*<Text note style={{fontSize:14,textAlign:'center',fontWeight:'bold'}} >Mehdipatna...</Text>*/}
-
-                    {/*</View>*/}
-
-                    {/*</Card>*/}
-
-                    {/*</TouchableOpacity>*/}
-                    {/*<TouchableOpacity onPress={() => Actions.searchScreen()}>*/}
-                    {/*<Card  styles={{width: 100,height:300,borderWidth: 3,*/}
-                    {/*borderColor: '#999999', alignItems: 'center',*/}
-                    {/*borderRadius: 5,*/}
-                    {/*overflow: 'hidden',*/}
-
-                    {/*elevation: 1,*/}
-                    {/*padding: 10}}>*/}
-
-                    {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-                    {/*<Text note style={{fontSize:14,textAlign:'center',fontWeight:'bold'}} >Kothaguda...</Text>*/}
-                    {/*<Image source={require('../Images/arrow.png')} style = {{ width: 25, height: 25,alignItems:'center' }}/>*/}
-                    {/*<Text note style={{fontSize:14,textAlign:'center',fontWeight:'bold'}} >Uppal Bus....</Text>*/}
-
-                    {/*</View>*/}
-
-
-
-                    {/*</Card>*/}
-                    {/*</TouchableOpacity>*/}
-                    {/*<TouchableOpacity onPress={() => Actions.searchScreen()}>*/}
-                    {/*<Card  styles={{width: 100,height:300,borderWidth: 3,*/}
-                    {/*borderColor: '#999999', alignItems: 'center',*/}
-                    {/*borderRadius: 5,*/}
-                    {/*overflow: 'hidden',*/}
-
-                    {/*elevation: 1,*/}
-                    {/*padding: 10}}>*/}
-
-
-                    {/*<View style={{flexDirection:"row",justifyContent:'space-evenly'}}>*/}
-                    {/*<Text note style={{fontSize:14,textAlign:'center',fontWeight:'bold'}} >Yousufguda...</Text>*/}
-                    {/*<Image source={require('../Images/arrow.png')} style = {{ width: 25, height: 25,alignItems:'center' }}/>*/}
-                    {/*<Text note style={{fontSize:14,textAlign:'center',fontWeight:'bold'}} >BHEL...........</Text>*/}
-                    {/**/}
-                    {/*</View>*/}
-
-                    {/*</Card>*/}
-                    {/*</TouchableOpacity>*/}
 
                 </View>
-
-
-                {/*<View style={{ flex: 1 }}>*/}
-                {/*<Fab*/}
-                {/*active={this.state.active}*/}
-                {/*direction="up"*/}
-                {/*containerStyle={{ }}*/}
-                {/*style={{ backgroundColor: '#2CA8DB' }}*/}
-                {/*position="bottomRight"*/}
-                {/*onPress={() => this.setState({ active: !this.state.active })}>*/}
-                {/*<Image  source={require('../Images/menu_symbol.png')} />*/}
-                {/*<Button style={{ backgroundColor: '#2CA8DB' }}>*/}
-                {/*<Image  source={require('../Images/user.png')} />*/}
-                {/*</Button>*/}
-                {/*<Button style={{ backgroundColor: '#2CA8DB' }}>*/}
-                {/*<Image  source={require('../Images/alert.png')} />*/}
-                {/*</Button>*/}
-                {/*<Button disabled style={{ backgroundColor: '#2CA8DB' }}>*/}
-                {/*<Image  source={require('../Images/search.png')} />*/}
-                {/*</Button>*/}
-                {/*</Fab>*/}
-                {/*</View>*/}
-                {/*</ScrollView>*/}
-
-
 
                 <View style={[styles.footer]}>
                     <BottomNavigation
@@ -874,24 +533,7 @@ export default class Home extends Component {
 
         );
     }
-    // _renderContent = (Tab: string,) => {
-    //     if(this.state.selectedTab==="Search"){
-    //         return (
-    //             <Home/>
-    //         );
-    //     }
-    //     else if(this.state.selectedTab==="Favourite"){
-    //         return (
-    //             <Favourite/>
-    //         );
-    //
-    //     }
-    //     else if(this.state.selectedTab==="Recent"){
-    //         return (
-    //             <Home/>
-    //         );
-    //     }
-    // }
+
 }
 const styles = StyleSheet.create({
     container: {
