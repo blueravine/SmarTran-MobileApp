@@ -19,6 +19,7 @@
     "react-cardstack": "^1.1.0",
     "react-dropdown-input": "^0.1.11",
     "react-native": "^0.55.4",
+    "react-native-action-button": "^2.8.5",
     "react-native-android-navigation": "^1.0.4",
     "react-native-animatable": "^1.3.0",
     "react-native-autocomplete": "^0.4.0",
