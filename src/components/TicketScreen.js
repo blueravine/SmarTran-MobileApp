@@ -25,6 +25,7 @@ const MARGIN = 40;
 import Moment from "moment/moment";
 import Toast from "react-native-simple-toast";
 var dialogticketarr = [];
+import ActionButton from 'react-native-action-button';
 const card      = {card: {width: 100,height:300,borderWidth: 3,
         borderRadius: 3,
         borderColor: '#FFFFFF',
@@ -416,6 +417,11 @@ export default class TicketScreen extends Component {
                     {/*</View>*/}
 
                 </ScrollView>
+                {/*<ActionButton >*/}
+                    {/*<ActionButton.Item  buttonColor='#2eacde' onPress={this.onButtonPress}>*/}
+                        {/*<Icons type='SimpleLineIcons' name='arrow-up' size={30} color="#FFFFFF"/>*/}
+                    {/*</ActionButton.Item>*/}
+                {/*</ActionButton>*/}
                 <Fab
                     // active={this.state.active}
                     direction="up"
