@@ -512,6 +512,14 @@ export default class Trips extends Component {
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
+            key:"favourite",
+            // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
+            icon : 'star' ,
+            label:"Favourite",
+            barColor: '#2eacde',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
             key:"track",
             // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
             icon : 'location-on' ,
@@ -782,48 +790,6 @@ export default class Trips extends Component {
                         backgroundColor='#0c71b7'/>
                 </View>
 
-                {/*<View style={styles.container}>*/}
-                    {/*{this.state.types.map(p => (*/}
-                        {/*<TouchableHighlight*/}
-                            {/*style={[styles.button, styles[this.state.status[p]]]}*/}
-                            {/*key={p}*/}
-                            {/*// onPress={() => this._requestPermission(p)}*/}
-                        {/*>*/}
-                            {/*<View>*/}
-                                {/*<Text style={styles.text}>*/}
-                                    {/*/!*{Platform.OS == 'ios' && p == 'location'*!/*/}
-                                        {/*? `location ${this.state.isAlways ? 'always' : 'whenInUse'}`*/}
-                                        {/*: p*/}
-                                    {/*/!*}*!/*/}
-                                {/*</Text>*/}
-                                {/*<Text style={styles.subtext}>{this.state.status[p]}</Text>*/}
-                            {/*</View>*/}
-                        {/*</TouchableHighlight>*/}
-                    {/*))}*/}
-                    {/*<View style={styles.footer}>*/}
-                        {/*<TouchableHighlight*/}
-                            {/*style={styles['footer_' + Platform.OS]}*/}
-                            {/*onPress={this._onLocationSwitchChange}*/}
-                        {/*>*/}
-                            {/*<Text style={styles.text}>Toggle location type</Text>*/}
-                        {/*</TouchableHighlight>*/}
-
-                        {/*{this.state.canOpenSettings && (*/}
-                            {/*<TouchableHighlight onPress={this._openSettings}>*/}
-                                {/*<Text style={styles.text}>Open settings</Text>*/}
-                            {/*</TouchableHighlight>*/}
-                        {/*)}*/}
-                    {/*</View>*/}
-
-                    {/*/!*<Text style={styles['footer_' + Platform.OS]}>*!/*/}
-                        {/*/!*Note: microphone permissions may not work on iOS simulator. Also,*!/*/}
-                        {/*/!*toggling permissions from the settings menu may cause the app to*!/*/}
-                        {/*/!*crash. This is normal on iOS. Google "ios crash permission change"*!/*/}
-                    {/*/!*</Text>*!/*/}
-                {/*</View>*/}
-                {/*<ScrollView >*/}
-                {/*<View style={[styles.headerview]}>*/}
-
                 <MapView
                     ref = {(ref)=>this.mapView=ref}
                     style={styles.map}
@@ -925,20 +891,6 @@ export default class Trips extends Component {
                     {/*</Marker>*/}
                 </MapView>
 
-                {/*</View>*/}
-                {/*styles.bubble*/}
-                {/*<View style={styles.Container}>*/}
-                {/*<TouchableOpacity style={[styles.bubble, styles.buttonContainer]}>*/}
-                {/*<Text style={styles.bottomBarContent}>*/}
-                {/*{parseFloat(this.state.distanceTravelled).toFixed(2)} km*/}
-                {/*</Text>*/}
-                {/*</TouchableOpacity>*/}
-                {/*</View>*/}
-
-                {/*</ScrollView>*/}
-
-
-
                 <View style={[styles.footer]}>
 
                     <BottomNavigation
@@ -948,63 +900,14 @@ export default class Trips extends Component {
                         renderTab={this.renderTab}
                         // useLayoutAnimation
                     />
-                    {/*<BottomNavigation active={'track'} hidden={false} >*/}
-                        {/*<BottomNavigation.Action*/}
-                            {/*key="home"*/}
-                            {/*// icon={<Image source={require('../Images/home_icon.png')} color="#2eacde" name="Search" style={{ width: 20, height: 20 }} />}*/}
-                            {/*label="Home"*/}
-                            {/*icon = {<Iccon type='SimpleLineIcons' name='home' size={24} color="#2eacde"/>}*/}
-                            {/*// onLoad={() => this.setState({ active: 'search' })}*/}
-                            {/*onPress={() => this.setState({ active: 'home' },Actions.homeScreen())}*/}
-                            {/*// onPress={()=>this.setState({showasearchimage:!this.state.showasearchimage})}*/}
-                            {/*// {this.changebottomLogo()}*/}
-                        {/*/>*/}
-                        {/*<BottomNavigation.Action*/}
-                            {/*key="track"*/}
-                            {/*// icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}*/}
-                            {/*icon = {<Icons type='FontAwesome5' name='route' size={24} color="#2eacde"/>}*/}
-                            {/*label="Track"*/}
-                            {/*onPress={() => this.setState({ active: 'track' })}*/}
-                        {/*/>*/}
-                        {/*<BottomNavigation.Action*/}
-                            {/*key="history"*/}
-                            {/*// icon={<Image source={require('../Images/ticket.png')} color="#669999" name="History" style={{ width: 20, height: 20 }} />}*/}
-                            {/*icon = {<Iccons type='Foundation' name='ticket' size={24} color="#2eacde"/>}*/}
-                            {/*label="History"*/}
-                            {/*onPress={() => this.setState({ active: 'history' },Actions.ticketScreen())}*/}
-                        {/*/>*/}
-                        {/*<BottomNavigation.Action*/}
-                            {/*key="more"*/}
-                            {/*// icon={<Image source={require('../Images/menuicon.png')} color="#669999" name="More" style={{ width: 20, height: 20 }} />}*/}
-                            {/*icon = {<Iccon type='SimpleLineIcons' name='menu' size={24} color="#2eacde"/>}*/}
-                            {/*label="More"*/}
-                            {/*onPress={() => this.setState({ active: 'more' })}*/}
-                        {/*/>*/}
-                    {/*</BottomNavigation>*/}
+
                 </View>
             </View>
 
         );
         // Toast.show("Latitute"+this.state.latitude+"Longitude"+this.state.longitude);
     }
-    // _renderContent = (Tab: string,) => {
-    //     if(this.state.selectedTab==="Search"){
-    //         return (
-    //             <Home/>
-    //         );
-    //     }
-    //     else if(this.state.selectedTab==="Favourite"){
-    //         return (
-    //             <Favourite/>
-    //         );
-    //
-    //     }
-    //     else if(this.state.selectedTab==="Recent"){
-    //         return (
-    //             <Home/>
-    //         );
-    //     }
-    // }
+
 }
 const styles = StyleSheet.create({
     container: {

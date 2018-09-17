@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableOpacity,AsyncStorage,
+import { Image,StyleSheet,TouchableOpacity,AsyncStorage,LayoutAnimation,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -36,10 +36,28 @@ var cardListArr;
 var ticketobj;
 var ticketkeys;
 var ticketListArr;
+var savefavticket;
+var favourites= {
+
+    mobile: "9999988888",
+    stops:[
+        {
+            from: "TELECOM NAGAR BUS STOP",
+            to: "JEEDIMETLA BUS STOP"
+        }
+    ],
+
+    routes: [
+        {
+            from: "TELECOM NAGAR BUS STOP",
+            to:"JEEDIMETLA BUS STOP"
+        }
+    ]
+};
 export default class TicketScreen extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         // this.state= {
         //     activeTab: 'ticket',
         //     thisticket : [],
@@ -51,17 +69,33 @@ export default class TicketScreen extends Component {
             activeTab: 'ticket',
             thiscard : [],
             ticketdialogindex:0,
+            favorite: [],
         };
 
 
     }
+    // componentWillMount() {
+    //     const {favorite} = this.props;
+    //     this.setState({favorite});
+    // }
 
+    componentWillUpdate() {
+        LayoutAnimation.easeInEaseOut();
+    }
     tabs = [
         {
             key:"home",
             // icon={<Image source={require('../Images/home_icon.png')} color="#2eacde" name="Search" style={{ width: 20, height: 20 }} />}
             label:"Home",
             icon : 'home',
+            barColor: '#2eacde',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+            key:"favourite",
+            // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
+            icon : 'star' ,
+            label:"Favourite",
             barColor: '#2eacde',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
@@ -134,52 +168,61 @@ export default class TicketScreen extends Component {
             .then((ticket) => {
                 ticketdata = ticket ? JSON.parse(ticket) : [];
                 // Toast.show(ticketdata[0].From, Toast.LONG);
-                this.setState({thisticket: ticketdata});
+                this.setState({thisticket: ticketdata.reverse()});
+
+                const favcopy = [...this.state.favorite];
+
+                for(let h=0;h<this.state.thisticket.length;h++) {
+                    favcopy.push(this.state.thisticket[h].isFavourite);
+                    alert("ticket after navigating back: " +JSON.stringify(this.state.thisticket) );
+                }
+                this.setState({favorite:favcopy});
+
+
+
             }).done();
     }
 
-    renderTicketText(currentTicket) {
+    savefavourites(recieveindex) {
+        try {
+            // this.setState({favorite[recieveindex]: true});
+            const copied = [...this.state.favorite];
+            copied[recieveindex] = !copied[recieveindex] ;
+            this.setState({ favorite: copied });
+            AsyncStorage.getItem('ticket')
+                .then((ticket) => {
+                    savefavticket = ticket ? JSON.parse(ticket) : [];
+                    // Toast.show("tickets " +c ,Toast.LONG);
 
-        // return (
+                    favourites.stops.push(savefavticket[recieveindex][5]);
+                    favourites.stops.push(savefavticket[recieveindex][6]);
 
-        //         var ticketobj = [currentTicket];
-        // ticketobj.forEach(function(AllTicket){
-        //     var ticketkeys=Object.keys(AllTicket);
-        //     <Text note style={{
-        //         marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
-        //     }}>{ticketkeys[0]+ ":"+AllTicket[ticketkeys[0]]}</Text>
-        //         alert(ticketkeys[0]+ ":"+AllTicket[ticketkeys[0]]);
-        //
-        // })
-        // // )
+                    favourites.routes.push({from:savefavticket[recieveindex][5], to:savefavticket[recieveindex][6]});
+
+                    savefavticket[recieveindex][8]=copied[recieveindex];
+                    // savefavticket[recieveindex].push(favourites);
+                    AsyncStorage.setItem('favs', JSON.stringify(favourites));
+                });
+
+            const ticketcopy = [...this.state.thisticket];
+
+            ticketcopy[recieveindex].isFavourite = copied[recieveindex];
+
+            this.setState({thisticket: ticketcopy});
+
+            AsyncStorage.setItem('ticket', JSON.stringify(ticketcopy));
+            alert("index: " + recieveindex + "value: " + this.state.thisticket[recieveindex].isFavourite);
+            AsyncStorage.getItem('ticket')
+                .then((updticket) => {
+                    alert("ticket after udpate: " + updticket);
+                });
+        }catch(error) {
+            alert(error)
+        }
     }
 
     render() {
 
-        // const { ticketdata: list } = this.state.thiscard;
-        //         ticketListArr = list && list.map(({Authority, Date},index) => {
-        //             // ticketkeys=Object.keys(AllTicket);
-        //             <View key={index}>
-        //                 <Text>{Authority}</Text>
-        //                 <Text>{Date}</Text>
-        //             </View>
-
-
-        //
-        // var ticketobj;
-        // var ticketkeys;
-        // var ticketListArr;
-        //
-        // ticketListArr = this.state.thiscard.forEach(function(AllTicket){
-        //     ticketkeys=Object.keys(AllTicket);
-
-        {/*<Text note style={{*/}
-        {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
-        {/*}}>{ticketkeys[0] + ":" + AllTicket[ticketkeys[0]]}</Text>*/}
-        // alert(ticketkeys[0]+ ":"+AllTicket[ticketkeys[0]]);
-
-        // });
-        // const { thisticket: list } = this.state.thisticket
         dialogticketarr = this.state.thisticket.map((AllTicket,index)=>{
             ticketkeys=Object.keys(AllTicket);
 
@@ -254,7 +297,7 @@ export default class TicketScreen extends Component {
                                     }}>{":\u20B9" + AllTicket[ticketkeys[3]]}/-</Text>
                                     <Text note style={{
                                         marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
-                                    }}>{":" + AllTicket[ticketkeys[4]]}</Text>
+                                    }}>{"    :  " + AllTicket[ticketkeys[4]]}</Text>
                                     <Text note style={{
                                         marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
                                     }}>{":" + AllTicket[ticketkeys[5]]}</Text>
@@ -293,9 +336,12 @@ export default class TicketScreen extends Component {
                 )};
         });
 
-        cardListArr = this.state.thisticket.reverse().map((AllTicket,index)=>{
+
+        cardListArr = this.state.thisticket.map((AllTicket,index)=>{
             ticketkeys=Object.keys(AllTicket);
             let cardlistlen = this.state.thisticket.length;
+
+            AllTicket[ticketkeys[8]] = this.state.favorite[index];
 
             return(
                 <View style={{  paddingRight:25,
@@ -314,7 +360,8 @@ export default class TicketScreen extends Component {
                         }}>{AllTicket[ticketkeys[1]]}</Text>
                             <TouchableOpacity  style={{flex:1,alignItems:'flex-end'}} >
                                 {/*<View style={{flex:15,alignItems:'flex-end'}}>*/}
-                                <Iccon type='MaterialIcons' name='star-border' size={22} color="#2eacde"/>
+                                <Iccon type='MaterialIcons' name={this.state.favorite[index] ?'star':'star-border'} size={22} color={this.state.favorite[index] ? '#2eacde' :"#2eacde"}
+                                       onPress={() =>{this.savefavourites(index)}}/>
                                 {/*</View>*/}
                             </TouchableOpacity>
                             </View>
@@ -347,39 +394,6 @@ export default class TicketScreen extends Component {
         return (
 
             <View style={styles.container}>
-                {/*<ScrollView>*/}
-                {/*<View style={[styles.headerview]}>*/}
-                {/*<Content>*/}
-                {/*</Content>*/}
-                {/*<Content/>*/}
-                {/*<Container >*/}
-                {/*<Content>*/}
-                {/*<View style={[styles.headerview1]}>*/}
-                {/*<View style={{flexDirection:"row",backgroundColor:'#0c71b7',paddingRight:10,*/}
-                {/*paddingLeft:10,}}>*/}
-                {/*<TouchableOpacity onPress={() => Actions.homeScreen()} >*/}
-                {/*<Icon type='MaterialIcons' name='arrow-back' size={30} color="#FFFFFF"/>*/}
-                {/*</TouchableOpacity>*/}
-                {/*<Text note style={{marginTop:5,fontSize:16,textAlign:'center',color:'#FFFFFF', flex:5}} >Ticket Details </Text>*/}
-                {/*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*/}
-
-                {/*</View>*/}
-                {/*</View>*/}
-
-
-                {/*</View>*/}
-                {/*<View style={[styles.headerview1]}>*/}
-                {/*<View style={{flexDirection:"row",backgroundColor:'#4d6bcb',paddingRight:10,*/}
-                {/*paddingLeft:10,}}>*/}
-                {/*<TouchableOpacity onPress={() => Actions.homeScreen()} >*/}
-                {/**/}
-                {/*<Icon type='MaterialIcons' name='arrow-back' size={30} color="#FFFFFF"/>*/}
-                {/*</TouchableOpacity>*/}
-                {/*<Text note style={{marginTop:5,fontSize:16,textAlign:'center',color:'#FFFFFF', flex:5}} >Ticket Details </Text>*/}
-                {/*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*/}
-
-                {/*</View>*/}
-                {/*</View>*/}
                 <ScrollView ref={ (c) => {this.scroll = c}} >
                     {/*style={{ flexGrow: 0.05, backgroundColor: '#FFFFFF'}} */}
                     <View style={{flexDirection:"row",backgroundColor:'#4d6bcb',paddingRight:10,
@@ -398,30 +412,9 @@ export default class TicketScreen extends Component {
                     <View>
                         {cardListArr}
                         {dialogticketarr}
-                        {/*<Button rounded onPress={this.onButtonPress}>*/}
-                            {/*<Text>^</Text>*/}
-                        {/*</Button>*/}
-
                     </View>
-                    {/*<View style={{ flex: 3 }}>*/}
-                        {/*<Fab*/}
-                            {/*// active={this.state.active}*/}
-                            {/*direction="up"*/}
-                            {/*containerStyle={{position:'absolute',bottom:50}}*/}
-                            {/*style={{ backgroundColor: '#2CA8DB' }}*/}
-                            {/*position="bottomRight"*/}
-                            {/*onPress={this.onButtonPress}>*/}
-                            {/*<Image  source={require('../Images/menu_symbol.png')} />*/}
-
-                        {/*</Fab>*/}
-                    {/*</View>*/}
-
                 </ScrollView>
-                {/*<ActionButton >*/}
-                    {/*<ActionButton.Item  buttonColor='#2eacde' onPress={this.onButtonPress}>*/}
-                        {/*<Icons type='SimpleLineIcons' name='arrow-up' size={30} color="#FFFFFF"/>*/}
-                    {/*</ActionButton.Item>*/}
-                {/*</ActionButton>*/}
+
                 <Fab
                     // active={this.state.active}
                     direction="up"
@@ -512,61 +505,5 @@ const styles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
 
-    },
-    // container: {
-    //     flex: 1,
-    //     justifyContent: 'center',
-    //     backgroundColor: '#F5FCFF',
-    // },
-    // title: {
-    //     textAlign: 'center',
-    //     fontSize: 22,
-    //     fontWeight: '300',
-    //     marginBottom: 20,
-    // },
-    // header: {
-    //     backgroundColor: '#FFFFFF',
-    //     padding: 5,
-    //     borderTopEndRadius:5,
-    //     borderWidth:2,
-    //     borderColor:'#2EACDE',
-    //     marginBottom:8,
-    //     marginRight:5,
-    //     marginLeft:5,
-    // },
-    // headerText: {
-    //     // textAlign: 'center',
-    //     fontSize: 16,
-    //     fontWeight: '500',
-    //     color:'#0C71B7',
-    // },
-    // content: {
-    //     padding: 20,
-    //     backgroundColor: '#FFFFFF',
-    //     marginRight:5,
-    //     marginLeft:5,
-    // },
-    // active: {
-    //     backgroundColor: 'rgba(255,255,255,1)',
-    // },
-    // inactive: {
-    //     backgroundColor: 'rgba(245,252,255,1)',
-    // },
-    // selectors: {
-    //     marginBottom: 10,
-    //     flexDirection: 'row',
-    //     justifyContent: 'center',
-    // },
-    // selector: {
-    //     backgroundColor: '#F5FCFF',
-    //     padding: 10,
-    // },
-    // activeSelector: {
-    //     fontWeight: 'bold',
-    // },
-    // selectTitle: {
-    //     fontSize: 14,
-    //     fontWeight: '500',
-    //     padding: 10,
-    // },
+    }
 });

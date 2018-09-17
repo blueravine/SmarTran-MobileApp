@@ -43,6 +43,7 @@ const nonac_icon_grey = require('../Images/nonac_icon_grey.png');
 const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
 var params;
+var favoritedata;
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
@@ -133,6 +134,8 @@ export default class Home extends Component {
             isDateTimePickerVisible: false,
             selectedItem: undefined,
             selected2: '',
+            viewSection :false,
+            favticket:[],
             results: {
                 items: []
             },
@@ -142,6 +145,7 @@ export default class Home extends Component {
             picked2: '',
             date: new Date(),
             selected1: '',
+
         };
     }
 
@@ -152,6 +156,14 @@ export default class Home extends Component {
             // icon={<Image source={require('../Images/home_icon.png')} color="#2eacde" name="Search" style={{ width: 20, height: 20 }} />}
             label:"Home",
             icon : 'home',
+            barColor: '#2eacde',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
+            key:"favourite",
+            // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
+            icon : 'star' ,
+            label:"Favourite",
             barColor: '#2eacde',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
@@ -180,6 +192,51 @@ export default class Home extends Component {
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
     ];
+
+    // renderBottomComponent(){
+    //
+    // if(this.state.viewSection) {
+    //         return (
+    //             <ScrollView
+    //                 style={styles.container1}
+    //                 ref={(scrollView) => { this.scrollView = scrollView; }}
+    //                 //pagingEnabled={true}
+    //                 horizontal= {true}
+    //                 decelerationRate={0}
+    //                 snapToInterval={width - 60}
+    //                 snapToAlignment={"center"}
+    //                 contentInset={{
+    //                     top:0,
+    //                     left: 30,
+    //                     bottom:0,
+    //                     right: 30,
+    //                 }}>
+    //                 <Card style={styles.view} >
+    //                     <Text style={{textAlign:'center'}}>
+    //                         Date:date
+    //                     </Text>
+    //                     <Text style={{textAlign:'center'}}>
+    //                         From:Location
+    //                     </Text>
+    //                     <Text style={{textAlign:'center'}}>
+    //                         To:Location
+    //                     </Text>
+    //                 </Card>
+    //                 <Card style={styles.view2} >
+    //                 </Card>
+    //                 <Card style={styles.view} >
+    //                 </Card>
+    //                 <Card style={styles.view2} >
+    //                 </Card>
+    //             </ScrollView>
+    //         );
+    //     }
+    // }
+    buttonPress=()=>{
+        // this.scrollView.scrollTo({x: -30},1);
+        this.setState({viewSection:true})
+        // this.setState({viewSection: !this.state.viewSection})
+    };
 
 
     // state = {
@@ -260,6 +317,12 @@ export default class Home extends Component {
             case 'more':
                 Actions.moreScreen();
                 break;
+            case 'favourite':
+                // Actions.moreScreen();
+            // {this.buttonPress}
+                this.setState({viewSection:!this.state.viewSection});
+            // {this.renderBottomComponent()}
+                break;
             default:
 
         }
@@ -338,6 +401,16 @@ export default class Home extends Component {
         });
     };
 
+    // async componentDidMount() {
+    //     await AsyncStorage.getItem('ticket')
+    //         .then((ticket) => {
+    //             favoritedata = ticket ? JSON.parse(ticket) : [];
+    //             // Toast.show(ticketdata[0].From, Toast.LONG);
+    //             this.setState({favticket: favoritedata});
+    //         }).done();
+    // }
+
+
     render() {
           params = {};
          params = {
@@ -373,7 +446,6 @@ export default class Home extends Component {
             .catch((error) => {
                 console.error(error);
             });
-
 
 
         return (
@@ -418,34 +490,6 @@ export default class Home extends Component {
                                     onCancel={this.onFromCancelpicker}
                                     options={options}
                                 />
-                                {/*<Picker*/}
-                                    {/*placeholder="Select One"*/}
-                                    {/*// prompt="From Location"*/}
-                                    {/*mode="dropdown"*/}
-                                    {/*style={{height:45,width:295,borderWidth:5, borderColor:'#2eacde',justifyContent:'flex-end'}}*/}
-                                    {/*selectedValue={this.state.selected1}*/}
-                                    {/*onValueChange={(itemValue) => this.setState({selected1: itemValue})}>*/}
-                                    {/*/!*<View style={{flexDirection: 'row'}}>*!/*/}
-                                    {/*/!*<Text note style={{fontSize:12,textAlign:'center',backgroundColor:'#2eacde',*!/*/}
-                                    {/*/!*color:'#FFFFFF'}} >JED</Text>*!/*/}
-                                    {/*/!*</View>*!/*/}
-                                    {/*<Item label="From Location" value="" />*/}
-                                    {/*<Item label="JEDIMETLA BUS STOP" value="JEDIMETLA BUS STOP" />*/}
-                                    {/*<Item label="KOTI BUS STOP" value="KOTI BUS STOP" />*/}
-                                    {/*<Item label="HITECH CITY BUS STOP" value="HITECH CITY BUS STOP" />*/}
-                                    {/*<Item label="VANASTALIPURAM" value="VANASTALIPURAM" />*/}
-                                    {/*<Item label="KACHIGUDA BUS STOP" value="KACHIGUDA BUS STOP" />*/}
-                                    {/*<Item label="MEHDIPATNAM BUS STOP" value="MEHDIPATNAM BUS STOP" />*/}
-                                    {/*<Item label="JNTU (KUKATPALLY) BUS STOP" value="JNTU (KUKATPALLY) BUS STOP" />*/}
-                                    {/*<Item label="MIYAPUR X ROADS" value="MIYAPUR X ROADS" />*/}
-                                {/*</Picker>*/}
-                                {/*<View style={{flexDirection: 'row', alignItems: 'center'}}>*/}
-                                    {/*<View style={{*/}
-                                        {/*flex: 10,*/}
-                                        {/*borderBottomColor: 'black',*/}
-                                        {/*borderBottomWidth: 1,*/}
-                                        {/*width: width - 10,}}>*/}
-                                    {/*</View>*/}
                                     <TouchableOpacity  style={{marginTop:20}} onPress={this._SwapPickerText.bind(this)}>
                                         <Icon type='MaterialIcons' name='swap-vertical-circle' size={35} color="#2eacde"/>
                                     </TouchableOpacity>
@@ -472,24 +516,6 @@ export default class Home extends Component {
                                     onCancel={this.onToCancelpicker}
                                     options={options}
                                 />
-
-                                {/*<Picker*/}
-                                    {/*placeholder="Select One"*/}
-                                    {/*mode="dropdown"*/}
-                                    {/*style={{height:45,width:295,borderWidth:5, borderColor:'#2eacde'}}*/}
-                                    {/*selectedValue={this.state.selected2}*/}
-                                    {/*onValueChange={(itemValue) => this.setState({selected2: itemValue})}>*/}
-
-                                    {/*<Item label="To Location" value="" />*/}
-                                    {/*<Item label="MEHDIPATNAM BUS STOP" value="MEHDIPATNAM BUS STOP" />*/}
-                                    {/*<Item label="MIYAPUR X ROADS" value="MIYAPUR X ROADS" />*/}
-                                    {/*<Item label="JNTU (KUKATPALLY) BUS STOP" value="JNTU (KUKATPALLY) BUS STOP" />*/}
-                                    {/*<Item label="JEDIMETLA BUS STOP" value="JEDIMETLA BUS STOP" />*/}
-                                    {/*<Item label="VANASTALIPURAM" value="VANASTALIPURAM" />*/}
-                                    {/*<Item label="KOTI BUS STOP" value="KOTI BUS STOP" />*/}
-                                    {/*<Item label="HITECH CITY BUS STOP" value="HITECH CITY BUS STOP" />*/}
-                                    {/*<Item label="KACHIGUDA BUS STOP" value="KACHIGUDA BUS STOP" />*/}
-                                {/*</Picker>*/}
 
                             </View>
                         </View>
@@ -573,10 +599,44 @@ export default class Home extends Component {
 
 
                     </Card>
+                    {(this.state.viewSection) &&
 
+                        <ScrollView
+                        style={styles.container1}
+                        ref={(scrollView) => { this.scrollView = scrollView; }}
+                        //pagingEnabled={true}
+                        horizontal= {true}
+                        decelerationRate={0}
+                        snapToInterval={width - 60}
+                        snapToAlignment={"center"}
+                        contentInset={{
+                        top:0,
+                        left: 30,
+                        bottom:0,
+                        right: 30,
+                    }}>
+                        <Card style={styles.view} >
+                        <Text style={{textAlign:'center'}}>
+                        Date:date
+                        </Text>
+                        <Text style={{textAlign:'center'}}>
+                        From:Location
+                        </Text>
+                        <Text style={{textAlign:'center'}}>
+                        To:Location
+                        </Text>
+                        </Card>
+                        <Card style={styles.view2} >
+                        </Card>
+                        <Card style={styles.view} >
+                        </Card>
+                        <Card style={styles.view2} >
+                        </Card>
+                        </ScrollView>
+
+                    }
 
                 </View>
-
                 <View style={[styles.footer]}>
                     <BottomNavigation
                         tabs={this.tabs}
@@ -638,17 +698,6 @@ const styles = StyleSheet.create({
         marginLeft:5,
 
     },
-    // container: {
-    //     flex: 1,
-    //     justifyContent: 'center',
-    //     backgroundColor: '#F5FCFF',
-    // },
-    // title: {
-    //     textAlign: 'center',
-    //     fontSize: 22,
-    //     fontWeight: '300',
-    //     marginBottom: 20,
-    // },
     header: {
         backgroundColor: '#4d6bcb',
         padding: 10,
@@ -671,60 +720,25 @@ const styles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
     },
-
-
-
-    wrapper: {
+    container1: {},
+    view: {
+        marginTop: 85,
+        backgroundColor: '#FFFFFF',
+        width: width - 80,
+        margin: 10,
+        height: 100,
+        borderRadius: 10,
+        color:'#000'
+        //paddingHorizontal : 30
     },
-    slide1: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#4d6bcb',
-    },
-    slide2: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#4d6bcb',
-    },
-    slide3: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#4d6bcb',
-    },
-    text: {
-        color: '#FFFFFF',
-        fontSize: 14,
-        fontStyle:'italic',
-        fontWeight:'bold'
-    },
-    image: {
-        width,
-        flex: 1
+    view2: {
+        marginTop: 85,
+        backgroundColor: '#FFFFFF',
+        width: width - 80,
+        margin: 10,
+        height: 100,
+        borderRadius: 10,
+        color:'#000'
+        //paddingHorizontal : 30
     }
-    // active: {
-    //     backgroundColor: 'rgba(255,255,255,1)',
-    // },
-    // inactive: {
-    //     backgroundColor: 'rgba(245,252,255,1)',
-    // },
-    // selectors: {
-    //     marginBottom: 10,
-    //     flexDirection: 'row',
-    //     justifyContent: 'center',
-    // },
-    // selector: {
-    //     backgroundColor: '#F5FCFF',
-    //     padding: 10,
-    // },
-    // activeSelector: {
-    //     fontWeight: 'bold',
-    // },
-    // selectTitle: {
-    //     fontSize: 14,
-    //     fontWeight: '500',
-    //     padding: 10,
-    // },
 });

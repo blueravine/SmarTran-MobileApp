@@ -63,6 +63,8 @@ var radio_props;
 var params;
 var temptickets;
 var payticket;
+
+
 export default class PaymentScreen extends Component {
 
     constructor(props) {
@@ -181,14 +183,14 @@ export default class PaymentScreen extends Component {
         );
     }
 
-    saveContacts() {
+    saveContacts(currentticket) {
         try {
 
             AsyncStorage.getItem('ticket')
                 .then((ticket) => {
                     payticket = ticket ? JSON.parse(ticket) : [];
                     // Toast.show("tickets " +c ,Toast.LONG);
-                    payticket.push(temptickets);
+                    payticket.push(currentticket);
                     AsyncStorage.setItem('ticket', JSON.stringify(payticket));
                 });
 
@@ -216,7 +218,7 @@ export default class PaymentScreen extends Component {
             "From":this.props.fromLoc,
             "To":this.props.toLoc,
             "Route(s)":"650N,625H",
-
+            "isFavourite":false
         };
 
         return (
@@ -292,7 +294,7 @@ export default class PaymentScreen extends Component {
 
                             <Button style={{height:50,width:width-10,backgroundColor: '#2eacde',
                                 marginTop:30,justifyContent:'space-evenly'}}
-                                    onPress={() => {(this.openDialog(true)),this.saveContacts()}} >
+                                    onPress={() => {this.saveContacts(temptickets), (this.openDialog(true))}} >
 
                                 {/*onPress={() => Actions.ticketScreen(params)}*/}
                                 <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
@@ -464,27 +466,6 @@ const styles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
     },
-    // container: {
-    //     flex: 1,
-    //     justifyContent: 'center',
-    //     backgroundColor: '#F5FCFF',
-    // },
-    // title: {
-    //     textAlign: 'center',
-    //     fontSize: 22,
-    //     fontWeight: '300',
-    //     marginBottom: 20,
-    // },
-    // header: {
-    //     backgroundColor: '#FFFFFF',
-    //     padding: 5,
-    //     borderTopEndRadius:5,
-    //     borderWidth:2,
-    //     borderColor:'#2eacde',
-    //     marginBottom:8,
-    //     marginRight:5,
-    //     marginLeft:5,
-    // },
     headerText: {
         // textAlign: 'center',
         fontSize: 16,
@@ -500,28 +481,5 @@ const styles = StyleSheet.create({
         color:'#669999',
         marginRight:5,
         marginLeft:5,
-    },
-    // active: {
-    //     backgroundColor: 'rgba(255,255,255,1)',
-    // },
-    // inactive: {
-    //     backgroundColor: 'rgba(245,252,255,1)',
-    // },
-    // selectors: {
-    //     marginBottom: 10,
-    //     flexDirection: 'row',
-    //     justifyContent: 'center',
-    // },
-    // selector: {
-    //     backgroundColor: '#F5FCFF',
-    //     padding: 10,
-    // },
-    // activeSelector: {
-    //     fontWeight: 'bold',
-    // },
-    // selectTitle: {
-    //     fontSize: 14,
-    //     fontWeight: '500',
-    //     padding: 10,
-    // },
+    }
 });
