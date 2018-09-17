@@ -345,7 +345,7 @@ export default class Home extends Component {
              toLoc:this.state.picked2,
              tripdte:this.state.date,
          };
-        fetch("http://35.240.144.134:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+        fetch("http://35.187.243.93:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'POST', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
                 'Accept': 'application/json',
