@@ -72,6 +72,14 @@ export default class More extends Component {
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
+            key:"favourite",
+            // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
+            icon : 'star' ,
+            label:"Favourite",
+            barColor: '#2eacde',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
             key:"track",
             // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
             icon : 'location-on' ,
@@ -108,6 +116,12 @@ export default class More extends Component {
         switch (pressedKey) {
             case 'home':
                 Actions.homeScreen();
+                break;
+            case 'favourite':
+                Actions.homeScreen();
+                // {this.buttonPress}
+                this.setState({viewSection:!this.state.viewSection});
+                // {this.renderBottomComponent()}
                 break;
             case 'track':
                 Actions.tripScreen();

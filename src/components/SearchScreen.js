@@ -51,23 +51,6 @@ export default class SearchScreen extends Component {
 
     constructor(props) {
         super(props);
-        // this.state = {
-        //     selected: "At",
-        //
-        // };
-        // this.state ={
-        //     showacimage:false
-        // };
-        // this.state ={
-        //     shownonacimage:false
-        // };
-        // this.state ={
-        //     showtextsource:true
-        // };
-
-        // this.state = {
-        //     count: 0
-        // };
         this.state ={
             activeTab: 'home',
             selectedvalue:'',
@@ -162,6 +145,14 @@ export default class SearchScreen extends Component {
             pressColor: 'rgba(255, 255, 255, 0.16)'
         },
         {
+            key:"favourite",
+            // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
+            icon : 'star' ,
+            label:"Favourite",
+            barColor: '#2eacde',
+            pressColor: 'rgba(255, 255, 255, 0.16)'
+        },
+        {
             key:"track",
             // icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}
             icon : 'location-on' ,
@@ -185,6 +176,7 @@ export default class SearchScreen extends Component {
             barColor: '#2eacde',
             pressColor: 'rgba(255, 255, 255, 0.16)'
         }
+
     ];
 
 
@@ -198,6 +190,12 @@ export default class SearchScreen extends Component {
         switch (pressedKey) {
             case 'home':
                 Actions.homeScreen();
+                break;
+            case 'favourite':
+                Actions.homeScreen();
+                // {this.buttonPress}
+                this.setState({viewSection:!this.state.viewSection});
+                // {this.renderBottomComponent()}
                 break;
             case 'track':
                 Actions.tripScreen();
@@ -612,30 +610,6 @@ export default class SearchScreen extends Component {
                             <Icon type='MaterialIcons' name='arrow-back' size={30} color="#FFFFFF"/>
                         </TouchableOpacity>
                         <Text note style={{marginTop:5,fontSize:16,textAlign:'center',color:'#FFFFFF', flex:5}} >Journey Options</Text>
-                        {/*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*/}
-                        {/*<Button rounded style={{height: 25,backgroundColor: '#2eacde',marginBottom:10*/}
-                        {/*}}*/}
-                                {/*onPress={() => this.setState({shownonacview: false, showacview: true})} >*/}
-                            {/*<Iccons type='FontAwesome' color="#FFFFFF" name={'snowflake-o'} size={20}  />*/}
-                            {/*/!*<Text style={{fontWeight: "bold",fontSize:16,color:'#FFFFFF',flex:2*!/*/}
-                                {/*/!*,textAlign:'center'}}>AC</Text>*!/*/}
-                        {/*</Button>*/}
-                        {/*<Button rounded style={{height: 25,backgroundColor: '#2eacde',marginBottom:10*/}
-                        {/*}}*/}
-                                {/*onPress={() => this.setState({shownonacview: true, showacview: false})} >*/}
-                            {/*<Icoons type='SimpleLineIcons' color="#FFFFFF" name={'ban'} size={20} />*/}
-                            {/*/!*<Text style={{fontWeight: "bold",fontSize:16,color:'#FFFFFF',flex:2*!/*/}
-                                {/*/!*,textAlign:'center'}}>Non/AC</Text>*!/*/}
-                        {/*</Button>*/}
-                        {/*<Button rounded style={{height: 25,backgroundColor: '#2eacde',marginBottom:10*/}
-                        {/*}}*/}
-                                {/*onPress={() => this.setState({shownonacview: true, showacview: true})} >*/}
-                            {/*<Icon type='MaterialIcons' color="#FFFFFF" name={'done-all'} size={20}/>*/}
-                            {/*/!*<Text style={{fontWeight: "bold",fontSize:16,color:'#FFFFFF',flex:2*!/*/}
-                                {/*/!*,textAlign:'center'}}>All</Text>*!/*/}
-                        {/*</Button>*/}
-                        {/*,
-                                Actions.searchScreen(params)*/}
                         <TouchableOpacity onPress={() => Actions.searchScreen(params)}>
                             <Icoons type='SimpleLineIcons' name='refresh' size={24} color="#FFFFFF"/>
                         </TouchableOpacity>
@@ -721,30 +695,6 @@ export default class SearchScreen extends Component {
                             {dialogarr}
                         </Card>
 
-
-                    {/*<View  style={{flexDirection:'row',justifyContent:'center'}} >*/}
-                        {/*<Text note style={{fontSize:14,textAlign:'center',color:'#FFFFFF'}} >Number of passengers</Text>*/}
-                        {/*<View style={{flexDirection:'row',justifyContent:'flex-end',borderColor:'#2eacde',borderWidth:1,borderRadius:1*/}
-                            {/*,marginLeft:75,marginRight:2,marginBottom:5,backgroundColor:'#FFFFFF'}}>*/}
-
-                            {/*<Button transparent style={{height: 18,width:width-880,backgroundColor: '#FFFFFF',*/}
-                            {/*}}*/}
-                                    {/*onPress={this.decrement}>*/}
-                                {/*<Text style={{fontWeight: "bold",fontSize:16,color:'#2eacde'*/}
-                                    {/*,textAlign:'center'}}>-</Text>*/}
-                            {/*</Button>*/}
-                            {/*<Text note style={{ fontSize: 16, textAlign: 'center'}}>{this.state.count}</Text>*/}
-                            {/*/!*{this.state.count}*!/*/}
-                            {/*<Button transparent style={{height: 18,width:width-880,backgroundColor: '#FFFFFF',*/}
-                            {/*}}*/}
-                                    {/*onPress={this.increment}>*/}
-                                {/*<Text style={{fontWeight: "bold",fontSize:16,color:'#2eacde'*/}
-                                    {/*,textAlign:'center'}}>+</Text>*/}
-                            {/*</Button>*/}
-                        {/*</View>*/}
-                        {/*</View>*/}
-
-                        {/*<ScrollView>*/}
                         {/*<Accordion*/}
                             {/*sections={SECTIONS}*/}
                             {/*renderHeader={this._renderHeader}*/}
@@ -752,7 +702,6 @@ export default class SearchScreen extends Component {
                         {/*>*/}
 
                         {/*</Accordion>*/}
-                    {/*</ScrollView>*/}
 
                 </View>
 
@@ -764,42 +713,7 @@ export default class SearchScreen extends Component {
                         renderTab={this.renderTab}
                         // useLayoutAnimation
                     />
-                    {/*<BottomNavigation active={'home'} hidden={false} >*/}
-                    {/*<BottomNavigation.Action*/}
-                    {/*key="home"*/}
-                    {/*// icon={<Image source={require('../Images/home_icon.png')} color="#2eacde" name="Search" style={{ width: 20, height: 20 }} />}*/}
-                    {/*label="Home"*/}
-                    {/*icon = {<Icoons type='SimpleLineIcons' name='home' size={24} color="#2eacde"/>}*/}
-                    {/*// icon = {{ type:'MaterialIcons',name:'home'}}*/}
-                    {/*// iconColor:"#2CA8DB"*/}
-                    {/*// onLoad={() => this.setState({ active: 'search' })}*/}
-                    {/*onPress={() => this.setState({ active: 'home' })}*/}
-                    {/*// onPress={()=>this.setState({showasearchimage:!this.state.showasearchimage})}*/}
-                    {/*// {this.changebottomLogo()}*/}
-                    {/*/>*/}
-                    {/*<BottomNavigation.Action*/}
-                    {/*key="track"*/}
-                    {/*// icon={<Image source={require('../Images/route.png')}color="#669999" name="trips" style={{ width: 20, height: 20 }} />}*/}
-                    {/*icon = {<Icons type='FontAwesome5' name='route' size={24} color="#2eacde"/>}*/}
-                    {/*label="Track"*/}
-                    {/*onPress={() => this.setState({ active: 'track' },Actions.tripScreen())}*/}
-                    {/*/>*/}
-                    {/*<BottomNavigation.Action*/}
-                    {/*key="history"*/}
-                    {/*// icon={<Image source={require('../Images/ticket.png')} color="#669999" name="History" style={{ width: 20, height: 20 }} />}*/}
-                    {/*icon = {<Icconss type='Foundation' name='ticket' size={24} color="#2eacde"/>}*/}
-                    {/*label="History"*/}
-                    {/*onPress={() => this.setState({ active: 'history' },Actions.ticketScreen())}*/}
-                    {/*/>*/}
-                    {/*<BottomNavigation.Action*/}
-                    {/*key="more"*/}
-                    {/*// icon={<Image source={require('../Images/menuicon.png')} color="#669999" name="More" style={{ width: 20, height: 20 }} />}*/}
-                    {/*icon = {<Icoons type='SimpleLineIcons' name='menu' size={24} color="#2eacde"/>}*/}
-                    {/*label="More"*/}
-                    {/*onPress={() => this.setState({ active: 'more' })}*/}
-                    {/*// onPress={() => {this._drawer.open()}}*/}
-                    {/*/>*/}
-                    {/*</BottomNavigation>*/}
+
                 </View>
             </View>
         );
@@ -847,17 +761,7 @@ const styles = StyleSheet.create({
         color:'#4d6bcb',
         // marginTop: 10
     },
-    // container: {
-    //     flex: 1,
-    //     justifyContent: 'center',
-    //     backgroundColor: '#F5FCFF',
-    // },
-    // title: {
-    //     textAlign: 'center',
-    //     fontSize: 22,
-    //     fontWeight: '300',
-    //     marginBottom: 20,
-    // },
+
     header: {
         backgroundColor: '#FFFFFF',
         // padding: 0,
@@ -897,28 +801,5 @@ const styles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
         textAlign:'right'
-    },
-    // active: {
-    //     backgroundColor: 'rgba(255,255,255,1)',
-    // },
-    // inactive: {
-    //     backgroundColor: 'rgba(245,252,255,1)',
-    // },
-    // selectors: {
-    //     marginBottom: 10,
-    //     flexDirection: 'row',
-    //     justifyContent: 'center',
-    // },
-    // selector: {
-    //     backgroundColor: '#F5FCFF',
-    //     padding: 10,
-    // },
-    // activeSelector: {
-    //     fontWeight: 'bold',
-    // },
-    // selectTitle: {
-    //     fontSize: 14,
-    //     fontWeight: '500',
-    //     padding: 10,
-    // },
+    }
 });
