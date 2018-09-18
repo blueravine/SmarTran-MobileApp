@@ -321,9 +321,9 @@ export default class PaymentScreen extends Component {
                         animationType="fade">
                         <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
                             <View style={{flexDirection:"column",justifyContent:'space-evenly'}}>
-                                <Text note style={{marginTop:20,color:'#000',fontSize:14,justifyContent:'flex-start'
-                                }} >Authority
-                                </Text>
+                                {/*<Text note style={{marginTop:20,color:'#000',fontSize:14,justifyContent:'flex-start'*/}
+                                {/*}} >Authority*/}
+                                {/*</Text>*/}
                                 <Text note style={{marginTop:5,fontSize:14,color:'#000',justifyContent:'flex-start'
                                 }} >Date
                                 </Text>
@@ -351,9 +351,9 @@ export default class PaymentScreen extends Component {
                             <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
                                 <View style={{flexDirection:"column",justifyContent:'space-evenly'}}>
 
-                                    <Text note style={{marginTop:20,fontSize:14,color:'#000',justifyContent:'flex-end'
-                                    }} >: TSRTC
-                                    </Text>
+                                    {/*<Text note style={{marginTop:20,fontSize:14,color:'#000',justifyContent:'flex-end'*/}
+                                    {/*}} >: TSRTC*/}
+                                    {/*</Text>*/}
                                     <Text note style={{fontSize:14,color:'#000',justifyContent:'flex-end',marginTop:5,
                                     }} >: {Moment(this.props.tripdte).format('DD/MM/YYYY ')}
                                     </Text>

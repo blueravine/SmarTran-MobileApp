@@ -31,27 +31,21 @@ const card      = {card: {width: 100,height:300,borderWidth: 3,
         borderColor: '#FFFFFF',
         padding: 10}};
 const cardItem = {cardItem: {fontSize: 40}};
-var ticketdata;
+var ticketdata=[];
 var cardListArr;
 var ticketobj;
 var ticketkeys;
 var ticketListArr;
-var savefavticket;
+var savefavticket=[];
 var favourites= {
 
     mobile: "9999988888",
     stops:[
-        {
-            from: "TELECOM NAGAR BUS STOP",
-            to: "JEEDIMETLA BUS STOP"
-        }
+
     ],
 
     routes: [
-        {
-            from: "TELECOM NAGAR BUS STOP",
-            to:"JEEDIMETLA BUS STOP"
-        }
+
     ]
 };
 export default class TicketScreen extends Component {
@@ -65,23 +59,19 @@ export default class TicketScreen extends Component {
 
 
         this.state = {
-            thisticket : [],
+            thisticket: [],
             activeTab: 'ticket',
-            thiscard : [],
-            ticketdialogindex:0,
+            thiscard: [],
+            ticketdialogindex: 0,
             favorite: [],
         };
 
 
     }
-    // componentWillMount() {
-    //     const {favorite} = this.props;
-    //     this.setState({favorite});
-    // }
 
-    componentWillUpdate() {
-        LayoutAnimation.easeInEaseOut();
-    }
+    // componentWillUpdate() {
+    //     LayoutAnimation.easeInEaseOut();
+    // }
     tabs = [
         {
             key:"home",
@@ -136,6 +126,12 @@ export default class TicketScreen extends Component {
             case 'home':
                 Actions.homeScreen();
                 break;
+            case 'favourite':
+                Actions.homeScreen();
+                // {this.buttonPress}
+                this.setState({viewSection:!this.state.viewSection});
+                // {this.renderBottomComponent()}
+                break;
             case 'track':
                 Actions.tripScreen();
                 break;
@@ -166,22 +162,26 @@ export default class TicketScreen extends Component {
     async componentDidMount() {
         await AsyncStorage.getItem('ticket')
             .then((ticket) => {
-                ticketdata = ticket ? JSON.parse(ticket) : [];
+                ticketdata = ticket ? JSON.parse(ticket).reverse() : [];
                 // Toast.show(ticketdata[0].From, Toast.LONG);
-                this.setState({thisticket: ticketdata.reverse()});
+                // alert("ticketdata: " + JSON.stringify(ticketdata) +" after navigating back: " + JSON.stringify(JSON.parse(ticket).reverse()) );
+                // this.setState({thisticket: JSON.parse(JSON.stringify(ticketdata))});
+                // alert("ticketdata: " + JSON.stringify(this.state.thisticket) +" after navigating back: " +JSON.stringify(JSON.parse(JSON.stringify(ticketdata))) );
 
                 const favcopy = [...this.state.favorite];
 
-                for(let h=0;h<this.state.thisticket.length;h++) {
-                    favcopy.push(this.state.thisticket[h].isFavourite);
-                    alert("ticket after navigating back: " +JSON.stringify(this.state.thisticket) );
+                for(let h=0;h<ticketdata.length;h++) {
+                    favcopy.push(ticketdata[h].isFavourite);
                 }
                 this.setState({favorite:favcopy});
 
-
-
             }).done();
     }
+
+    // async componentWillUnmount() {
+    //     await AsyncStorage.setItem('ticket', JSON.stringify(ticketdata.reverse()));
+    // }
+
 
     savefavourites(recieveindex) {
         try {
@@ -189,32 +189,38 @@ export default class TicketScreen extends Component {
             const copied = [...this.state.favorite];
             copied[recieveindex] = !copied[recieveindex] ;
             this.setState({ favorite: copied });
-            AsyncStorage.getItem('ticket')
-                .then((ticket) => {
-                    savefavticket = ticket ? JSON.parse(ticket) : [];
+            // AsyncStorage.getItem('ticket')
+            //     .then((ticket) => {
+            //         savefavticket = ticket ? JSON.parse(ticket).reverse() : [];
                     // Toast.show("tickets " +c ,Toast.LONG);
+                if(copied[recieveindex]) {
+                    favourites.stops.includes(ticketdata[recieveindex].From) ? '' : favourites.stops.push(ticketdata[recieveindex].From);
+                    favourites.stops.includes(ticketdata[recieveindex].To) ? '' : favourites.stops.push(ticketdata[recieveindex].To);
 
-                    favourites.stops.push(savefavticket[recieveindex][5]);
-                    favourites.stops.push(savefavticket[recieveindex][6]);
+                    favourites.routes.includes({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To})? '' : favourites.routes.push({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To});
 
-                    favourites.routes.push({from:savefavticket[recieveindex][5], to:savefavticket[recieveindex][6]});
+                }
+                else{
+                    favourites.stops.pop(ticketdata[recieveindex].From);
+                    favourites.stops.pop(ticketdata[recieveindex].To);
 
-                    savefavticket[recieveindex][8]=copied[recieveindex];
+                    favourites.routes.pop({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To});
+
+                }
                     // savefavticket[recieveindex].push(favourites);
+            ticketdata[recieveindex].isFavourite = copied[recieveindex];
                     AsyncStorage.setItem('favs', JSON.stringify(favourites));
-                });
+                // });
 
-            const ticketcopy = [...this.state.thisticket];
+            // const ticketcopy = [...this.state.thisticket];
+            // ticketdata[recieveindex].isFavourite = copied[recieveindex];
+            // this.setState({thisticket: ticketcopy});
 
-            ticketcopy[recieveindex].isFavourite = copied[recieveindex];
-
-            this.setState({thisticket: ticketcopy});
-
-            AsyncStorage.setItem('ticket', JSON.stringify(ticketcopy));
-            alert("index: " + recieveindex + "value: " + this.state.thisticket[recieveindex].isFavourite);
-            AsyncStorage.getItem('ticket')
-                .then((updticket) => {
-                    alert("ticket after udpate: " + updticket);
+            AsyncStorage.setItem('ticket', JSON.stringify(JSON.parse(JSON.stringify(ticketdata)).reverse()));
+            // alert("value"+JSON.stringify(favourites));
+            AsyncStorage.getItem('favs')
+                .then((favs) => {
+                    // alert("ticket after udpate: " + favs);
                 });
         }catch(error) {
             alert(error)
@@ -222,8 +228,12 @@ export default class TicketScreen extends Component {
     }
 
     render() {
+        AsyncStorage.getItem('ticket')
+            .then((ticket) => {
+                ticketdata = ticket ? JSON.parse(ticket).reverse() : [];
+            }).done();
 
-        dialogticketarr = this.state.thisticket.map((AllTicket,index)=>{
+        dialogticketarr = ticketdata.map((AllTicket,index)=>{
             ticketkeys=Object.keys(AllTicket);
 
             if(this.state.ticketdialogindex === index){
@@ -246,9 +256,9 @@ export default class TicketScreen extends Component {
                                 {/*<Text note style={{*/}
                                 {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
                                 {/*}}>{ticketkeys[0]  }</Text>*/}
-                                <Text note style={{
-                                    marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
-                                }}>{ticketkeys[0] }</Text>
+                                {/*<Text note style={{*/}
+                                    {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
+                                {/*}}>{ticketkeys[0] }</Text>*/}
                                 <Text note style={{
                                     marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
                                 }}>{ticketkeys[1] }</Text>
@@ -283,9 +293,9 @@ export default class TicketScreen extends Component {
                                     {/*<Text note style={{*/}
                                     {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
                                     {/*}}>{":" + AllTicket[ticketkeys[0]]}</Text>*/}
-                                    <Text note style={{
-                                        marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
-                                    }}>{":" + AllTicket[ticketkeys[0]]}</Text>
+                                    {/*<Text note style={{*/}
+                                        {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
+                                    {/*}}>{":" + AllTicket[ticketkeys[0]]}</Text>*/}
                                     <Text note style={{
                                         marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
                                     }}>{":" + AllTicket[ticketkeys[1]]}</Text>
@@ -299,10 +309,10 @@ export default class TicketScreen extends Component {
                                         marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
                                     }}>{"    :  " + AllTicket[ticketkeys[4]]}</Text>
                                     <Text note style={{
-                                        marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
+                                        marginTop: 5, fontSize: 14, color: '#53b73a', justifyContent: 'flex-start'
                                     }}>{":" + AllTicket[ticketkeys[5]]}</Text>
                                     <Text note style={{
-                                        marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
+                                        marginTop: 5, fontSize: 14, color: '#ff0000', justifyContent: 'flex-start'
                                     }}>{":" + AllTicket[ticketkeys[6]]}</Text>
                                     {/*<Text note style={{*/}
                                     {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
@@ -337,11 +347,11 @@ export default class TicketScreen extends Component {
         });
 
 
-        cardListArr = this.state.thisticket.map((AllTicket,index)=>{
+        cardListArr = ticketdata.map((AllTicket,index)=>{
             ticketkeys=Object.keys(AllTicket);
-            let cardlistlen = this.state.thisticket.length;
+            let cardlistlen = ticketdata.length;
 
-            AllTicket[ticketkeys[8]] = this.state.favorite[index];
+            AllTicket.isFavourite = this.state.favorite[index];
 
             return(
                 <View style={{  paddingRight:25,

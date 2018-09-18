@@ -117,6 +117,12 @@ export default class More extends Component {
             case 'home':
                 Actions.homeScreen();
                 break;
+            case 'favourite':
+                Actions.homeScreen();
+                // {this.buttonPress}
+                this.setState({viewSection:!this.state.viewSection});
+                // {this.renderBottomComponent()}
+                break;
             case 'track':
                 Actions.tripScreen();
                 break;

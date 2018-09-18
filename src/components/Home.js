@@ -1,5 +1,5 @@
 import React, { Component,PropTypes } from 'react';
-import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,
+import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,
      UIManager, findNodeHandle,
     TouchableHighlight,Dimensions,Animated,Easing } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,icon,Input,View,Fab, Button,  Left, Body, Right,
@@ -43,7 +43,7 @@ const nonac_icon_grey = require('../Images/nonac_icon_grey.png');
 const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
 var params;
-var favoritedata;
+var favoriteticketdata=[];
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
@@ -52,6 +52,8 @@ var locationkey={};
 var locationlabel={};
 var poiarray=[];
 var currentpoi;
+var favcardListArr;
+var favticketkeys;
 var poi = [
     {
         id: "1212",
@@ -130,12 +132,12 @@ export default class Home extends Component {
         super(props);
 
         this.state = {
+            favticket:[],
             activeTab: 'home',
             isDateTimePickerVisible: false,
             selectedItem: undefined,
             selected2: '',
             viewSection :false,
-            favticket:[],
             results: {
                 items: []
             },
@@ -308,6 +310,12 @@ export default class Home extends Component {
         switch (pressedKey) {
             case 'home':
                 break;
+            case 'favourite':
+                Actions.homeScreen();
+                // {this.buttonPress}
+                this.setState({viewSection:!this.state.viewSection});
+                // {this.renderBottomComponent()}
+                break;
             case 'track':
                 Actions.tripScreen();
                 break;
@@ -316,12 +324,6 @@ export default class Home extends Component {
                 break;
             case 'more':
                 Actions.moreScreen();
-                break;
-            case 'favourite':
-                // Actions.moreScreen();
-            // {this.buttonPress}
-                this.setState({viewSection:!this.state.viewSection});
-            // {this.renderBottomComponent()}
                 break;
             default:
 
@@ -346,32 +348,6 @@ export default class Home extends Component {
 
     onFromShowpicker = () => {
         this.setState({ pickervisible1: true });
-        // fetch("http://35.240.144.134:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
-        //     method: 'POST', // USE GET, POST, PUT,ETC
-        //     headers: { //MODIFY HEADERS
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/x-www-form-urlencoded',
-        //         //    application/x-www-form-urlencoded
-        //     },
-        //     body: JSON.stringify({location:"name"})
-        // })
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //         // alert(responseJson.message);
-        //         if (responseJson.message==="poi found"){ //MAKE YOU VALIDATIONS HERE ) {
-        //
-        //
-        //         }
-        //         else   {
-        //             // Actions.lo({text: this.state.mobiles });
-        //             // Actions.homeScreen();
-        //
-        //         }
-        //
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //     });
     };
     onToShowpicker = () => {
         this.setState({ pickervisible2: true });
@@ -402,17 +378,48 @@ export default class Home extends Component {
     };
 
     // async componentDidMount() {
-    //     await AsyncStorage.getItem('ticket')
-    //         .then((ticket) => {
-    //             favoritedata = ticket ? JSON.parse(ticket) : [];
+    //     AsyncStorage.getItem('favs')
+    //         .then((favs) => {
+    //             // alert("all tick"+favs+"favticket");
+    //             favoriteticketdata = favs ? JSON.parse(favs) : [];
+    //             // alert("all tick"+favs);
     //             // Toast.show(ticketdata[0].From, Toast.LONG);
-    //             this.setState({favticket: favoritedata});
+    //             // this.setState({favticket: favoriteticketdata});
+    //             // alert("all tick"+favs+"favticket"+favticket);
+    //             alert("all tick"+JSON.stringify(favoriteticketdata));
     //         }).done();
+    //     // alert("all tick"+JSON.stringify(favoriteticketdata));
+    //     // alert("ticket"+JSON.stringify(this.state.favticket));
+    //
     // }
 
 
     render() {
-          params = {};
+
+        // favcardListArr = favoriteticketdata.map((AllfavTicket)=> {
+        //     favticketkeys = Object.keys(AllfavTicket);
+        //     // let favcardlistlen = favoritedata.length;
+        //     // alert("all tick" + AllfavTicket[favticketkeys[1]]);
+        //
+        //     if(this.state.viewSection===true) {
+        //         return (
+        //
+        //             <Card style={styles.view}>
+        //                 {/*<Text style={{textAlign:'center'}}>*/}
+        //                 {/*Date:date*/}
+        //                 {/*</Text>*/}
+        //                 <Text style={{textAlign: 'center'}}>
+        //                     {AllfavTicket[favticketkeys].From}
+        //                 </Text>
+        //                 <Text style={{textAlign: 'center'}}>
+        //                     {AllfavTicket[favticketkeys].To}
+        //                 </Text>
+        //             </Card>
+        //         );
+        //     }
+        // });
+
+        params = {};
          params = {
              fromLoc:this.state.picked1,
              toLoc:this.state.picked2,
@@ -599,9 +606,29 @@ export default class Home extends Component {
 
 
                     </Card>
-                    {(this.state.viewSection) &&
+                    {/*{(this.state.viewSection) &&*/}
 
-                        <ScrollView
+                        {/*<ScrollView*/}
+                        {/*style={styles.container1}*/}
+                        {/*ref={(scrollView) => { this.scrollView = scrollView; }}*/}
+                        {/*//pagingEnabled={true}*/}
+                        {/*horizontal= {true}*/}
+                        {/*decelerationRate={0}*/}
+                        {/*snapToInterval={width - 60}*/}
+                        {/*snapToAlignment={"center"}*/}
+                        {/*contentInset={{*/}
+                        {/*top:0,*/}
+                        {/*left: 30,*/}
+                        {/*bottom:0,*/}
+                        {/*right: 30,*/}
+                    {/*}}>*/}
+
+                        {/*</ScrollView>*/}
+
+                    {/*}*/}
+                    {/*{(this.state.viewSection) &&*/}
+
+                    <ScrollView
                         style={styles.container1}
                         ref={(scrollView) => { this.scrollView = scrollView; }}
                         //pagingEnabled={true}
@@ -610,31 +637,26 @@ export default class Home extends Component {
                         snapToInterval={width - 60}
                         snapToAlignment={"center"}
                         contentInset={{
-                        top:0,
-                        left: 30,
-                        bottom:0,
-                        right: 30,
-                    }}>
-                        <Card style={styles.view} >
-                        <Text style={{textAlign:'center'}}>
-                        Date:date
-                        </Text>
-                        <Text style={{textAlign:'center'}}>
-                        From:Location
-                        </Text>
-                        <Text style={{textAlign:'center'}}>
-                        To:Location
-                        </Text>
+                            top:0,
+                            left: 30,
+                            bottom:0,
+                            right: 30,
+                        }}>
+                        {/*{favcardListArr}*/}
+                        <Card style={styles.view}>
+                            {/*<Text style={{textAlign:'center'}}>*/}
+                            {/*Date:date*/}
+                            {/*</Text>*/}
+                            <Text style={{textAlign: 'center'}}>
+                               From:from
+                            </Text>
+                            <Text style={{textAlign: 'center'}}>
+                                To:to
+                            </Text>
                         </Card>
-                        <Card style={styles.view2} >
-                        </Card>
-                        <Card style={styles.view} >
-                        </Card>
-                        <Card style={styles.view2} >
-                        </Card>
-                        </ScrollView>
 
-                    }
+                    </ScrollView>
+                    {/*}*/}
 
                 </View>
                 <View style={[styles.footer]}>
