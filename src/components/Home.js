@@ -43,7 +43,7 @@ const nonac_icon_grey = require('../Images/nonac_icon_grey.png');
 const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
 var params;
-var favoriteticketdata=[];
+var favoriteticketdata={mobile: "9999988888",stops:[],routes:[]};
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
@@ -234,11 +234,11 @@ export default class Home extends Component {
     //         );
     //     }
     // }
-    buttonPress=()=>{
-        // this.scrollView.scrollTo({x: -30},1);
-        this.setState({viewSection:true})
-        // this.setState({viewSection: !this.state.viewSection})
-    };
+    // buttonPress=()=>{
+    //     // this.scrollView.scrollTo({x: -30},1);
+    //     this.setState({viewSection:true})
+    //     // this.setState({viewSection: !this.state.viewSection})
+    // };
 
 
     // state = {
@@ -311,7 +311,7 @@ export default class Home extends Component {
             case 'home':
                 break;
             case 'favourite':
-                Actions.homeScreen();
+                // Actions.homeScreen();
                 // {this.buttonPress}
                 this.setState({viewSection:!this.state.viewSection});
                 // {this.renderBottomComponent()}
@@ -328,22 +328,6 @@ export default class Home extends Component {
             default:
 
         }
-    };
-
-    _onSubmit(param) {
-        // const { selected1, selected2 } = this.state;
-        if(!(this.state.selected1) || !(this.state.selected2)){
-            Toast.show("Please enter From and To Location",Toast.LONG);
-        }
-
-        else if(this.state.selected1 === this.state.selected2){
-            Toast.show(" From and To Location cannot be same",Toast.LONG);
-        }
-
-        else if((this.state.selected1) && (this.state.selected2)){
-            Actions.searchScreen(param);
-        }
-        // Alert.alert('Button has been pressed!');
     };
 
     onFromShowpicker = () => {
@@ -377,54 +361,40 @@ export default class Home extends Component {
         });
     };
 
-    // async componentDidMount() {
-    //     AsyncStorage.getItem('favs')
-    //         .then((favs) => {
-    //             // alert("all tick"+favs+"favticket");
-    //             favoriteticketdata = favs ? JSON.parse(favs) : [];
-    //             // alert("all tick"+favs);
-    //             // Toast.show(ticketdata[0].From, Toast.LONG);
-    //             // this.setState({favticket: favoriteticketdata});
-    //             // alert("all tick"+favs+"favticket"+favticket);
-    //             alert("all tick"+JSON.stringify(favoriteticketdata));
-    //         }).done();
-    //     // alert("all tick"+JSON.stringify(favoriteticketdata));
-    //     // alert("ticket"+JSON.stringify(this.state.favticket));
+    // favouritedata(recivedindex){
+    //     // this.setState({
+    //     //     picked1: favoriteticketdata.routes[recivedindex].from
+    //     // });
+    //     // this.setState({
+    //     //     picked2: favoriteticketdata.routes[recivedindex].to
+    //     // });
+    //     params.fromLoc= favoriteticketdata.routes[recivedindex].from;
+    //     params.toLoc= favoriteticketdata.routes[recivedindex].to;
     //
-    // }
+    //     alert("all tick"+recivedindex+"from"+params.fromLoc+"to"+params.toLoc+"date"+params.tripdte);
+    //
+    // };
+
+    async componentDidMount() {
+        await AsyncStorage.getItem('favs')
+            .then((favs) => {
+                // alert("all tick"+favs+"favticket");
+                favoriteticketdata = favs ? JSON.parse(favs) : [];
+                // this.setState({favticket: favoriteticketdata});
+                // alert("all tick"+JSON.stringify(favoriteticketdata.routes));
+            }).done();
+    }
 
 
     render() {
-
-        // favcardListArr = favoriteticketdata.map((AllfavTicket)=> {
-        //     favticketkeys = Object.keys(AllfavTicket);
-        //     // let favcardlistlen = favoritedata.length;
-        //     // alert("all tick" + AllfavTicket[favticketkeys[1]]);
-        //
-        //     if(this.state.viewSection===true) {
-        //         return (
-        //
-        //             <Card style={styles.view}>
-        //                 {/*<Text style={{textAlign:'center'}}>*/}
-        //                 {/*Date:date*/}
-        //                 {/*</Text>*/}
-        //                 <Text style={{textAlign: 'center'}}>
-        //                     {AllfavTicket[favticketkeys].From}
-        //                 </Text>
-        //                 <Text style={{textAlign: 'center'}}>
-        //                     {AllfavTicket[favticketkeys].To}
-        //                 </Text>
-        //             </Card>
-        //         );
-        //     }
-        // });
-
         params = {};
          params = {
              fromLoc:this.state.picked1,
              toLoc:this.state.picked2,
              tripdte:this.state.date,
+
          };
+
         fetch("http://35.187.243.93:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'POST', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
@@ -454,7 +424,38 @@ export default class Home extends Component {
                 console.error(error);
             });
 
+            favcardListArr = favoriteticketdata.routes.map((AllfavTicket,index)=> {
+            // favticketkeys = Object.keys(AllfavTicket);
+            // let favcardlistlen = favoritedata.length;
+            // alert("all tick" + AllfavTicket.from);
 
+            // if(this.state.viewSection===true) {
+            return (
+
+                <Card style={styles.view}>
+                    <TouchableOpacity  onPress={ () => {
+                        params.fromLoc= favoriteticketdata.routes[index].from;
+                        params.toLoc= favoriteticketdata.routes[index].to;
+
+                        // alert("all tick "+index+" from"+params.fromLoc+"to"+params.toLoc+"date"+params.tripdte);
+                        Actions.searchScreen(params);
+                    }}>
+                    <View style={{flexDirection:'column'}}>
+                    <Text style={{textAlign: 'center',marginTop: 5, fontSize: 14, color: '#000'}}>
+                        {AllfavTicket.from}
+                    </Text>
+                    <Text  style={{textAlign:'center',fontSize:16,color:'#000',marginTop:10}} > To
+                    </Text>
+                    <Text style={{textAlign: 'center',marginTop: 5, fontSize: 14, color: '#000'}}>
+                         {AllfavTicket.to}
+                    </Text>
+                    </View>
+                    </TouchableOpacity>
+                </Card>
+
+            );
+            // }
+        });
         return (
 
             <View style={styles.container}>
@@ -626,7 +627,7 @@ export default class Home extends Component {
                         {/*</ScrollView>*/}
 
                     {/*}*/}
-                    {/*{(this.state.viewSection) &&*/}
+                    {(this.state.viewSection) &&
 
                     <ScrollView
                         style={styles.container1}
@@ -642,21 +643,21 @@ export default class Home extends Component {
                             bottom:0,
                             right: 30,
                         }}>
-                        {/*{favcardListArr}*/}
-                        <Card style={styles.view}>
-                            {/*<Text style={{textAlign:'center'}}>*/}
-                            {/*Date:date*/}
+                        {favcardListArr}
+                        {/*<Card style={styles.view}>*/}
+                            {/*/!*<Text style={{textAlign:'center'}}>*!/*/}
+                            {/*/!*Date:date*!/*/}
+                            {/*/!*</Text>*!/*/}
+                            {/*<Text style={{textAlign: 'center'}}>*/}
+                               {/*From:from*/}
                             {/*</Text>*/}
-                            <Text style={{textAlign: 'center'}}>
-                               From:from
-                            </Text>
-                            <Text style={{textAlign: 'center'}}>
-                                To:to
-                            </Text>
-                        </Card>
+                            {/*<Text style={{textAlign: 'center'}}>*/}
+                                {/*To:to*/}
+                            {/*</Text>*/}
+                        {/*</Card>*/}
 
                     </ScrollView>
-                    {/*}*/}
+                    }
 
                 </View>
                 <View style={[styles.footer]}>
@@ -750,7 +751,9 @@ const styles = StyleSheet.create({
         margin: 10,
         height: 100,
         borderRadius: 10,
-        color:'#000'
+        color:'#000',
+        borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
+        borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#2eacde'
         //paddingHorizontal : 30
     },
     view2: {

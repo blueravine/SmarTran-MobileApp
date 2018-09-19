@@ -37,17 +37,7 @@ var ticketobj;
 var ticketkeys;
 var ticketListArr;
 var savefavticket=[];
-var favourites= {
-
-    mobile: "9999988888",
-    stops:[
-
-    ],
-
-    routes: [
-
-    ]
-};
+var favourites= {mobile: "9999988888",stops:[],routes:[]};
 export default class TicketScreen extends Component {
 
     constructor(props) {
@@ -194,6 +184,10 @@ export default class TicketScreen extends Component {
             //         savefavticket = ticket ? JSON.parse(ticket).reverse() : [];
                     // Toast.show("tickets " +c ,Toast.LONG);
                 if(copied[recieveindex]) {
+                    // alert("add index " + recieveindex + " from: " + ticketdata[recieveindex].From +
+                    //     " to: " +ticketdata[recieveindex].To);
+
+
                     favourites.stops.includes(ticketdata[recieveindex].From) ? '' : favourites.stops.push(ticketdata[recieveindex].From);
                     favourites.stops.includes(ticketdata[recieveindex].To) ? '' : favourites.stops.push(ticketdata[recieveindex].To);
 
@@ -201,11 +195,36 @@ export default class TicketScreen extends Component {
 
                 }
                 else{
-                    favourites.stops.pop(ticketdata[recieveindex].From);
-                    favourites.stops.pop(ticketdata[recieveindex].To);
+                    // alert("pop index " + recieveindex + " from: " + ticketdata[recieveindex].From +
+                    //     " to: " +ticketdata[recieveindex].To);
 
-                    favourites.routes.pop({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To});
+                    let fidx = favourites.stops.indexOf(ticketdata[recieveindex].From);
+                    if(fidx > -1) {
+                        favourites.stops.splice(fidx,1);
+                    }
 
+                    let tidx = favourites.stops.indexOf(ticketdata[recieveindex].To);
+                    if(tidx > -1) {
+                        favourites.stops.splice(tidx,1);
+                    }
+
+                    favourites.routes.filter( (favroute, ridx) => {
+                        if ((favroute.from === ticketdata[recieveindex].From) &&
+                            (favroute.to === ticketdata[recieveindex].To)) {
+                            favourites.routes.splice(ridx,1);
+                        }
+                    });
+
+
+
+                    // favourites.deleteElem = function ( val ) {
+                    //     for ( var i = 0; i < this.length; i++ ) {
+                    //         if ( this[i] === val ) {
+                    //             this.splice( i, 1 );
+                    //             return i;
+                    //         }
+                    //     }
+                    // };
                 }
                     // savefavticket[recieveindex].push(favourites);
             ticketdata[recieveindex].isFavourite = copied[recieveindex];
