@@ -31,16 +31,17 @@ export default class Main extends Component {
 	          {/*hideNavBar={true}*/}
 	          {/*initial={true}*/}
             {/*/>*/}
+              {/*<Scene key="otpScreen"*/}
+                     {/*component={OTPScreen}*/}
+                     {/*animation='fade'*/}
+                     {/*hideNavBar={true}*/}
+              {/*/>*/}
             {/*<Scene key="loginScreen"*/}
 	          {/*component={LoginScreen}*/}
 	          {/*animation='fade'*/}
 	          {/*hideNavBar={true}*/}
             {/*/>*/}
-			{/*<Scene key="otpScreen"*/}
-				 {/*component={OTPScreen}*/}
-				 {/*animation='fade'*/}
-				 {/*hideNavBar={true}*/}
-			{/*/>*/}
+
 
 			<Scene key="homeScreen"
 				 component={Home}
