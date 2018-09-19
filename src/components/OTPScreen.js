@@ -13,13 +13,20 @@ import PropTypes from 'prop-types';
   Easing,
     TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert
   } from 'react-native';
+import {Card,icon} from 'native-base';
 import Button from 'react-native-button'; // 2.3.0
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/SimpleLineIcons';
+import Icoon from 'react-native-vector-icons/FontAwesome5';
+import Icoons from 'react-native-vector-icons/FontAwesome5';
 import { Actions, ActionConst } from 'react-native-router-flux'; // 4.0.0-beta.31
 import spinner from '../Images/loading.gif';
 import Registration from "./Registration";
 import LoginScreen from "./LoginScreen";
 import Toast from 'react-native-simple-toast';
 // const appId = "1047121222092614"
+const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
  const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
@@ -44,8 +51,13 @@ constructor() {
     this.buttonAnimated = new Animated.Value(0);
     this.growAnimated = new Animated.Value(0);
     this._onPress = this._onPress.bind(this);
+    this.state = { hidePassword: true }
   }
-
+    managePasswordVisibility = () =>
+    {
+        // function used to change password visibility
+        this.setState({ hidePassword: !this.state.hidePassword });
+    }
   _onPress() {
     if (this.state.isLoading) return;
 
@@ -155,13 +167,21 @@ constructor() {
       // var height = Dimensions.get('window').height; //full height
       return (
    <View style={styles.container}>
-              <StatusBar backgroundColor="#FFFFFF" barStyle="light-content"/>
+       <View>
+           <StatusBar
+               hidden={false}
+               backgroundColor='#4d6bcb'/>
+       </View>
+       <View style={[styles.headerviewotp]}>
+           <Card style={{ borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
+               borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#FFFFFF'}}>
                 <View style={[styles.halfHeight,{paddingLeft:25,paddingRight:25}]} >
-                    <View style={[{backgroundColor: '#FFFFFF',flex:1}]}>
-                     <Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                    <Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />
+                    {/*<View style={[{backgroundColor: '#FFFFFF',flex:1}]}>*/}
+                     {/*<Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />*/}
+                    {/*</View>*/}
+                    <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                    {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />*/}
+                        <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 78 }}/>
                     <View style={styles.numberFormTextInput}>
                      
                         <TextInput placeholder="+91" placeholderTextColor="#2CA8DB" 
@@ -190,11 +210,12 @@ constructor() {
                  
                 </View>
                 <View style={styles.quarterHeight}>
-                 <View style={{flexDirection:"row"}}>
+                 <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
                   
                   
-                                     <View style={{flexDirection:"row"}}>
-                    <Image source = {require('../Images/padlock.png')} style = {{ width: 45, height: 45,marginTop: 15 }} />
+                     <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                    {/*<Image source = {require('../Images/padlock.png')} style = {{ width: 45, height: 45,marginTop: 15 }} />*/}
+                         <Icons type='SimpleLineIcons' name='lock' size={45} color="#bbbfbc" style = {{marginTop: 15 }}/>
                     <View style={styles.loginFormTextInput1}>
                           
                         <TextInput 
@@ -210,37 +231,74 @@ constructor() {
                           style={{justifyContent: 'flex-end',}}/>
                   </View>
                  </View>
-                </View>
-                <View style={{flexDirection:"row"}}>
+
+                 </View>
+                    <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                        {/*<Image source = {require('../Images/key.png')} style = {{ width: 45, height: 45,marginTop: 18 }} />*/}
+                        <Icoon type='FontAwesome5' name='key' size={45} color="#bbbfbc" style = {{marginTop: 18 }}/>
+                        <View style={styles.loginFormTextInput1}>
+
+                            <TextInput
+                                placeholder="    Password"
+
+                                placeholderTextColor="#2CA8DB"
+                                underlineColorAndroid="#fafafa"
+                                returnKeyType={"done"}
+                                selectionColor="#2CA8DB"
+                                maxLength={12}
+                                // Making the Text Input Text Hidden.
+                                secureTextEntry = { this.state.hidePassword }
+                                style={{justifyContent: 'flex-end',}}/>
+                            <TouchableOpacity activeOpacity = { 0.8 } style = { styles.visibilityBtn } onPress = { this.managePasswordVisibility }>
+                                <Image source = { ( this.state.hidePassword ) ? require('../Images/hide.png') : require('../Images/view.png') }
+                                       style = { styles.btnImage } />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={{flexDirection:"row",justifyContent:"space-evenly",marginBottom:10}}>
                   <View style={styles.orTextView1}>                
                     <Text style={styles.orTextView1}>Problem reciving OTP?  </Text>                 
                   </View>
                   
-                  <View style={{flexDirection:"row"}}>
+                  <View style={{flexDirection:"row",justifyContent:"space-evenly",marginBottom:10}}>
 
 <Text style={styles.orText1} >Resend OTP </Text>
                       {/*onPress={this._onLinkPress(this.props.phone)}*/}
                   </View>
                 </View>
-               <View style={styles.container}>
+               {/*<View style={styles.container}>*/}
         <Animated.View style={{width: changeWidth}}>
           <TouchableOpacity
             style={styles.button}
-            onPress={this._onPress}
-            activeOpacity={1}>
-            {this.state.isLoading ? (
-              <Image source={spinner} style={styles.image} />
-            ) : (
-              <Text style={styles.text}>Verify OTP</Text>
-            )}
+            onPress={this._onPress}>
+            {/*activeOpacity={1}>*/}
+            {/*{this.state.isLoading ? (*/}
+              {/*<Image source={spinner} style={styles.image} />*/}
+            {/*) : (*/}
+              {/*<Text style={styles.text}>Verify OTP</Text>*/}
+            {/*)}*/}
+              <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
+                  {/*<Image source={require('../Images/search_magnifie.png')} style = {{ width: 20,*/}
+                  {/*height: 20,alignItems:'center'}}/>*/}
+                  <Icoon type='FontAwesome5' name='key' size={20} color="#FFFFFF" style = {{alignItems:'center' }}/>
+                  {/*{this.state.isLoading ? (*/}
+                      {/*<Icoon type='FontAwesome5' name='spinner' size={24} color="#2ezcde" style={styles.image}/>*/}
+                  {/*) : (*/}
+                  <Text style={{fontSize:20,color:'#FFFFFF'
+                      ,textAlign:'center',paddingLeft:10}}>Verify OTP</Text>
+                      {/*)}*/}
+              </View>
+
           </TouchableOpacity>
-          <Animated.View
-            style={[styles.circle, {transform: [{scale: changeScale}]}]}
-          />
+          {/*<Animated.View*/}
+            {/*style={[styles.circle, {transform: [{scale: changeScale}]}]}*/}
+          {/*/>*/}
         </Animated.View>
-      </View>
+      {/*</View>*/}
                </View>
-                
+           </Card>
+       </View>
             </View>
             
       );
@@ -263,8 +321,25 @@ constructor() {
           flex: 1,
           justifyContent: 'center',
     alignItems: 'center',
-          flexDirection: 'column'
-          
+          flexDirection: 'column',
+       backgroundColor: '#4d6bcb',
+       // paddingTop: ( Platform.OS === 'ios' ) ? 20 : 0
+   },
+
+      headerviewotp: {
+          // height: 250,
+          //borderRadius:25,
+          // borderWidth:5,
+          // borderColor:'#917cb7',
+          position: 'absolute',
+          backgroundColor: '#4d6bcb',
+          paddingRight:15,
+          paddingLeft:15,
+          paddingTop:55,
+          left: 0,
+          right: 0,
+          top:0,
+
       },
       halfHeight: {
           flex: .5,
@@ -276,7 +351,7 @@ constructor() {
 
       
       quarterHeight: {
-          flex: .52,
+          flex: .5,
           backgroundColor: '#FFFFFF',
             alignItems: 'center',
       },
@@ -298,12 +373,22 @@ constructor() {
       },
 
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0C71B7',
-    height: MARGIN,
-    borderRadius: 15,
-    zIndex: 100,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#2eacde',
+      height: 60,
+      fontSize: 16,
+      width:DEVICE_WIDTH - 10,
+      // borderRadius: 15,
+      color:'#FFFFFF',
+      borderColor: '#2eacde',
+      padding:10,
+      paddingLeft:15,
+      marginTop: 20,
+      marginBottom:10,
+      textAlign: 'center',
+      alignSelf: 'center',
+      zIndex: 100
   },
   circle: {
     height: MARGIN,
@@ -318,6 +403,7 @@ constructor() {
   },
   text: {
     color: 'white',
+      fontSize:20,
     backgroundColor: 'transparent',
   },
   image: {

@@ -11,9 +11,14 @@ import {
     TouchableOpacity,
     TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert,Animated,Easing
 } from 'react-native';
+import {Card,icon} from 'native-base';
 import Button from 'react-native-button'; // 2.3.0
 import { Actions, ActionConst } from 'react-native-router-flux'; // 4.0.0-beta.31
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icoon from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-simple-toast';
+const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
@@ -114,13 +119,21 @@ export default class LoginScreen extends Component {
         // var height = Dimensions.get('window').height; //full height
         return (
             <View style={styles.container}>
-                <StatusBar backgroundColor="#FFFFFF" barStyle="light-content"/>
+                <View>
+                    <StatusBar
+                        hidden={false}
+                        backgroundColor='#4d6bcb'/>
+                </View>
+                <View style={[styles.headerviewlogin]}>
+                    <Card style={{ borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
+                        borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#FFFFFF'}}>
                 <View style={[styles.halfHeight,{paddingLeft:25,paddingRight:25}]} >
-                    <View style={[{backgroundColor: '#FFFFFF',flex:1}]}>
-                        <Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                        <Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />
+                    {/*<View style={[{backgroundColor: '#FFFFFF',flex:1}]}>*/}
+                        {/*<Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />*/}
+                    {/*</View>*/}
+                    <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                        {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />*/}
+                        <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 78 }}/>
                         <View style={styles.numberFormTextInput}>
 
                             <TextInput placeholder="+91" placeholderTextColor="#2CA8DB"
@@ -150,11 +163,12 @@ export default class LoginScreen extends Component {
 
                 </View>
                 <View style={styles.quarterHeight}>
-                    <View style={{flexDirection:"row"}}>
+                    <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
 
 
-                        <View style={{flexDirection:"row"}}>
-                            <Image source = {require('../Images/key.png')} style = {{ width: 45, height: 45,marginTop: 18 }} />
+                        <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                            {/*<Image source = {require('../Images/key.png')} style = {{ width: 45, height: 45,marginTop: 18 }} />*/}
+                            <Icoon type='FontAwesome5' name='key' size={45} color="#bbbfbc" style = {{marginTop: 18 }}/>
                             <View style={styles.loginFormTextInput1}>
 
                                 <TextInput
@@ -166,7 +180,8 @@ export default class LoginScreen extends Component {
                                     selectionColor="#2CA8DB"
                                     maxLength={12}
                                     // Making the Text Input Text Hidden.
-                                    secureTextEntry = { this.state.hidePassword }                                       style={{justifyContent: 'flex-end',}}/>
+                                    secureTextEntry = { this.state.hidePassword }
+                                    style={{justifyContent: 'flex-end',}}/>
                                 <TouchableOpacity activeOpacity = { 0.8 } style = { styles.visibilityBtn } onPress = { this.managePasswordVisibility }>
                                     <Image source = { ( this.state.hidePassword ) ? require('../Images/hide.png') : require('../Images/view.png') }
                                            style = { styles.btnImage } />
@@ -179,22 +194,31 @@ export default class LoginScreen extends Component {
                         <TouchableOpacity
                             style={styles.button}
                             // onPress={this.onButtonPress}
-                            onPress={this._onPress}
-                            activeOpacity={1}>
-                            {
+                            onPress={this._onPress}>
+                            {/*activeOpacity={1}>*/}
+                            {/*{*/}
 
-                                <Text style={styles.text}>Login</Text>
-                            }
+                                {/*<Text style={styles.text}>Login</Text>*/}
+                            <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
+                                {/*<Image source={require('../Images/search_magnifie.png')} style = {{ width: 20,*/}
+                                {/*height: 20,alignItems:'center'}}/>*/}
+                                <Icoon type='FontAwesome5' name='key' size={20} color="#FFFFFF" style = {{alignItems:'center' }}/>
+                                <Text style={{fontSize:20,color:'#FFFFFF'
+                                    ,textAlign:'center',paddingLeft:10}}>Login</Text>
+                            </View>
+                            {/*}*/}
                         </TouchableOpacity>
                         <Animated.View
                             style={[styles.circle, {transform: [{scale: changeScale}]}]}
                         />
                     </Animated.View>
+
                     {/*<Text style={styles.fbLoginButton} onPress={this._onPress}*/}
                     {/*>Login</Text>*/}
 
                 </View>
-
+                    </Card>
+                </View>
             </View>
 
         );
@@ -208,7 +232,24 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        backgroundColor: '#4d6bcb',
+        // paddingTop: ( Platform.OS === 'ios' ) ? 20 : 0
+    },
+
+    headerviewlogin: {
+        // height: 250,
+        //borderRadius:25,
+        // borderWidth:5,
+        // borderColor:'#917cb7',
+        position: 'absolute',
+        backgroundColor: '#4d6bcb',
+        paddingRight:15,
+        paddingLeft:15,
+        paddingTop:55,
+        left: 0,
+        right: 0,
+        top:0,
 
     },
     halfHeight: {
@@ -233,7 +274,7 @@ const styles = StyleSheet.create({
         },
 
     quarterHeight: {
-        flex: .62,
+        flex: .5,
         backgroundColor: '#FFFFFF',
         alignItems: 'center',
     },
@@ -241,13 +282,13 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#0C71B7',
-        height: MARGIN,
+        backgroundColor: '#2eacde',
+        height: 60,
         fontSize: 16,
-        width:DEVICE_WIDTH - 220,
-        borderRadius: 15,
+        width:DEVICE_WIDTH - 10,
+        // borderRadius: 15,
         color:'#FFFFFF',
-        borderColor: '#0C71B7',
+        borderColor: '#2eacde',
         padding:10,
         paddingLeft:15,
         marginTop: 20,
@@ -269,6 +310,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
+        fontSize:20,
         backgroundColor: 'transparent',
     },
     fbLoginButton:{

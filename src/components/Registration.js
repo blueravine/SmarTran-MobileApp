@@ -4,10 +4,15 @@ import {Navigator,
     AppRegistry,TouchableHighlight,StatusBar,Dimensions,Button,ScrollView,Animated,
     Easing,
 } from 'react-native';
+import {Card,icon} from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux'; // 4.0.0-beta.31
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Icoon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PhoneInput from 'react-native-phone-input';
 import CountryPicker from 'react-native-country-picker-modal';
 import Toast from 'react-native-simple-toast';
+const { width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
@@ -53,13 +58,13 @@ export default class Registration extends Component {
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                //    application/x-www-form-urlencoded
+                    //    application/x-www-form-urlencoded
                 },
                 body: JSON.stringify({mobile:this.state.mobiles})
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
-                   // alert(responseJson.message);
+                    // alert(responseJson.message);
                     if (responseJson.message==="user not found"){ //MAKE YOU VALIDATIONS HERE ) {
 
                         Actions.otpScreen({phone: this.state.mobiles });
@@ -128,81 +133,98 @@ export default class Registration extends Component {
 
             <View style = { styles.MainContainer }>
 
-                <StatusBar backgroundColor="#FFFFFF" barStyle="light-content"/>
-                <View style={[styles.halfHeight,{paddingLeft:25,paddingRight:25}]} >
-                    <View style={[{backgroundColor: '#FFFFFF',flex:1}]}>
-                        <Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                        <Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 88 }} />
-                        <View style={styles.numberFormTextInput}>
+                <View>
+                    <StatusBar
+                        hidden={false}
+                        backgroundColor='#4d6bcb'/>
+                </View>
+                <View style={[styles.headerviewhome]}>
+                    {/*<View style={[{backgroundColor: '#FFFFFF',flex:1}]}>*/}
+                    {/*<Image source = {require('../Images/smartranlogowhite.png')} style={styles.ImageStyle} />*/}
+                    {/*</View>*/}
 
-                            <TextInput placeholder="+91" placeholderTextColor="#2CA8DB"
-                                       underlineColorAndroid="#fafafa" style={{justifyContent: 'flex-start',}} />
+                    <Card style={{ borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
+                        borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#FFFFFF'}}>
+                        <View style={{paddingLeft:25,paddingRight:25}} >
+                            <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                                {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 88 }} />*/}
+                                <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 95 }}/>
+                                <View style={styles.numberFormTextInput}>
+
+                                    <TextInput placeholder="+91" placeholderTextColor="#2CA8DB"
+                                               underlineColorAndroid="#fafafa" style={{justifyContent: 'flex-start',}} />
+                                </View>
+                                <View style={styles.loginFormTextInput}>
+
+                                    <TextInput
+                                        placeholder="   Enter Mobile Number"
+                                        keyboardType='phone-pad'
+                                        placeholderTextColor="#2CA8DB"
+                                        underlineColorAndroid="#fafafa"
+                                        returnKeyType={"done"}
+                                        selectionColor="#2CA8DB"
+                                        value={this.state.mobiles}
+                                        onChangeText={(mobiles) => this.setState({mobiles})}
+                                        maxLength={10}
+                                        style={{justifyContent: 'flex-end',}}/>
+
+                                </View>
+
+                            </View>
+
                         </View>
-                        <View style={styles.loginFormTextInput}>
 
-                            <TextInput
-                                placeholder="   Enter Mobile Number"
-                                keyboardType='phone-pad'
-                                placeholderTextColor="#2CA8DB"
-                                underlineColorAndroid="#fafafa"
-                                returnKeyType={"done"}
-                                selectionColor="#2CA8DB"
-                                value={this.state.mobiles}
-                                onChangeText={(mobiles) => this.setState({mobiles})}
-                                maxLength={10}
-                                style={{justifyContent: 'flex-end',}}/>
+                        <View style={styles.quarterHeight}>
+                            <Animated.View >
+                                <TouchableOpacity
+                                    style={styles.button}
+                                    // onPress={this.onButtonPress}
+                                    onPress={this._onPress}>
+                                    {/*activeOpacity={1}>*/}
+                                    {/*{*/}
+
+                                        {/*<Text style={styles.text}>Continue ---></Text>*/}
+                                    {/*}*/}
+                                    <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
+                                        {/*<Image source={require('../Images/search_magnifie.png')} style = {{ width: 20,*/}
+                                        {/*height: 20,alignItems:'center'}}/>*/}
+                                        {/*<Icoon type='MaterialCommunityIcons' name='skip-next-circle' size={20} color="#FFFFFF" style = {{alignItems:'center' }}/>*/}
+                                        <Text style={{fontSize:20,color:'#FFFFFF'
+                                            ,textAlign:'center',paddingLeft:10}}>Continue</Text>
+                                    </View>
+
+                                </TouchableOpacity>
+                                {/*<Animated.View*/}
+                                    {/*style={[styles.circle, {transform: [{scale: changeScale}]}]}*/}
+                                {/*/>*/}
+                            </Animated.View>
+
+
+                            <View style={{flexDirection:"row"}}>
+                                <View style={styles.orTextView}>
+                                    <Text style={styles.orText}>Login With</Text>
+                                </View>
+
+                                <View style={{flexDirection:"row"}}>
+                                    <TouchableHighlight style = {{width: 50, height: '100%',marginLeft:0,marginTop: 78}}onPress={()=>this._onPressButton('Login with Facebook')}>
+                                        <Image source = {require('../Images/facebook.png')} style = {{ width: 40, height: 40}}/>
+                                    </TouchableHighlight>
+                                    <Text style={styles.orText1}>or</Text>
+                                    <TouchableHighlight style = {{ width: 50, height:'100%',marginLeft:20,marginTop: 78}}onPress={()=>this._onPressButton('Login with Google')}>
+                                        <Image source = {require('../Images/googlesearch.png')} style = {{ width: 40, height: 40 }} />
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
 
                         </View>
 
-                    </View>
+                    </Card>
+
+
+
+
 
                 </View>
-
-                <View style={styles.quarterHeight}>
-                    <Animated.View >
-                        <TouchableOpacity
-                            style={styles.button}
-                            // onPress={this.onButtonPress}
-                            onPress={this._onPress}
-                            activeOpacity={1}>
-                            {
-
-                                <Text style={styles.text}>Continue ---></Text>
-                            }
-                        </TouchableOpacity>
-                        <Animated.View
-                            style={[styles.circle, {transform: [{scale: changeScale}]}]}
-                        />
-                    </Animated.View>
-
-
-                    <View style={{flexDirection:"row"}}>
-                        <View style={styles.orTextView}>
-                            <Text style={styles.orText}>Login With</Text>
-                        </View>
-
-                        <View style={{flexDirection:"row"}}>
-                            <TouchableHighlight style = {{width: 50, height: '100%',marginLeft:0,marginTop: 78}}onPress={()=>this._onPressButton('Login with Facebook')}>
-                                <Image source = {require('../Images/facebook.png')} style = {{ width: 40, height: 40}}/>
-                            </TouchableHighlight>
-                            <Text style={styles.orText1}>or</Text>
-                            <TouchableHighlight style = {{ width: 50, height:'100%',marginLeft:20,marginTop: 78}}onPress={()=>this._onPressButton('Login with Google')}>
-                                <Image source = {require('../Images/googlesearch.png')} style = {{ width: 40, height: 40 }} />
-                            </TouchableHighlight>
-                        </View>
-                    </View>
-
-                </View>
-
-
-
-
-
-
-
-
 
             </View>
 
@@ -230,11 +252,26 @@ const styles = StyleSheet.create(
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                backgroundColor: '#4d6bcb',
                 // paddingTop: ( Platform.OS === 'ios' ) ? 20 : 0
             },
 
+        headerviewhome: {
+            // height: 250,
+            //borderRadius:25,
+            // borderWidth:5,
+            // borderColor:'#917cb7',
+            position: 'absolute',
+            backgroundColor: '#4d6bcb',
+            paddingRight:15,
+            paddingLeft:15,
+            paddingTop:55,
+            left: 0,
+            right: 0,
+            top:0,
 
+        },
         halfHeight: {
             flex: .5,
             backgroundColor: '#FFFFFF',
@@ -245,8 +282,9 @@ const styles = StyleSheet.create(
 
 
         quarterHeight: {
-            flex: .52,
-            backgroundColor: '#FFFFFF',
+            flex: .5,
+            marginBottom:10,
+
             alignItems: 'center',
         },
 
@@ -272,13 +310,13 @@ const styles = StyleSheet.create(
         button: {
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#0C71B7',
-            height: MARGIN,
-            fontSize: 16,
-            width:DEVICE_WIDTH - 220,
-            borderRadius: 15,
+            backgroundColor: '#2eacde',
+            height: 60,
+            fontSize: 20,
+            width:DEVICE_WIDTH - 50,
+            // borderRadius: 15,
             color:'#FFFFFF',
-            borderColor: '#0C71B7',
+            borderColor: '#2eacde',
             padding:10,
             paddingLeft:15,
             marginTop: 20,
@@ -301,6 +339,7 @@ const styles = StyleSheet.create(
         text: {
             color: 'white',
             backgroundColor: 'transparent',
+            fontSize: 20,
         },
 
         loginFormTextInput: {
@@ -318,6 +357,7 @@ const styles = StyleSheet.create(
             marginTop: 90,
             marginBottom:10,
             textAlign: 'center',
+            justifyContent:"space-evenly",
             alignSelf: 'center'
 
         },
@@ -334,21 +374,17 @@ const styles = StyleSheet.create(
             marginLeft:15,
             marginTop: 80,
             marginBottom:0,
+            justifyContent:"space-evenly",
             textAlign: 'center',
             alignSelf: 'center'
         },
         ImageStyle: {
-            padding: 10,
-            paddingLeft:45,
-            paddingRight:45,
-            margin: 105,
-            marginRight:100,
-            marginLeft:300,
-            marginTop:1,
-            height: 150,
+            padding: 5,
+            alignItems:"flex-end",
+            // marginTop:1,
+            height: 80,
             width: 150,
             resizeMode : 'stretch',
-            alignItems: 'center'
         },
 
     });
