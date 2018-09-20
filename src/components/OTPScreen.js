@@ -242,7 +242,7 @@ constructor() {
                         <View style={styles.loginFormTextInput1}>
 
                             <TextInput
-                                placeholder="    Password"
+                                placeholder="    Set new password"
 
                                 placeholderTextColor="#2CA8DB"
                                 underlineColorAndroid="#fafafa"
@@ -261,7 +261,7 @@ constructor() {
 
                     <View style={{flexDirection:"row",justifyContent:"space-evenly",marginBottom:10}}>
                   <View style={styles.orTextView1}>                
-                    <Text style={styles.orTextView1}>Problem reciving OTP?  </Text>                 
+                    <Text style={styles.orTextView1}>Problem receiving OTP?  </Text>
                   </View>
                   
                   <View style={{flexDirection:"row",justifyContent:"space-evenly",marginBottom:10}}>

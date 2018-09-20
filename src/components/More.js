@@ -246,8 +246,8 @@ export default class More extends Component {
                     </View>
                     <ScrollView>
                         <Card >
-                            <ImageBackground source={require('../Images/profilebackground.png')}
-                                   style={styles.headercardbackground}>
+                            {/*<ImageBackground source={require('../Images/profilebackground.png')}*/}
+                            <View style={styles.headercardbackground}>
                                 <View style={styles.headermore}>
                             <View style={styles.profilepicWrap}>
                                 <Image source={require('../Images/student.png')}
@@ -256,7 +256,7 @@ export default class More extends Component {
 
                             <Text note style={styles.myname} >John Doe</Text>
                                 </View>
-                            </ImageBackground>
+                            </View>
                             {/*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*/}
                         </Card>
                         {/*<ScrollView>*/}

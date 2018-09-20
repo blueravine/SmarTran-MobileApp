@@ -2,7 +2,7 @@ import React, { Component,PropTypes } from 'react';
 import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,
      UIManager, findNodeHandle,
     TouchableHighlight,Dimensions,Animated,Easing } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,icon,Input,View,Fab, Button,  Left, Body, Right,
+import { Container, Header, Content, Card, CardItem, Spinner,Thumbnail,Picker,DeckSwiper, Text,Item,icon,Input,View,Fab, Button,  Left, Body, Right,
     Footer, FooterTab} from 'native-base';
 import Calendar from 'react-native-calendar-datepicker';
 import Moment from 'moment';
@@ -13,7 +13,7 @@ import Iccons from 'react-native-vector-icons/Foundation'
 import BottomNavigation, {
     ShiftingTab
 } from 'react-native-material-bottom-navigation';
-
+// import Spinner from 'react-native-spinkit';
 import Drawer from 'react-native-drawer';
 import DatePicker from 'react-native-datepicker';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
@@ -132,6 +132,7 @@ export default class Home extends Component {
         super(props);
 
         this.state = {
+            isLoading:false,
             favticket:[],
             activeTab: 'home',
             isDateTimePickerVisible: false,
@@ -441,9 +442,7 @@ export default class Home extends Component {
 
             // if(this.state.viewSection===true) {
             return (
-<View>
-    <Text  style={{justifyContent:'flex-start',fontSize:16,color:'#FFFFFF',marginTop:20}} > Favourite Routes
-    </Text>
+
                 <Card style={styles.view}>
                     <TouchableOpacity  onPress={ () => {
                         params.fromLoc= favoriteticketdata.routes[index].from;
@@ -464,7 +463,7 @@ export default class Home extends Component {
                     </View>
                     </TouchableOpacity>
                 </Card>
-</View>
+
             );
             // }
         });
@@ -640,6 +639,9 @@ export default class Home extends Component {
 
                     {/*}*/}
                     {(this.state.viewSection) &&
+                    <View>
+                        <Text  style={{justifyContent:'flex-start',fontSize:16,color:'#FFFFFF'}} > Favourite Routes
+                        </Text>
 
                     <ScrollView
                         style={styles.container1}
@@ -655,6 +657,7 @@ export default class Home extends Component {
                             bottom:0,
                             right: 30,
                         }}>
+
                         {favcardListArr}
                         {/*<Card style={styles.view}>*/}
                             {/*/!*<Text style={{textAlign:'center'}}>*!/*/}
@@ -669,6 +672,7 @@ export default class Home extends Component {
                         {/*</Card>*/}
 
                     </ScrollView>
+                    </View>
                     }
 
                 </View>
@@ -709,6 +713,13 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         top:0,
+
+    },
+    spinner:{
+        flex:1,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#FFFFFF'
 
     },
     content1: {
@@ -757,7 +768,7 @@ const styles = StyleSheet.create({
     },
     container1: {},
     view: {
-        marginTop: 45,
+        marginTop: 25,
         backgroundColor: '#FFFFFF',
         width: width - 80,
         margin: 10,

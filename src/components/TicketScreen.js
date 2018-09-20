@@ -7,6 +7,7 @@ import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper
 import BottomNavigation, {
     ShiftingTab
 } from 'react-native-material-bottom-navigation'
+import Snackbar from 'react-native-snackbar';
 import { Dropdown } from 'react-native-material-dropdown';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { Dialog } from 'react-native-simple-dialogs';
@@ -188,10 +189,32 @@ export default class TicketScreen extends Component {
                     //     " to: " +ticketdata[recieveindex].To);
 
 
-                    favourites.stops.includes(ticketdata[recieveindex].From) ? '' : favourites.stops.push(ticketdata[recieveindex].From);
-                    favourites.stops.includes(ticketdata[recieveindex].To) ? '' : favourites.stops.push(ticketdata[recieveindex].To);
+                    favourites.stops.includes(ticketdata[recieveindex].From) ?
+                        Snackbar.show({
+                        title: 'Favourite stops already Exists!',
+                        duration: Snackbar.LENGTH_SHORT,
+                    })
+                    : favourites.stops.push(ticketdata[recieveindex].From);
+                    favourites.stops.includes(ticketdata[recieveindex].To) ? '': favourites.stops.push(ticketdata[recieveindex].To);
 
-                    favourites.routes.includes({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To})? '' : favourites.routes.push({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To});
+                    let routefound=false;
+
+                     favourites.routes.map( (favroute, ridx) => {
+                        if ((favroute.from === ticketdata[recieveindex].From) &&
+                            (favroute.to === ticketdata[recieveindex].To)) {
+
+                            routefound=true;
+                        }
+                    });
+                    // alert(routefound);
+
+                    routefound ? '' : favourites.routes.push({from: ticketdata[recieveindex].From, to: ticketdata[recieveindex].To});
+
+
+                    Snackbar.show({
+                        title: 'Favourite added Successfully',
+                        duration: Snackbar.LENGTH_SHORT,
+                    })
 
                 }
                 else{
@@ -215,7 +238,10 @@ export default class TicketScreen extends Component {
                         }
                     });
 
-
+                    Snackbar.show({
+                        title: 'Favourite removed Successfully',
+                        duration: Snackbar.LENGTH_SHORT,
+                    })
 
                     // favourites.deleteElem = function ( val ) {
                     //     for ( var i = 0; i < this.length; i++ ) {

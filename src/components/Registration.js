@@ -163,7 +163,7 @@ export default class Registration extends Component {
                 </View>
                 <View style={[styles.headerviewhome]}>
                     {/*<View style={{backgroundColor: '#FFFFFF',}}>*/}
-                    <Image source = {require('../Images/smartranlogowhite.png')} style={styles.ImageStyle} />
+                    {/*<Image source = {require('../Images/smartranlogowhite.png')} style={styles.ImageStyle} />*/}
                     {/*</View>*/}
 
                     <Card style={{height:180, borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
