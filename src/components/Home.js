@@ -391,7 +391,7 @@ export default class Home extends Component {
                 favoriteticketdata.mobile = number;
                 // this.setState({favticket: favoriteticketdata});
                 // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
-                alert("all tick"+(favoriteticketdata.mobile));
+                // alert("all tick"+(favoriteticketdata.mobile));
             }).done();
     }
 
