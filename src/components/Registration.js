@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Navigator,
-    Platform, StyleSheet, View, Text,text,TextInput, Image, TouchableOpacity, Alert,
+    Platform, StyleSheet, View, Text,text,TextInput, Image, TouchableOpacity, Alert,AsyncStorage,
     AppRegistry,TouchableHighlight,StatusBar,Dimensions,Button,ScrollView,Animated,
     Easing,
 } from 'react-native';
@@ -18,8 +18,10 @@ const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 global.sessionid ;
 import PropTypes from 'prop-types';
-
-
+import Moment from "moment/moment";
+var paramshome;
+var tempnumber;
+var addnumber;
 export default class Registration extends Component {
     // public static var=sessionid;
     constructor() {
@@ -53,7 +55,7 @@ export default class Registration extends Component {
 
         setTimeout(() => {
 
-            fetch('http://35.240.250.77:3037/users/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('http://35.187.243.93:3037/users/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
@@ -67,7 +69,7 @@ export default class Registration extends Component {
                     // alert(responseJson.message);
                     if (responseJson.message==="user not found"){ //MAKE YOU VALIDATIONS HERE ) {
 
-                        Actions.otpScreen({phone: this.state.mobiles });
+                        Actions.otpScreen();
 
                         fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+this.state.mobiles+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                             method: 'GET', // USE GET, POST, PUT,ETC
@@ -97,7 +99,8 @@ export default class Registration extends Component {
                     }
                     else   {
                         // Actions.lo({text: this.state.mobiles });
-                        Actions.loginScreen({phone: this.state.mobiles });
+                        // Actions.loginScreen(paramshome.phone);
+                        Actions.homeScreen(this.savenumber(tempnumber));
 
                     }
 
@@ -119,8 +122,28 @@ export default class Registration extends Component {
             easing: Easing.linear,
         }).start();
     }
+    savenumber(currentnumber) {
+        try {
+
+            AsyncStorage.getItem('number')
+                .then((number) => {
+                    addnumber = number;
+                    // Toast.show("tickets " +c ,Toast.LONG);
+                    // addnumber.push(currentnumber);
+                    AsyncStorage.setItem('number', currentnumber);
+                });
+
+        }catch(error) {
+            alert(error)
+        }
+    }
 
     render() {
+        tempnumber = this.state.mobiles;
+        // paramshome= {};
+        // paramshome = {
+        //     phone: this.state.mobiles
+        // };
         const changeWidth = this.buttonAnimated.interpolate({
             inputRange: [0, 1],
             outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
@@ -139,19 +162,21 @@ export default class Registration extends Component {
                         backgroundColor='#4d6bcb'/>
                 </View>
                 <View style={[styles.headerviewhome]}>
-                    {/*<View style={[{backgroundColor: '#FFFFFF',flex:1}]}>*/}
-                    {/*<Image source = {require('../Images/smartranlogowhite.png')} style={styles.ImageStyle} />*/}
+                    {/*<View style={{backgroundColor: '#FFFFFF',}}>*/}
+                    <Image source = {require('../Images/smartranlogowhite.png')} style={styles.ImageStyle} />
                     {/*</View>*/}
 
-                    <Card style={{ borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
-                        borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#FFFFFF'}}>
+                    <Card style={{height:180, borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
+                        borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#FFFFFF' }}>
                         <View style={{paddingLeft:25,paddingRight:25}} >
                             <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
                                 {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 88 }} />*/}
-                                <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 95 }}/>
+                                <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 25 }}/>
                                 <View style={styles.numberFormTextInput}>
-
+                                    {/*style = {{marginTop: 95 }}*/}
                                     <TextInput placeholder="+91" placeholderTextColor="#2CA8DB"
+                                               editable={false}
+                                               selectTextOnFocus={false}
                                                underlineColorAndroid="#fafafa" style={{justifyContent: 'flex-start',}} />
                                 </View>
                                 <View style={styles.loginFormTextInput}>
@@ -180,6 +205,8 @@ export default class Registration extends Component {
                                     style={styles.button}
                                     // onPress={this.onButtonPress}
                                     onPress={this._onPress}>
+                                    {/*onPress={() => {this.savenumber(tempnumber), (this._onPress)}}>*/}
+                                    {/*onPress={() => {this.savenumber(tempnumber), (this._onPress)}}*/}
                                     {/*activeOpacity={1}>*/}
                                     {/*{*/}
 
@@ -200,21 +227,21 @@ export default class Registration extends Component {
                             </Animated.View>
 
 
-                            <View style={{flexDirection:"row"}}>
-                                <View style={styles.orTextView}>
-                                    <Text style={styles.orText}>Login With</Text>
-                                </View>
+                            {/*<View style={{flexDirection:"row"}}>*/}
+                                {/*<View style={styles.orTextView}>*/}
+                                    {/*<Text style={styles.orText}>Login With</Text>*/}
+                                {/*</View>*/}
 
-                                <View style={{flexDirection:"row"}}>
-                                    <TouchableHighlight style = {{width: 50, height: '100%',marginLeft:0,marginTop: 78}}onPress={()=>this._onPressButton('Login with Facebook')}>
-                                        <Image source = {require('../Images/facebook.png')} style = {{ width: 40, height: 40}}/>
-                                    </TouchableHighlight>
-                                    <Text style={styles.orText1}>or</Text>
-                                    <TouchableHighlight style = {{ width: 50, height:'100%',marginLeft:20,marginTop: 78}}onPress={()=>this._onPressButton('Login with Google')}>
-                                        <Image source = {require('../Images/googlesearch.png')} style = {{ width: 40, height: 40 }} />
-                                    </TouchableHighlight>
-                                </View>
-                            </View>
+                                {/*<View style={{flexDirection:"row"}}>*/}
+                                    {/*<TouchableHighlight style = {{width: 50, height: '100%',marginLeft:0,marginTop: 78}}onPress={()=>this._onPressButton('Login with Facebook')}>*/}
+                                        {/*<Image source = {require('../Images/facebook.png')} style = {{ width: 40, height: 40}}/>*/}
+                                    {/*</TouchableHighlight>*/}
+                                    {/*<Text style={styles.orText1}>or</Text>*/}
+                                    {/*<TouchableHighlight style = {{ width: 50, height:'100%',marginLeft:20,marginTop: 78}}onPress={()=>this._onPressButton('Login with Google')}>*/}
+                                        {/*<Image source = {require('../Images/googlesearch.png')} style = {{ width: 40, height: 40 }} />*/}
+                                    {/*</TouchableHighlight>*/}
+                                {/*</View>*/}
+                            {/*</View>*/}
 
                         </View>
 
@@ -354,7 +381,7 @@ const styles = StyleSheet.create(
             paddingLeft: 5,
             marginLeft:15,
             marginRight: 15,
-            marginTop: 90,
+            marginTop: 30,
             marginBottom:10,
             textAlign: 'center',
             justifyContent:"space-evenly",
@@ -372,7 +399,7 @@ const styles = StyleSheet.create(
             padding:4,
             paddingLeft:10,
             marginLeft:15,
-            marginTop: 80,
+            marginTop: 20,
             marginBottom:0,
             justifyContent:"space-evenly",
             textAlign: 'center',
@@ -380,8 +407,10 @@ const styles = StyleSheet.create(
         },
         ImageStyle: {
             padding: 5,
-            alignItems:"flex-end",
-            // marginTop:1,
+            // alignItems:"center",
+            justifyContent: 'flex-end',
+            marginBottom:35,
+            marginLeft:180,
             height: 80,
             width: 150,
             resizeMode : 'stretch',

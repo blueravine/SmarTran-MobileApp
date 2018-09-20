@@ -218,7 +218,8 @@ export default class PaymentScreen extends Component {
             "From":this.props.fromLoc,
             "To":this.props.toLoc,
             "Route(s)":"650N,625H",
-            "isFavourite":false
+            "isFavourite":false,
+            // "My Number":this.props.phone
         };
 
         return (

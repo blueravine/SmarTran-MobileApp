@@ -31,7 +31,7 @@ const { height } = Dimensions.get('window');
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 import { StackNavigator } from 'react-navigation';
-
+var paramshome;
 export default class OTPScreen extends Component {
 
 
@@ -86,8 +86,8 @@ constructor() {
             .then((responseJson) => {
                 if((responseJson.Status==="Success") && (responseJson.Details==="OTP Matched")){
 
-                    Actions.loginScreen({phone:this.props.phone});
-
+                    // Actions.loginScreen({phone:this.props.phone});
+                    Actions.homeScreen();
                 }
                 else if((responseJson.Status==="Success") && (responseJson.Details==="OTP Mismatched")){
                     //sessionid=responseJson.Details;
@@ -121,39 +121,42 @@ constructor() {
       easing: Easing.linear,
     }).start();
   }
-    // _onLinkPress(phone){
-    //     // Actions.otpScreen({texts: this.state.mobiles });
-    //     // Toast.show('my no'+this.state.mobile);
-    //     fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+phone+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
-    //         method: 'GET', // USE GET, POST, PUT,ETC
-    //         headers: { //MODIFY HEADERS
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //             //    application/x-www-form-urlencoded
-    //         },
-    //
-    //     })
-    //         .then((response) => response.json())
-    //         .then((responseJson) => {
-    //             if (responseJson.Status === "Success") {
-    //
-    //                 sessionid = responseJson.Details;
-    //
-    //
-    //             }
-    //             else {
-    //
-    //             }
-    //
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    //
-    // }
+    _onLinkPress(phone){
+        // Actions.otpScreen({texts: this.state.mobiles });
+        // Toast.show('my no'+this.state.mobile);
+        fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+phone+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            method: 'GET', // USE GET, POST, PUT,ETC
+            headers: { //MODIFY HEADERS
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                //    application/x-www-form-urlencoded
+            },
+
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                if (responseJson.Status === "Success") {
+
+                    sessionid = responseJson.Details;
+
+
+                }
+                else {
+
+                }
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+    }
 
    render() {
-
+       paramshome= {};
+       paramshome = {
+           phoneno: this.props.phone
+       };
  const changeWidth = this.buttonAnimated.interpolate({
       inputRange: [0, 1],
       outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
@@ -163,8 +166,6 @@ constructor() {
       outputRange: [1, MARGIN],
     });
 
-      //     var width = Dimensions.get('window').width; //full width
-      // var height = Dimensions.get('window').height; //full height
       return (
    <View style={styles.container}>
        <View>
@@ -181,10 +182,12 @@ constructor() {
                     {/*</View>*/}
                     <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
                     {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />*/}
-                        <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 78 }}/>
+                        <Icon type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 25 }}/>
                     <View style={styles.numberFormTextInput}>
                      
-                        <TextInput placeholder="+91" placeholderTextColor="#2CA8DB" 
+                        <TextInput placeholder="+91" placeholderTextColor="#2CA8DB"
+                                   editable={false}
+                                   selectTextOnFocus={false}
                             underlineColorAndroid="#fafafa" style={{justifyContent: 'flex-start',}} />
                     </View>
                     <View style={styles.loginFormTextInputnonedit}>
@@ -423,7 +426,7 @@ height: 45,
   paddingLeft: 5,
   marginLeft:15,
   marginRight: 15,
-  marginTop: 80,
+  marginTop: 30,
   marginBottom:10,
   textAlign: 'center',
   alignSelf: 'center'
@@ -456,7 +459,7 @@ height: 45,
   padding:4,
   paddingLeft:10,
   marginLeft:15,
-  marginTop: 70,
+  marginTop: 20,
   marginBottom:0,
   textAlign: 'center',
   alignSelf: 'center'

@@ -23,6 +23,7 @@ const DEVICE_WIDTH = Dimensions.get('window').width;
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 // var newno;
+var paramshome;
 export default class LoginScreen extends Component {
 
 
@@ -62,7 +63,7 @@ export default class LoginScreen extends Component {
 
         setTimeout(() => {
             // Actions.secondScreen();
-            fetch('http://35.240.250.77:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('http://35.187.243.93:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
@@ -106,7 +107,10 @@ export default class LoginScreen extends Component {
     }
 
     render() {
-
+        paramshome= {};
+        paramshome = {
+            phone: this.props.phone
+        };
         const changeWidth = this.buttonAnimated.interpolate({
             inputRange: [0, 1],
             outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
@@ -154,7 +158,7 @@ export default class LoginScreen extends Component {
                                 // value={this.state.phone}
                                 // onChangeText={(phone) => this.setState({phone})}
                                 style={{justifyContent: 'flex-end',}}>
-                                {this.props.phone}
+                                {paramshome.phone}
                                 {/*{this.state.phone}*/}
                             </TextInput>
                         </View>

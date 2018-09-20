@@ -378,10 +378,20 @@ export default class Home extends Component {
     async componentDidMount() {
         await AsyncStorage.getItem('favs')
             .then((favs) => {
+                let tempfavticket = favoriteticketdata;
                 // alert("all tick"+favs+"favticket");
-                favoriteticketdata = favs ? JSON.parse(favs) : [];
+                favoriteticketdata = favs ? JSON.parse(favs) : tempfavticket;
                 // this.setState({favticket: favoriteticketdata});
                 // alert("all tick"+JSON.stringify(favoriteticketdata.routes));
+            }).done();
+        await AsyncStorage.getItem('number')
+            .then((number) => {
+                // let tempfavticket = favoriteticketdata;
+                // alert("all tick"+favs+"favticket");
+                favoriteticketdata.mobile = number;
+                // this.setState({favticket: favoriteticketdata});
+                // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
+                alert("all tick"+(favoriteticketdata.mobile));
             }).done();
     }
 
@@ -431,7 +441,9 @@ export default class Home extends Component {
 
             // if(this.state.viewSection===true) {
             return (
-
+<View>
+    <Text  style={{justifyContent:'flex-start',fontSize:16,color:'#FFFFFF',marginTop:20}} > Favourite Routes
+    </Text>
                 <Card style={styles.view}>
                     <TouchableOpacity  onPress={ () => {
                         params.fromLoc= favoriteticketdata.routes[index].from;
@@ -452,7 +464,7 @@ export default class Home extends Component {
                     </View>
                     </TouchableOpacity>
                 </Card>
-
+</View>
             );
             // }
         });
@@ -745,7 +757,7 @@ const styles = StyleSheet.create({
     },
     container1: {},
     view: {
-        marginTop: 85,
+        marginTop: 45,
         backgroundColor: '#FFFFFF',
         width: width - 80,
         margin: 10,
