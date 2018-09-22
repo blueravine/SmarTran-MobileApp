@@ -646,7 +646,7 @@ export default class Home extends Component {
                     {
                         // Here the ? Question Mark represent the ternary operator.
                         //style={{backgroundColor:'#FFFFFF',width:width-220}}
-                        this.state.loading ?  <ActivityIndicator color = '#FFFFFF'
+                        this.state.loading ?  <ActivityIndicator color = '#2eacde'
                                                                  size = "large" style={{padding: 20}} /> : null
                     }
                     {/*{(this.state.viewSection) &&*/}

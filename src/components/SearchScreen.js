@@ -499,11 +499,11 @@ export default class SearchScreen extends Component {
                         ,textAlign:'center'}}>Close</Text>
                 </Button>
 
-                {
-                    // Here the ? Question Mark represent the ternary operator.
-                    this.state.isloading ?  <ActivityIndicator color = '#2eacde'
-                                                               size = "large" style={{padding: 20}} /> : null
-                }
+                {/*{*/}
+                    {/*// Here the ? Question Mark represent the ternary operator.*/}
+                    {/*this.state.isloading ?  <ActivityIndicator color = '#2eacde'*/}
+                                                               {/*size = "large" style={{padding: 20}} /> : null*/}
+                {/*}*/}
             </View>
 
         </Dialog>
@@ -710,6 +710,11 @@ export default class SearchScreen extends Component {
                             {routelistarr}
                             {dialogarr}
                         </Card>
+                    {
+                        // Here the ? Question Mark represent the ternary operator.
+                        this.state.isloading ?  <ActivityIndicator color = '#2eacde'
+                                                                   size = "large" style={{padding: 20}} /> : null
+                    }
 
                         {/*<Accordion*/}
                             {/*sections={SECTIONS}*/}
