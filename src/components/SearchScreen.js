@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,
+import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ActivityIndicator,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -52,6 +52,7 @@ export default class SearchScreen extends Component {
     constructor(props) {
         super(props);
         this.state ={
+            isloading:false,
             activeTab: 'home',
             selectedvalue:'',
             isDateTimePickerVisible: false,
@@ -266,6 +267,15 @@ export default class SearchScreen extends Component {
         //         break;
         // }
     }
+    ShowHidesearchActivityIndicator = () =>{
+
+        this.setState({isloading: true});
+        setTimeout(() => {
+            Actions.paymentScreen(params);
+        }, 2000)
+        // this.setState({loading: false})
+    };
+
     render() {
         params = {};
         params = {
@@ -470,8 +480,7 @@ export default class SearchScreen extends Component {
                 </View>
                 <Button style={{height:50,width:width-80,backgroundColor: '#2eacde',
                     marginTop:5,marginBottom:15,justifyContent:'space-evenly'}}
-                        onPress={() => {(this.openDialog(false)),
-                                Actions.paymentScreen(params)}} >
+                        onPress={() => {(this.openDialog(false)),this.ShowHidesearchActivityIndicator()}} >
                     {/*onPress={() => Actions.paymentScreen(params)}>*/}
                     <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
                         <Image source={require('../Images/rupees_symbol.png')} style = {{ width: 25,
@@ -482,12 +491,19 @@ export default class SearchScreen extends Component {
                             ,textAlign:'right',paddingLeft:70}}>&#8377;{this.state.totalfare}/-</Text>
                     </View>
                 </Button>
+
                 <Button transparent style={{height: 25,width:width-880,backgroundColor: '#FFFFFF',marginBottom:10
                 }}
                         onPress={() => {(this.openDialog(false))}} >
                     <Text style={{fontWeight: "bold",fontSize:16,color:'#2eacde',flex:2
                         ,textAlign:'center'}}>Close</Text>
                 </Button>
+
+                {
+                    // Here the ? Question Mark represent the ternary operator.
+                    this.state.isloading ?  <ActivityIndicator color = '#2eacde'
+                                                               size = "large" style={{padding: 20}} /> : null
+                }
             </View>
 
         </Dialog>
