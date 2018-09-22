@@ -1,5 +1,5 @@
 import React, { Component,PropTypes } from 'react';
-import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,
+import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,ActivityIndicator,
      UIManager, findNodeHandle,
     TouchableHighlight,Dimensions,Animated,Easing } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Spinner,Thumbnail,Picker,DeckSwiper, Text,Item,icon,Input,View,Fab, Button,  Left, Body, Right,
@@ -42,6 +42,7 @@ const nonac_icon_blue = require('../Images/nonac_icon_blue.png');
 const nonac_icon_grey = require('../Images/nonac_icon_grey.png');
 const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
+import Icoons from 'react-native-vector-icons/FontAwesome';
 var params;
 var favoriteticketdata={mobile: "9999988888",stops:[],routes:[]};
 const drawerStyles = {
@@ -132,7 +133,7 @@ export default class Home extends Component {
         super(props);
 
         this.state = {
-            isLoading:false,
+            loading:false,
             favticket:[],
             activeTab: 'home',
             isDateTimePickerVisible: false,
@@ -150,6 +151,7 @@ export default class Home extends Component {
             selected1: '',
 
         };
+        // this._onButtonPressed = this._onButtonPressed.bind(this);
     }
 
 
@@ -376,6 +378,22 @@ export default class Home extends Component {
     //
     // };
 
+
+    ShowHideActivityIndicator = () =>{
+
+        this.setState({loading: true});
+                setTimeout(() => {
+            Actions.searchScreen(params);
+        }, 2000)
+            // this.setState({loading: false})
+    };
+    // _onButtonPressed() {
+    //             setTimeout(() => {
+    //         this.setState({ loading: true });
+    //         Actions.searchScreen(params);
+    //                 this.setState({ loading: false });
+    //     }, 3000)
+    // };
     async componentDidMount() {
         await AsyncStorage.getItem('favs')
             .then((favs) => {
@@ -397,6 +415,11 @@ export default class Home extends Component {
     }
 
 
+    resetData(){
+    this.setState({
+        picked2 : ''
+                  });
+};
     render() {
         params = {};
          params = {
@@ -406,7 +429,7 @@ export default class Home extends Component {
 
          };
 
-        fetch("http://35.187.243.93:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+        fetch("http://35.240.147.242:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'POST', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
                 'Accept': 'application/json',
@@ -604,9 +627,12 @@ export default class Home extends Component {
                                         title: 'From and To Location cannot be same!',
                                         duration: Snackbar.LENGTH_SHORT,
                                     });
+                                    this.resetData();
                                 }
                                 else{
-                                    Actions.searchScreen(params);
+                                    // Actions.searchScreen(params);
+                                    this.ShowHideActivityIndicator();
+                                    // this._onButtonPressed();
                                 }}}>
                             <View style={{flexDirection:"row",justifyContent:'space-evenly'}}>
                                 <Image source={require('../Images/search_magnifie.png')} style = {{ width: 20,
@@ -616,9 +642,19 @@ export default class Home extends Component {
                             </View>
                         </Button>
 
-
                     </Card>
+                    {
+                        // Here the ? Question Mark represent the ternary operator.
+                        //style={{backgroundColor:'#FFFFFF',width:width-220}}
+                        this.state.loading ?  <ActivityIndicator color = '#FFFFFF'
+                                                                 size = "large" style={{padding: 20}} /> : null
+                    }
                     {/*{(this.state.viewSection) &&*/}
+                    {/*<ActivityIndicator*/}
+                        {/*animating = {this.state.loading}*/}
+                        {/*color = '#bc2b78'*/}
+                        {/*size = "large"*/}
+                        {/*style = {styles.activityIndicator}/>*/}
 
                         {/*<ScrollView*/}
                         {/*style={styles.container1}*/}
@@ -743,6 +779,12 @@ const styles = StyleSheet.create({
         marginRight:5,
         marginLeft:5,
 
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 80
     },
     header: {
         backgroundColor: '#4d6bcb',
