@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Scene, Actions, ActionConst } from 'react-native-router-flux';
 
-// import SplashScreen from './SplashScreen'
+import SplashScreen from './SplashScreen'
 import Home from './Home';
 import SearchScreen from './SearchScreen';
 import Registration from './Registration';
@@ -18,24 +18,24 @@ export default class Main extends Component {
 	    <Router>
 	      <Scene key="root">
 
-              {/*<Scene key="splshScreen"*/}
-                     {/*component={SplashScreen}*/}
-                     {/*animation='fade'*/}
-                     {/*hideNavBar={true}*/}
-                     {/*initial={true}*/}
-              {/*/>*/}
+              <Scene key="splshScreen"
+                     component={SplashScreen}
+                     animation='fade'
+                     hideNavBar={true}
+                     initial={true}
+              />
 
-            {/*<Scene key="registerScreen"*/}
-	          {/*component={Registration}*/}
-	        	{/*animation='fade'*/}
-	          {/*hideNavBar={true}*/}
-	          {/*initial={true}*/}
-            {/*/>*/}
-              {/*<Scene key="otpScreen"*/}
-                     {/*component={OTPScreen}*/}
-                     {/*animation='fade'*/}
-                     {/*hideNavBar={true}*/}
-              {/*/>*/}
+            <Scene key="registerScreen"
+	          component={Registration}
+	        	animation='fade'
+	          hideNavBar={true}
+	          // initial={true}
+            />
+              <Scene key="otpScreen"
+                     component={OTPScreen}
+                     animation='fade'
+                     hideNavBar={true}
+              />
             {/*<Scene key="loginScreen"*/}
 	          {/*component={LoginScreen}*/}
 	          {/*animation='fade'*/}

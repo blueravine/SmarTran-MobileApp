@@ -403,11 +403,11 @@ export default class Home extends Component {
                 // this.setState({favticket: favoriteticketdata});
                 // alert("all tick"+JSON.stringify(favoriteticketdata.routes));
             }).done();
-        await AsyncStorage.getItem('number')
-            .then((number) => {
+        await AsyncStorage.getItem('mobileno')
+            .then((mobileno) => {
                 // let tempfavticket = favoriteticketdata;
                 // alert("all tick"+favs+"favticket");
-                favoriteticketdata.mobile = number;
+                favoriteticketdata.mobile = mobileno;
                 // this.setState({favticket: favoriteticketdata});
                 // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
                 // alert("all tick"+(favoriteticketdata.mobile));

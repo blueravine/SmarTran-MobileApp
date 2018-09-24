@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
     View,
     Image,
      Animated,
-     TouchableOpacity,
+     TouchableOpacity,AsyncStorage,
   Easing,
     TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert
   } from 'react-native';
@@ -31,25 +31,24 @@ const { height } = Dimensions.get('window');
 const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 import { StackNavigator } from 'react-navigation';
-var paramshome;
+var paramsmobile={tempnumber:''};
+var addmynumber;
 export default class OTPScreen extends Component {
 
 
-constructor() {
-    super();
+constructor(props) {
+    super(props);
     this.state={
-        mobile:''
-    };
-    this.state = {
+        mobile:'',
         otp: ''
     };
 
-    this.state = {
-      isLoading: false,
-    };
-
-    this.buttonAnimated = new Animated.Value(0);
-    this.growAnimated = new Animated.Value(0);
+    // this.state = {
+    //   isLoading: false,
+    // };
+    //
+    // this.buttonAnimated = new Animated.Value(0);
+    // this.growAnimated = new Animated.Value(0);
     this._onPress = this._onPress.bind(this);
     this.state = { hidePassword: true }
   }
@@ -59,20 +58,20 @@ constructor() {
         this.setState({ hidePassword: !this.state.hidePassword });
     }
   _onPress() {
-    if (this.state.isLoading) return;
+    // if (this.state.isLoading) return;
+    //
+    // this.setState({isLoading: true});
+    // Animated.timing(this.buttonAnimated, {
+    //   toValue: 1,
+    //   duration: 200,
+    //   easing: Easing.linear,
+    // }).start();
+    //
+    // setTimeout(() => {
+    //   this._onGrow();
+    // }, 2000);
 
-    this.setState({isLoading: true});
-    Animated.timing(this.buttonAnimated, {
-      toValue: 1,
-      duration: 200,
-      easing: Easing.linear,
-    }).start();
-
-    setTimeout(() => {
-      this._onGrow();
-    }, 2000);
-
-    setTimeout(() => {
+    // setTimeout(() => {
 
 
         fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/VERIFY/'+sessionid+'/'+this.state.otp, { // USE THE LINK TO THE SERVER YOU'RE USING mobile
@@ -86,8 +85,31 @@ constructor() {
             .then((responseJson) => {
                 if((responseJson.Status==="Success") && (responseJson.Details==="OTP Matched")){
 
-                    // Actions.loginScreen({phone:this.props.phone});
-                    Actions.homeScreen();
+                    fetch('http://35.240.147.242:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                        method: 'POST', // USE GET, POST, PUT,ETC
+                        headers: { //MODIFY HEADERS
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            //    application/x-www-form-urlencoded
+                        },
+                        body: JSON.stringify({mobile:paramsmobile.tempnumber})
+                    })
+                        .then((response) => response.json())
+                        .then((responseJson) => {
+
+                            if (responseJson.message==="user created") {
+                                // Actions.loginScreen({phone:this.props.phone});
+                                Actions.homeScreen(paramsmobile);
+                            }
+                            else
+                            {
+                                alert("user creation failed");
+                            }
+
+
+                            }).catch((error) => {
+                        alert(error);
+                    });
                 }
                 else if((responseJson.Status==="Success") && (responseJson.Details==="OTP Mismatched")){
                     //sessionid=responseJson.Details;
@@ -108,19 +130,34 @@ constructor() {
                 console.error(error);
             });
 
-        this.setState({isLoading: false});
-      this.buttonAnimated.setValue(0);
-      this.growAnimated.setValue(0);
-    }, 2300);
+    //     this.setState({isLoading: false});
+    //   this.buttonAnimated.setValue(0);
+    //   this.growAnimated.setValue(0);
+    // }, 2300);
   }
 
-  _onGrow() {
-    Animated.timing(this.growAnimated, {
-      toValue: 1,
-      duration: 200,
-      easing: Easing.linear,
-    }).start();
-  }
+  // _onGrow() {
+  //   Animated.timing(this.growAnimated, {
+  //     toValue: 1,
+  //     duration: 200,
+  //     easing: Easing.linear,
+  //   }).start();
+  // }
+    // savemynumber(currentmobnumber) {
+    //     try {
+    //
+    //         // AsyncStorage.getItem('mobileno')
+    //         //     .then((mobileno) => {
+    //         //         addmynumber = mobileno;
+    //         // Toast.show("tickets " +c ,Toast.LONG);
+    //         // addmynumber.push(currentmobnumber);
+    //         AsyncStorage.setItem('mobileno', currentmobnumber);
+    //         // });
+    //
+    //     } catch (error) {
+    //         alert(error)
+    //     }
+    // }
     _onLinkPress(phone){
         // Actions.otpScreen({texts: this.state.mobiles });
         // Toast.show('my no'+this.state.mobile);
@@ -153,18 +190,18 @@ constructor() {
     }
 
    render() {
-       paramshome= {};
-       paramshome = {
-           phoneno: this.props.phone
+       // paramsmobile = {};
+       paramsmobile = {
+           tempnumber:this.props.tempnumber,
        };
- const changeWidth = this.buttonAnimated.interpolate({
-      inputRange: [0, 1],
-      outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
-    });
-    const changeScale = this.growAnimated.interpolate({
-      inputRange: [0, 1],
-      outputRange: [1, MARGIN],
-    });
+ // const changeWidth = this.buttonAnimated.interpolate({
+ //      inputRange: [0, 1],
+ //      outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
+ //    });
+ //    const changeScale = this.growAnimated.interpolate({
+ //      inputRange: [0, 1],
+ //      outputRange: [1, MARGIN],
+ //    });
 
       return (
    <View style={styles.container}>
@@ -193,7 +230,7 @@ constructor() {
                     <View style={styles.loginFormTextInputnonedit}>
                           
                         <TextInput 
-                            placeholder="   9999912345"
+                            placeholder="   mobile number"
                             keyboardType='phone-pad'
                             editable={false} 
                             selectTextOnFocus={false}
@@ -205,7 +242,7 @@ constructor() {
                             // onChangeText={(mobile) => this.setState({mobile})}
                             maxLength={10}                           
                           style={{justifyContent: 'flex-end',}}>
-                            {this.props.phone}
+                            {this.props.tempnumber}
                         </TextInput>
                   </View>
                  </View>
@@ -228,7 +265,7 @@ constructor() {
                             underlineColorAndroid="#fafafa" 
                             returnKeyType={"done"}
                             value={this.state.otp}
-                            onChangeText={(otp) => this.setState({otp})}
+                            onChangeText={(otp) => this.setState({otp:otp})}
                             selectionColor="#2CA8DB"
                             maxLength={6}                           
                           style={{justifyContent: 'flex-end',}}/>
@@ -271,7 +308,7 @@ constructor() {
                   </View>
                 </View>
                {/*<View style={styles.container}>*/}
-        <Animated.View style={{width: changeWidth}}>
+        {/*<Animated.View style={{width: changeWidth}}>*/}
           <TouchableOpacity
             style={styles.button}
             onPress={this._onPress}>
@@ -297,7 +334,7 @@ constructor() {
           {/*<Animated.View*/}
             {/*style={[styles.circle, {transform: [{scale: changeScale}]}]}*/}
           {/*/>*/}
-        </Animated.View>
+        {/*</Animated.View>*/}
       {/*</View>*/}
                </View>
            </Card>
@@ -360,7 +397,7 @@ constructor() {
       },
      
         orTextView1:{
-          fontSize: 18,
+          fontSize: 16,
           color:'#2CA8DB',
         marginTop: 12
         

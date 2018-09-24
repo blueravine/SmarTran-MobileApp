@@ -22,56 +22,63 @@ import Moment from "moment/moment";
 var paramshome;
 var tempnumber;
 var addnumber;
+var paramsmobile={tempnumber:''};
 export default class Registration extends Component {
     // public static var=sessionid;
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             mobiles: ''
         };
 
-        this.state = {
-            isLoading: false,
-        };
-
-        this.buttonAnimated = new Animated.Value(0);
-        this.growAnimated = new Animated.Value(0);
+        // this.state = {
+        //     isLoading: false,
+        // };
+        //
+        // this.buttonAnimated = new Animated.Value(0);
+        // this.growAnimated = new Animated.Value(0);
         this._onPress = this._onPress.bind(this);
     }
 
     _onPress() {
-        if (this.state.isLoading) return;
+        // if (this.state.isLoading) return;
 
-        this.setState({isLoading: true});
-        Animated.timing(this.buttonAnimated, {
-            toValue: 1,
-            duration: 200,
-            easing: Easing.linear,
-        }).start();
+        // this.setState({isLoading: true});
+        // Animated.timing(this.buttonAnimated, {
+        //     toValue: 1,
+        //     duration: 200,
+        //     easing: Easing.linear,
+        // }).start();
+        //
+        // setTimeout(() => {
+        //     this._onGrow();
+        // }, 2000);
 
-        setTimeout(() => {
-            this._onGrow();
-        }, 2000);
+        // setTimeout(() => {
 
-        setTimeout(() => {
+        try {
+            AsyncStorage.setItem('mobileno', this.state.mobiles);
+        }
+        catch(error)
+        {
+            alert(error);
+        }
 
-            fetch('http://35.187.243.93:3037/users/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('http://35.240.147.242:3037/users/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     //    application/x-www-form-urlencoded
                 },
-                body: JSON.stringify({mobile:this.state.mobiles})
+                body: JSON.stringify({mobile:paramsmobile.tempnumber})
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
                     // alert(responseJson.message);
-                    if (responseJson.message==="user not found"){ //MAKE YOU VALIDATIONS HERE ) {
+                    if (responseJson.message==="user not found"){
 
-                        Actions.otpScreen();
-
-                        fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+this.state.mobiles+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                        fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+paramsmobile.tempnumber+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                             method: 'GET', // USE GET, POST, PUT,ETC
                             headers: { //MODIFY HEADERS
                                 'Accept': 'application/json',
@@ -86,6 +93,8 @@ export default class Registration extends Component {
 
                                     sessionid = responseJson.Details;
 
+                                    Actions.otpScreen(paramsmobile);
+
 
                                 }
                                 else {
@@ -96,11 +105,13 @@ export default class Registration extends Component {
                             .catch((error) => {
                                 console.error(error);
                             });
+
+                        // alert("all tick"+(paramsmobile.tempnumber));
                     }
                     else   {
                         // Actions.lo({text: this.state.mobiles });
                         // Actions.loginScreen(paramshome.phone);
-                        Actions.homeScreen(this.savenumber(tempnumber));
+                        Actions.homeScreen(paramsmobile);
 
                     }
 
@@ -109,49 +120,48 @@ export default class Registration extends Component {
                     console.error(error);
                 });
 
-            this.setState({isLoading: false});
-            this.buttonAnimated.setValue(0);
-            this.growAnimated.setValue(0);
-        }, 2300);
+            // this.setState({isLoading: false});
+            // this.buttonAnimated.setValue(0);
+            // this.growAnimated.setValue(0);
+        // }, 2300);
     }
 
-    _onGrow() {
-        Animated.timing(this.growAnimated, {
-            toValue: 1,
-            duration: 200,
-            easing: Easing.linear,
-        }).start();
-    }
-    savenumber(currentnumber) {
-        try {
-
-            AsyncStorage.getItem('number')
-                .then((number) => {
-                    addnumber = number;
-                    // Toast.show("tickets " +c ,Toast.LONG);
-                    // addnumber.push(currentnumber);
-                    AsyncStorage.setItem('number', currentnumber);
-                });
-
-        }catch(error) {
-            alert(error)
-        }
-    }
+    // _onGrow() {
+    //     Animated.timing(this.growAnimated, {
+    //         toValue: 1,
+    //         duration: 200,
+    //         easing: Easing.linear,
+    //     }).start();
+    // }
+    // savenumber(currentnumber) {
+    //     try {
+    //
+    //         // AsyncStorage.getItem('mobileno')
+    //         //     .then((mobileno) => {
+    //         //         addnumber = mobileno;
+    //                 // Toast.show("tickets " +c ,Toast.LONG);
+    //                 // addnumber.push(currentnumber);
+    //                 AsyncStorage.setItem('mobileno', currentnumber);
+    //             // });
+    //
+    //     }catch(error) {
+    //         alert(error)
+    //     }
+    // }
 
     render() {
-        tempnumber = this.state.mobiles;
-        // paramshome= {};
-        // paramshome = {
-        //     phone: this.state.mobiles
-        // };
-        const changeWidth = this.buttonAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
-        });
-        const changeScale = this.growAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, MARGIN],
-        });
+        // paramsmobile = {};
+        paramsmobile = {
+            tempnumber:this.state.mobiles,
+    };
+        // const changeWidth = this.buttonAnimated.interpolate({
+        //     inputRange: [0, 1],
+        //     outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
+        // });
+        // const changeScale = this.growAnimated.interpolate({
+        //     inputRange: [0, 1],
+        //     outputRange: [1, MARGIN],
+        // });
         return(
 
             <View style = { styles.MainContainer }>
@@ -189,7 +199,7 @@ export default class Registration extends Component {
                                         returnKeyType={"done"}
                                         selectionColor="#2CA8DB"
                                         value={this.state.mobiles}
-                                        onChangeText={(mobiles) => this.setState({mobiles})}
+                                        onChangeText={(mobiles) => this.setState({mobiles:mobiles})}
                                         maxLength={10}
                                         style={{justifyContent: 'flex-end',}}/>
 
@@ -200,7 +210,7 @@ export default class Registration extends Component {
                         </View>
 
                         <View style={styles.quarterHeight}>
-                            <Animated.View >
+                            {/*<Animated.View >*/}
                                 <TouchableOpacity
                                     style={styles.button}
                                     // onPress={this.onButtonPress}
@@ -224,7 +234,7 @@ export default class Registration extends Component {
                                 {/*<Animated.View*/}
                                     {/*style={[styles.circle, {transform: [{scale: changeScale}]}]}*/}
                                 {/*/>*/}
-                            </Animated.View>
+                            {/*</Animated.View>*/}
 
 
                             {/*<View style={{flexDirection:"row"}}>*/}
