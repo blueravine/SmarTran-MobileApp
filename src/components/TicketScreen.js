@@ -169,7 +169,7 @@ export default class TicketScreen extends Component {
                 }
                 this.setState({favorite:favcopy});
 
-                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);;
             }).done();
     }
 
@@ -279,7 +279,7 @@ export default class TicketScreen extends Component {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
     handleBackButton = () => {
-        Actions.homeScreen(params);
+        Actions.homeScreen();
         // Alert.alert(
         //     'Exit App',
         //     'Exiting the application?', [{

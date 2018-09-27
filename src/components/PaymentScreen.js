@@ -208,7 +208,7 @@ export default class PaymentScreen extends Component {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
     handleBackButton = () => {
-        Actions.homeScreen(params);
+        Actions.searchScreen(params);
         // Alert.alert(
         //     'Exit App',
         //     'Exiting the application?', [{
