@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Navigator,
     Platform, StyleSheet, View, Text,text,TextInput, Image, TouchableOpacity, Alert,AsyncStorage,
     AppRegistry,TouchableHighlight,StatusBar,Dimensions,Button,ScrollView,Animated,
-    Easing,
+    Easing,BackHandler,
 } from 'react-native';
 import {Card,icon} from 'native-base';
 import { Actions, ActionConst } from 'react-native-router-flux'; // 4.0.0-beta.31
@@ -94,7 +94,7 @@ export default class Registration extends Component {
                                     sessionid = responseJson.Details;
 
                                     Actions.otpScreen(paramsmobile);
-
+                                    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
 
                                 }
                                 else {
@@ -148,6 +148,32 @@ export default class Registration extends Component {
     //         alert(error)
     //     }
     // }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Alert.alert(
+            'Exit App',
+            'Do you want to exit the app?', [{
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel'
+            }, {
+                text: 'OK',
+                onPress: () => BackHandler.exitApp()
+            }, ]
+            , {
+                cancelable: false
+            }
+        );
+        return true;
+    };
+
 
     render() {
         // paramsmobile = {};

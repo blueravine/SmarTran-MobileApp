@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
     View,
     Image,
      Animated,
-     TouchableOpacity,AsyncStorage,
+     TouchableOpacity,AsyncStorage,BackHandler,
   Easing,
     TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert
   } from 'react-native';
@@ -100,6 +100,7 @@ constructor(props) {
                             if (responseJson.message==="user created") {
                                 // Actions.loginScreen({phone:this.props.phone});
                                 Actions.homeScreen(paramsmobile);
+                                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                             }
                             else
                             {
@@ -188,6 +189,33 @@ constructor(props) {
             });
 
     }
+
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Actions.registerScreen();
+        // Alert.alert(
+        //     'Exit App',
+        //     'Exiting the application?', [{
+        //         text: 'Cancel',
+        //         onPress: () => console.log('Cancel Pressed'),
+        //         style: 'cancel'
+        //     }, {
+        //         text: 'OK',
+        //         onPress: () => BackHandler.exitApp()
+        //     }, ]
+        //     , {
+        //         cancelable: false
+        //     }
+        // );
+        return true;
+    };
 
    render() {
        // paramsmobile = {};

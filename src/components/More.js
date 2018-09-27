@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ImageBackground,
+import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ImageBackground,BackHandler,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -121,13 +121,16 @@ export default class More extends Component {
                 Actions.homeScreen();
                 // {this.buttonPress}
                 this.setState({viewSection:!this.state.viewSection});
+                // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 // {this.renderBottomComponent()}
                 break;
             case 'track':
                 Actions.tripScreen();
+                // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 break;
             case 'ticket':
                 Actions.ticketScreen();
+                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 break;
             case 'more':
                 break;
@@ -203,6 +206,33 @@ export default class More extends Component {
             </View>
         );
     }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Actions.homeScreen(params);
+        // Alert.alert(
+        //     'Exit App',
+        //     'Exiting the application?', [{
+        //         text: 'Cancel',
+        //         onPress: () => console.log('Cancel Pressed'),
+        //         style: 'cancel'
+        //     }, {
+        //         text: 'OK',
+        //         onPress: () => BackHandler.exitApp()
+        //     }, ]
+        //     , {
+        //         cancelable: false
+        //     }
+        // );
+        return true;
+    };
+
 
     render() {
         // params = {};

@@ -1,6 +1,6 @@
 import React, { Component,PropTypes } from 'react';
-import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,ActivityIndicator,
-     UIManager, findNodeHandle,
+import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,ActivityIndicator,BackHandler,
+     UIManager, findNodeHandle,Alert,
     TouchableHighlight,Dimensions,Animated,Easing } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Spinner,Thumbnail,Picker,DeckSwiper, Text,Item,icon,Input,View,Fab, Button,  Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -384,6 +384,7 @@ export default class Home extends Component {
         this.setState({loading: true});
                 setTimeout(() => {
             Actions.searchScreen(params);
+                    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         }, 2000)
             // this.setState({loading: false})
     };
@@ -411,9 +412,30 @@ export default class Home extends Component {
                 // this.setState({favticket: favoriteticketdata});
                 // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
                 // alert("all tick"+(favoriteticketdata.mobile));
+                BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
             }).done();
     }
 
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Alert.alert(
+            'Exit App',
+            'Do you want to exit the app?', [{
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel'
+    }, {
+            text: 'OK',
+                onPress: () => BackHandler.exitApp()
+        }, ]
+    , {
+            cancelable: false
+        }
+    );
+        return true;
+    };
 
     resetData(){
     this.setState({

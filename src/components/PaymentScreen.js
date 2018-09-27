@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableOpacity,AsyncStorage,
+import { Image,StyleSheet,TouchableOpacity,AsyncStorage,BackHandler,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem,Radio, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -193,11 +193,38 @@ export default class PaymentScreen extends Component {
                     payticket.push(currentticket);
                     AsyncStorage.setItem('ticket', JSON.stringify(payticket));
                 });
-
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         }catch(error) {
             alert(error)
         }
     }
+
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Actions.homeScreen(params);
+        // Alert.alert(
+        //     'Exit App',
+        //     'Exiting the application?', [{
+        //         text: 'Cancel',
+        //         onPress: () => console.log('Cancel Pressed'),
+        //         style: 'cancel'
+        //     }, {
+        //         text: 'OK',
+        //         onPress: () => BackHandler.exitApp()
+        //     }, ]
+        //     , {
+        //         cancelable: false
+        //     }
+        // );
+        return true;
+    };
 
     render() {
          params = {};

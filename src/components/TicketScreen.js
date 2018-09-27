@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableOpacity,AsyncStorage,LayoutAnimation,
+import { Image,StyleSheet,TouchableOpacity,AsyncStorage,LayoutAnimation,BackHandler,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -121,16 +121,19 @@ export default class TicketScreen extends Component {
                 Actions.homeScreen();
                 // {this.buttonPress}
                 this.setState({viewSection:!this.state.viewSection});
+                //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 // {this.renderBottomComponent()}
                 break;
             case 'track':
                 Actions.tripScreen();
+                //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 break;
             case 'ticket':
                 // Actions.ticketScreen();
                 break;
             case 'more':
                 Actions.moreScreen();
+                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                 break;
             default:
 
@@ -166,6 +169,7 @@ export default class TicketScreen extends Component {
                 }
                 this.setState({favorite:favcopy});
 
+                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
             }).done();
     }
 
@@ -271,6 +275,30 @@ export default class TicketScreen extends Component {
             alert(error)
         }
     }
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Actions.homeScreen(params);
+        // Alert.alert(
+        //     'Exit App',
+        //     'Exiting the application?', [{
+        //         text: 'Cancel',
+        //         onPress: () => console.log('Cancel Pressed'),
+        //         style: 'cancel'
+        //     }, {
+        //         text: 'OK',
+        //         onPress: () => BackHandler.exitApp()
+        //     }, ]
+        //     , {
+        //         cancelable: false
+        //     }
+        // );
+        return true;
+    };
+
+
+
 
     render() {
         AsyncStorage.getItem('ticket')

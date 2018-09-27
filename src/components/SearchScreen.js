@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ActivityIndicator,
+import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ActivityIndicator,BackHandler,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -272,8 +272,35 @@ export default class SearchScreen extends Component {
         this.setState({isloading: true});
         setTimeout(() => {
             Actions.paymentScreen(params);
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
         }, 2000)
         // this.setState({loading: false})
+    };
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    handleBackButton = () => {
+        Actions.homeScreen(params);
+        // Alert.alert(
+        //     'Exit App',
+        //     'Exiting the application?', [{
+        //         text: 'Cancel',
+        //         onPress: () => console.log('Cancel Pressed'),
+        //         style: 'cancel'
+        //     }, {
+        //         text: 'OK',
+        //         onPress: () => BackHandler.exitApp()
+        //     }, ]
+        //     , {
+        //         cancelable: false
+        //     }
+        // );
+        return true;
     };
 
     render() {
