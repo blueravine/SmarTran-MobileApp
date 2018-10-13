@@ -451,7 +451,7 @@ export default class Home extends Component {
 
          };
 
-        fetch("http://35.240.147.242:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+        fetch("http://35.187.226.152:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'POST', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
                 'Accept': 'application/json',
