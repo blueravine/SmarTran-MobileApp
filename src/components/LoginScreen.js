@@ -63,7 +63,7 @@ export default class LoginScreen extends Component {
 
         setTimeout(() => {
             // Actions.secondScreen();
-            fetch('http://35.187.243.93:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('http://35.198.204.170:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',

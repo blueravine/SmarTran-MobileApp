@@ -64,7 +64,8 @@ export default class Registration extends Component {
             alert(error);
         }
 
-            fetch('http://35.187.226.152:3037/users/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+
+            fetch('http://35.198.204.170:3037/users/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
