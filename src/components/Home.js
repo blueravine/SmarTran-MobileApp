@@ -1,6 +1,6 @@
 import React, { Component,PropTypes } from 'react';
 import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,AsyncStorage,ActivityIndicator,BackHandler,
-     UIManager, findNodeHandle,Alert,
+     UIManager, findNodeHandle,Alert,Keyboard,
     TouchableHighlight,Dimensions,Animated,Easing } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Spinner,Thumbnail,Picker,DeckSwiper, Text,Item,icon,Input,View,Fab, Button,  Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -345,6 +345,7 @@ export default class Home extends Component {
             picked1: picked,
             pickervisible1: false,
         });
+        // Keyboard.dismiss();
     };
     onToSelectpicker = (picked) => {
         this.setState({
@@ -543,6 +544,7 @@ export default class Home extends Component {
                                     <TextField label="From Location"
                                     lineHeight={30}
                                     value={this.state.picked1}
+                                    fontSize={16}
                                     editable={false}
                                     // onChangeText={(itemValue) => {this.setState({selected1: this.findPOI(itemValue)})}}
                                     containerStyle={{height:55,width:280,justifyContent:'flex-end'}}
@@ -553,6 +555,7 @@ export default class Home extends Component {
                                     onSelect={this.onFromSelectpicker}
                                     onCancel={this.onFromCancelpicker}
                                     options={options}
+                                    optionTextStyle={style={fontSize:16}}
                                 />
                                     <TouchableOpacity  style={{marginTop:20}} onPress={this._SwapPickerText.bind(this)}>
                                         <Icon type='MaterialIcons' name='swap-vertical-circle' size={35} color="#2eacde"/>
@@ -571,6 +574,7 @@ export default class Home extends Component {
                                            lineHeight={30}
                                            value={this.state.picked2}
                                            editable={false}
+                                           fontSize={16}
                                            // onChangeText={(itemValue) => this.setState({selected2: itemValue})}
                                            containerStyle={{height:55,width:280,marginTop:10,justifyContent:'flex-end'}}/>
                                 </TouchableOpacity>
@@ -579,6 +583,7 @@ export default class Home extends Component {
                                     onSelect={this.onToSelectpicker}
                                     onCancel={this.onToCancelpicker}
                                     options={options}
+                                    optionTextStyle={style={fontSize:16}}
                                 />
 
                             </View>
