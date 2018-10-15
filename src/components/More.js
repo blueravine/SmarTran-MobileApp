@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ImageBackground,BackHandler,
+import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ImageBackground,BackHandler,TextInput,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { Actions } from 'react-native-router-flux'; // 4.0.0-beta.31
 import SmartPicker from 'react-native-smart-picker'
+import Iconns from 'react-native-vector-icons/FontAwesome';
+import Icons from 'react-native-vector-icons/SimpleLineIcons';
+import Icoon from 'react-native-vector-icons/MaterialIcons';
 import MultiToggleSwitch from 'react-native-multi-toggle-switch';
 import {Collapse, CollapseHeader, CollapseBody} from "accordion-collapse-react-native";
 import BottomNavigation, {
     ShiftingTab
 } from 'react-native-material-bottom-navigation'
-// import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-picker';
 var params;
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icoons from 'react-native-vector-icons/SimpleLineIcons';
@@ -34,7 +37,16 @@ const ac_icon_blue = require('../Images/ac_icon_blue.png');
 const ac_icon_grey = require('../Images/ac_icon_grey.png');
 const nonac_icon_blue = require('../Images/nonac_icon_blue.png');
 const nonac_icon_grey = require('../Images/nonac_icon_grey.png');
+var paramsmobile={tempnumber:''};
 
+const options = {
+    title: 'Select Avatar',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images',
+    },
+};
 export default class More extends Component {
 
 
@@ -233,29 +245,32 @@ export default class More extends Component {
         return true;
     };
 
-    // Cameraopenonclick(){
-    //     ImagePicker.showImagePicker(options, (response) => {
-    //         console.log('Response = ', response);
-    //
-    //         if (response.didCancel) {
-    //             console.log('User cancelled image picker');
-    //         } else if (response.error) {
-    //             console.log('ImagePicker Error: ', response.error);
-    //         } else if (response.customButton) {
-    //             console.log('User tapped custom button: ', response.customButton);
-    //         } else {
-    //             const source = { uri: response.uri };
-    //
-    //             // You can also display the image using data:
-    //             // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-    //
-    //             this.setState({
-    //                 avatarSource: source,
-    //             });
-    //         }
-    //     });
-    // }
+    Cameraopenonclick(){
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            } else {
+                const source = { uri: response.uri };
+
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+                this.setState({
+                    avatarSource: source,
+                });
+            }
+        });
+    }
     render() {
+        paramsmobile = {
+            tempnumber:this.props.tempnumber,
+        };
         // params = {};
         // params = {
         //     fromLoc:this.props.fromLoc,
@@ -283,8 +298,10 @@ export default class More extends Component {
         return (
 
             <View style={styles.container}>
+
                 {/*<ScrollView >*/}
                 <View style={[styles.headerview]}>
+                    <ScrollView ref={ (c) => {this.scroll = c}} >
                     {/*<Container style={[styles.headerview]}>*/}
                     {/*<Content>*/}
                     <View style={{flexDirection:"row",backgroundColor:'#0c71b7',paddingRight:10,
@@ -295,9 +312,10 @@ export default class More extends Component {
                         <Text note style={{marginTop:5,fontSize:16,textAlign:'center',color:'#FFFFFF', flex:5}} >Profile Details</Text>
                         <Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>
                     </View>
-                    <ScrollView>
+                    {/*<ScrollView>*/}
                         <Card >
                             {/*<ImageBackground source={require('../Images/profilebackground.png')}*/}
+                            <TouchableOpacity onPress={() =>this.Cameraopenonclick()} >
                             <View style={styles.headercardbackground}>
                                 <View style={styles.headermore}>
                             <View style={styles.profilepicWrap}>
@@ -308,18 +326,97 @@ export default class More extends Component {
                             <Text note style={styles.myname} >John Doe</Text>
                                 </View>
                             </View>
+                            </TouchableOpacity>
                             {/*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*/}
                         </Card>
                         {/*<ScrollView>*/}
-                        <Accordion
-                            sections={SECTIONS}
-                            renderHeader={this._renderHeader}
-                            renderContent={this._renderContent}
-                        >
+                        {/*<Accordion*/}
+                            {/*sections={SECTIONS}*/}
+                            {/*renderHeader={this._renderHeader}*/}
+                            {/*renderContent={this._renderContent}*/}
+                        {/*>*/}
+                        <Card style={{ borderRightWidth:10,borderBottomRightRadius:10,borderTopRightRadius:10,borderBottomLeftRadius:10,
+                            borderTopLeftRadius:10,borderLeftWidth:10,shadowColor:"#f1f1f1f1",borderColor:'#FFFFFF'}}>
+                            <View style={[styles.halfHeight,{paddingLeft:25,paddingRight:25}]} >
+                                {/*<View style={[{backgroundColor: '#FFFFFF',flex:1}]}>*/}
+                                {/*<Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />*/}
+                                {/*</View>*/}
+                                <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                                    {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />*/}
+                                    <Iconns type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 25 }}/>
+                                    <View style={styles.loginFormTextInputnonedit}>
 
-                        </Accordion>
+                                        <TextInput
+                                            placeholder="   mobile number"
+                                            keyboardType='phone-pad'
+                                            editable={false}
+                                            selectTextOnFocus={false}
+                                            placeholderTextColor="#2CA8DB"
+                                            returnKeyType={"done"}
+                                            selectionColor="#2CA8DB"
+                                            underlineColorAndroid="#fafafa"
+                                            // value={this.state.mobile}
+                                            // onChangeText={(mobile) => this.setState({mobile})}
+                                            maxLength={10}
+                                            style={{justifyContent: 'flex-end',}}>
+                                            {this.props.tempnumber}
+                                        </TextInput>
+                                    </View>
+                                </View>
+
+
+                            </View>
+                            <View style={styles.quarterHeight}>
+                                <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+
+
+                                    <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                                        {/*<Image source = {require('../Images/padlock.png')} style = {{ width: 45, height: 45,marginTop: 15 }} />*/}
+                                        <Icons type='SimpleLineIcons' name='user' size={45} color="#bbbfbc" style = {{marginTop: 15 }}/>
+                                        <View style={styles.loginFormTextInput1}>
+
+                                            <TextInput
+                                                placeholder="   Name"
+                                                placeholderTextColor="#2CA8DB"
+                                                underlineColorAndroid="#fafafa"
+                                                returnKeyType={"next"}
+                                                // value={this.state.otp}
+                                                onChangeText={(otp) => this.setState({otp:otp})}
+                                                selectionColor="#2CA8DB"
+                                                maxLength={6}
+                                                style={{justifyContent: 'flex-end',}}/>
+                                        </View>
+                                    </View>
+
+                                </View>
+                                <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
+                                    {/*<Image source = {require('../Images/key.png')} style = {{ width: 45, height: 45,marginTop: 18 }} />*/}
+                                    <Icoon type='MaterialIcons' name='email' size={45} color="#bbbfbc" style = {{marginTop: 18 }}/>
+                                    <View style={styles.loginFormTextInput1}>
+
+                                        <TextInput
+                                            placeholder="   Email-Id"
+                                            placeholderTextColor="#2CA8DB"
+                                            underlineColorAndroid="#fafafa"
+                                            returnKeyType={"done"}
+                                            // value={this.state.otp}
+                                            onChangeText={(otp) => this.setState({otp:otp})}
+                                            selectionColor="#2CA8DB"
+                                            maxLength={6}
+                                            style={{justifyContent: 'flex-end',}}/>
+                                        {/*<TouchableOpacity activeOpacity = { 0.8 } style = { styles.visibilityBtn } onPress = { this.managePasswordVisibility }>*/}
+                                            {/*<Image source = { ( this.state.hidePassword ) ? require('../Images/hide.png') : require('../Images/view.png') }*/}
+                                                   {/*style = { styles.btnImage } />*/}
+                                        {/*</TouchableOpacity>*/}
+                                    </View>
+                                </View>
+
+                            </View>
+                        </Card>
+
+                        {/*</Accordion>*/}
+                    {/*</ScrollView>*/}
                     </ScrollView>
-
                 </View>
 
                 <View style={[styles.footer]}>
@@ -407,8 +504,8 @@ const styles = StyleSheet.create({
 
     },
     profilepicWrap:{
-        width:180,
-        height:180,
+        width:100,
+        height:100,
         borderRadius:100,
         borderColor:'rgba(0,0,0,0.4)',
         borderWidth:16,
@@ -430,4 +527,128 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
 
     },
+    quarterHeight: {
+        flex: .5,
+        backgroundColor: '#FFFFFF',
+        alignItems: 'center',
+    },
+
+    orTextView1:{
+        fontSize: 16,
+        color:'#2CA8DB',
+        marginTop: 12
+
+
+    },
+    orText1:{
+        fontSize: 18,
+        color:'#2CA8DB',
+        marginTop: 20,
+
+        paddingLeft:15,
+        textDecorationLine: 'underline'
+    },
+
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#2eacde',
+        height: 60,
+        fontSize: 16,
+        width:DEVICE_WIDTH - 10,
+        // borderRadius: 15,
+        color:'#FFFFFF',
+        borderColor: '#2eacde',
+        padding:10,
+        paddingLeft:15,
+        marginTop: 20,
+        marginBottom:10,
+        textAlign: 'center',
+        alignSelf: 'center',
+        zIndex: 100
+    },
+    circle: {
+        height: MARGIN,
+        width: MARGIN,
+        marginTop: -MARGIN,
+        //  borderWidth: 1,
+        //   borderColor: '#F035E0',
+        //   borderRadius: 100,
+        alignSelf: 'center',
+        zIndex: 99,
+        backgroundColor: '#FFFFFF',
+    },
+    text: {
+        color: 'white',
+        fontSize:20,
+        backgroundColor: 'transparent',
+    },
+    image: {
+        width: 24,
+        height: 24,
+    },
+
+    loginFormTextInputnonedit:{
+        height: 45,
+        fontSize: 14,
+        width:DEVICE_WIDTH - 120,
+        borderWidth: 0.5,
+        borderRadius:10,
+        borderColor: '#bbbfbc',
+        backgroundColor: '#fafafa',
+        padding:4,
+        paddingLeft: 5,
+        marginLeft:15,
+        marginRight: 15,
+        marginTop: 30,
+        marginBottom:10,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    loginFormTextInput1:{
+        height: 45,
+        fontSize: 14,
+        width:DEVICE_WIDTH - 120,
+        borderWidth: 0.5,
+        borderRadius:10,
+        borderColor: '#2CA8DB',
+        backgroundColor: '#fafafa',
+        padding:4,
+        paddingLeft:5,
+        marginLeft:15,
+        marginRight: 10,
+        marginTop: 20,
+        marginBottom:10,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    numberFormTextInput:{
+        height: 45,
+        fontSize: 16,
+        width:DEVICE_WIDTH -300,
+        borderWidth: 0.5,
+        borderRadius:10,
+        borderColor: '#2CA8DB',
+        backgroundColor: '#fafafa',
+        padding:4,
+        paddingLeft:10,
+        marginLeft:15,
+        marginTop: 20,
+        marginBottom:0,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    ImageStyle: {
+        padding: 10,
+        paddingLeft:45,
+        paddingRight:45,
+        margin: 105,
+        marginRight:100,
+        marginLeft:300,
+        marginTop:1,
+        height: 150,
+        width: 150,
+        resizeMode : 'stretch',
+        alignItems: 'center'
+    }
 });
