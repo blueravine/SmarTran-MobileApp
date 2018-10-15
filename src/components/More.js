@@ -11,7 +11,7 @@ import {Collapse, CollapseHeader, CollapseBody} from "accordion-collapse-react-n
 import BottomNavigation, {
     ShiftingTab
 } from 'react-native-material-bottom-navigation'
-import ImagePicker from 'react-native-image-picker';
+// import ImagePicker from 'react-native-image-picker';
 var params;
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icoons from 'react-native-vector-icons/SimpleLineIcons';

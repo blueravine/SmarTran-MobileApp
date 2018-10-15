@@ -55,6 +55,8 @@
 		34708E93C48042D9ADA26296 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55235DA5FC2B4498A6CEBD34 /* SimpleLineIcons.ttf */; };
 		ACE7C4058CA2445796604731 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F65E22E6832417D97FA82C7 /* Zocial.ttf */; };
 		7BA3E824A31F47CAA8696A02 /* libRNSnackbar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 05441C8089984867AC063FD2 /* libRNSnackbar.a */; };
+		82145EFB10714118B32A58F3 /* libRCTAutoComplete.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D98E4BEBC474273A740BAAA /* libRCTAutoComplete.a */; };
+		F751A84674774FA1A1CFF6F1 /* libRNCardView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B32B2FECBE93464E8FB07307 /* libRNCardView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -382,6 +384,10 @@
 		3F65E22E6832417D97FA82C7 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		66FB0232BA764A929D3154AE /* RNSnackbar.xcodeproj */ = {isa = PBXFileReference; name = "RNSnackbar.xcodeproj"; path = "../node_modules/react-native-snackbar/ios/RNSnackbar.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		05441C8089984867AC063FD2 /* libRNSnackbar.a */ = {isa = PBXFileReference; name = "libRNSnackbar.a"; path = "libRNSnackbar.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		DDECA7519FAB48F7A9F635AE /* RCTAutoComplete.xcodeproj */ = {isa = PBXFileReference; name = "RCTAutoComplete.xcodeproj"; path = "../node_modules/react-native-autocomplete/RCTAutoComplete.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		6D98E4BEBC474273A740BAAA /* libRCTAutoComplete.a */ = {isa = PBXFileReference; name = "libRCTAutoComplete.a"; path = "libRCTAutoComplete.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		C4278C2BE50A4CA184309966 /* RNCardView.xcodeproj */ = {isa = PBXFileReference; name = "RNCardView.xcodeproj"; path = "../node_modules/react-native-cardview/ios/RNCardView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B32B2FECBE93464E8FB07307 /* libRNCardView.a */ = {isa = PBXFileReference; name = "libRNCardView.a"; path = "libRNCardView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -414,6 +420,8 @@
 				4736DA8A70F246F79B1FFBC9 /* libReactNativePermissions.a in Frameworks */,
 				3EE91BADFDD04F61B5560B7D /* libRNVectorIcons.a in Frameworks */,
 				7BA3E824A31F47CAA8696A02 /* libRNSnackbar.a in Frameworks */,
+				82145EFB10714118B32A58F3 /* libRCTAutoComplete.a in Frameworks */,
+				F751A84674774FA1A1CFF6F1 /* libRNCardView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +612,8 @@
 				4B344DD3582147708AA9C8B1 /* ReactNativePermissions.xcodeproj */,
 				E3BD42CF053942D5A70F00B5 /* RNVectorIcons.xcodeproj */,
 				66FB0232BA764A929D3154AE /* RNSnackbar.xcodeproj */,
+				DDECA7519FAB48F7A9F635AE /* RCTAutoComplete.xcodeproj */,
+				C4278C2BE50A4CA184309966 /* RNCardView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1267,6 +1277,8 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Smartran.app/Smartran";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1274,6 +1286,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Debug;
@@ -1294,6 +1308,8 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Smartran.app/Smartran";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1301,6 +1317,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Release;
@@ -1326,6 +1344,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Debug;
@@ -1350,6 +1370,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Release;
@@ -1379,6 +1401,8 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1386,6 +1410,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Debug;
@@ -1415,6 +1441,8 @@
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1422,6 +1450,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Release;
@@ -1450,6 +1480,8 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1457,6 +1489,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Debug;
@@ -1485,6 +1519,8 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1492,6 +1528,8 @@
 					"$(SRCROOT)\..\node_modules\react-native-permissions\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-vector-icons\RNVectorIconsManager",
 					"$(SRCROOT)\..\node_modules\react-native-snackbar\ios",
+					"$(SRCROOT)\..\node_modules\react-native-autocomplete/**",
+					"$(SRCROOT)\..\node_modules\react-native-cardview\ios",
 				);
 			};
 			name = Release;
