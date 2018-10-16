@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ImageBackground,BackHandler,TextInput,
+import { Image,StyleSheet,TouchableHighlight,TouchableOpacity,ImageBackground,BackHandler,TextInput,PixelRatio,
     Dimensions,ScrollView,Alert} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button, Left, Body, Right,
     Footer, FooterTab} from 'native-base';
@@ -14,6 +14,7 @@ import {Collapse, CollapseHeader, CollapseBody} from "accordion-collapse-react-n
 import BottomNavigation, {
     ShiftingTab
 } from 'react-native-material-bottom-navigation'
+import { TextField } from 'react-native-material-textfield';
 import ImagePicker from 'react-native-image-picker';
 var params;
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -39,31 +40,15 @@ const nonac_icon_blue = require('../Images/nonac_icon_blue.png');
 const nonac_icon_grey = require('../Images/nonac_icon_grey.png');
 var paramsmobile={tempnumber:''};
 
-const options = {
-    title: 'Select Avatar',
-    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-    storageOptions: {
-        skipBackup: true,
-        path: 'images',
-    },
-};
 export default class More extends Component {
 
 
     constructor() {
         super();
-        this.state = {
-            selected: "At",
-
-        };
-
-        this.state ={
-            showacview: true,
-            shownonacview: true,
-        };
 
         this.state= {
             activeTab: 'more',
+            avatarSource: null
         };
 
         this._renderHeader = this._renderHeader.bind(this);
@@ -245,28 +230,42 @@ export default class More extends Component {
         return true;
     };
 
-    Cameraopenonclick(){
+    selectPhotoTapped() {
+        const options = {
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
+        };
+
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response);
 
             if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
                 console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
+            }
+            else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
-            } else {
-                const source = { uri: response.uri };
+            }
+            else {
+                let source = { uri: response.uri };
 
                 // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
                 this.setState({
-                    avatarSource: source,
+                    avatarSource: source
                 });
             }
         });
     }
+
+
     render() {
         paramsmobile = {
             tempnumber:this.props.tempnumber,
@@ -313,22 +312,17 @@ export default class More extends Component {
                         <Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>
                     </View>
                     {/*<ScrollView>*/}
-                        <Card >
-                            {/*<ImageBackground source={require('../Images/profilebackground.png')}*/}
-                            <TouchableOpacity onPress={() =>this.Cameraopenonclick()} >
-                            <View style={styles.headercardbackground}>
-                                <View style={styles.headermore}>
-                            <View style={styles.profilepicWrap}>
-                                <Image source={require('../Images/student.png')}
-                                       style={styles.profilepic}/>
-                            </View>
-
-                            <Text note style={styles.myname} >John Doe</Text>
-                                </View>
-                            </View>
-                            </TouchableOpacity>
-                            {/*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*/}
-                        </Card>
+                        {/*<Card >*/}
+                            {/*/!*<ImageBackground source={require('../Images/profilebackground.png')}*!/*/}
+                            {/*<TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>*/}
+                                {/*<View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>*/}
+                                    {/*{ this.state.avatarSource === null ? <Text>Select a Photo</Text> :*/}
+                                        {/*<Image style={styles.avatar} source={this.state.avatarSource} />*/}
+                                    {/*}*/}
+                                {/*</View>*/}
+                            {/*</TouchableOpacity>*/}
+                            {/*/!*<Text note style={{marginTop:5,fontSize:12,textAlign:'right',color:'#FFFFFF', flex:1}} > </Text>*!/*/}
+                        {/*</Card>*/}
                         {/*<ScrollView>*/}
                         {/*<Accordion*/}
                             {/*sections={SECTIONS}*/}
@@ -341,27 +335,42 @@ export default class More extends Component {
                                 {/*<View style={[{backgroundColor: '#FFFFFF',flex:1}]}>*/}
                                 {/*<Image source = {require('../Images/smartranlogo.png')} style={styles.ImageStyle} />*/}
                                 {/*</View>*/}
+                                <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                                    <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+                                        { this.state.avatarSource === null ? <Text>Select a Photo</Text> :
+                                            <Image style={styles.avatar} source={this.state.avatarSource} />
+                                        }
+                                    </View>
+                                </TouchableOpacity>
                                 <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
                                     {/*<Image source = {require('../Images/phonecircle.png')} style = {{ width: 45, height: 45,marginTop: 78 }} />*/}
-                                    <Iconns type='FontAwesome' name='whatsapp' size={45} color="#bbbfbc" style = {{marginTop: 25 }}/>
-                                    <View style={styles.loginFormTextInputnonedit}>
+                                    <Iconns type='FontAwesome' name='whatsapp' size={22} color="#bbbfbc" style = {{marginTop: 25 }}/>
+                                    <TextField label="Mobile Number"
+                                               lineHeight={30}
+                                        // value={this.state.picked2}
+                                               editable={false}
+                                               fontSize={16}
+                                        // onChangeText={(itemValue) => this.setState({selected2: itemValue})}
+                                               containerStyle={{height:55,width:DEVICE_WIDTH - 120,marginTop:10,marginLeft:10,marginRight:10,justifyContent:'flex-end'}}/>
 
-                                        <TextInput
-                                            placeholder="   mobile number"
-                                            keyboardType='phone-pad'
-                                            editable={false}
-                                            selectTextOnFocus={false}
-                                            placeholderTextColor="#2CA8DB"
-                                            returnKeyType={"done"}
-                                            selectionColor="#2CA8DB"
-                                            underlineColorAndroid="#fafafa"
-                                            // value={this.state.mobile}
-                                            // onChangeText={(mobile) => this.setState({mobile})}
-                                            maxLength={10}
-                                            style={{justifyContent: 'flex-end',}}>
-                                            {this.props.tempnumber}
-                                        </TextInput>
-                                    </View>
+                                    {/*<View style={styles.loginFormTextInputnonedit}>*/}
+
+                                        {/*<TextInput*/}
+                                            {/*placeholder="   mobile number"*/}
+                                            {/*keyboardType='phone-pad'*/}
+                                            {/*editable={false}*/}
+                                            {/*selectTextOnFocus={false}*/}
+                                            {/*placeholderTextColor="#2CA8DB"*/}
+                                            {/*returnKeyType={"done"}*/}
+                                            {/*selectionColor="#2CA8DB"*/}
+                                            {/*underlineColorAndroid="#fafafa"*/}
+                                            {/*// value={this.state.mobile}*/}
+                                            {/*// onChangeText={(mobile) => this.setState({mobile})}*/}
+                                            {/*maxLength={10}*/}
+                                            {/*style={{justifyContent: 'flex-end',}}>*/}
+                                            {/*{this.props.tempnumber}*/}
+                                        {/*</TextInput>*/}
+                                    {/*</View>*/}
                                 </View>
 
 
@@ -372,43 +381,59 @@ export default class More extends Component {
 
                                     <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
                                         {/*<Image source = {require('../Images/padlock.png')} style = {{ width: 45, height: 45,marginTop: 15 }} />*/}
-                                        <Icons type='SimpleLineIcons' name='user' size={45} color="#bbbfbc" style = {{marginTop: 15 }}/>
-                                        <View style={styles.loginFormTextInput1}>
+                                        <Icons type='SimpleLineIcons' name='user' size={22} color="#bbbfbc" style = {{marginTop: 15 }}/>
+                                        <TextField label="Name"
+                                                   lineHeight={30}
+                                            // value={this.state.picked2}
+                                                   editable={true}
+                                                   fontSize={16}
+                                            // onChangeText={(itemValue) => this.setState({selected2: itemValue})}
+                                                   containerStyle={{height:55,width:DEVICE_WIDTH - 120,marginTop:10,marginLeft:10,marginRight:10,justifyContent:'flex-end'}}/>
 
-                                            <TextInput
-                                                placeholder="   Name"
-                                                placeholderTextColor="#2CA8DB"
-                                                underlineColorAndroid="#fafafa"
-                                                returnKeyType={"next"}
-                                                // value={this.state.otp}
-                                                onChangeText={(otp) => this.setState({otp:otp})}
-                                                selectionColor="#2CA8DB"
-                                                maxLength={6}
-                                                style={{justifyContent: 'flex-end',}}/>
-                                        </View>
+                                        {/*<View style={styles.loginFormTextInput1}>*/}
+
+                                            {/*<TextInput*/}
+                                                {/*placeholder="   Name"*/}
+                                                {/*placeholderTextColor="#2CA8DB"*/}
+                                                {/*underlineColorAndroid="#fafafa"*/}
+                                                {/*returnKeyType={"next"}*/}
+                                                {/*// value={this.state.otp}*/}
+                                                {/*onChangeText={(otp) => this.setState({otp:otp})}*/}
+                                                {/*selectionColor="#2CA8DB"*/}
+                                                {/*maxLength={6}*/}
+                                                {/*style={{justifyContent: 'flex-end',}}/>*/}
+                                        {/*</View>*/}
                                     </View>
 
                                 </View>
                                 <View style={{flexDirection:"row",justifyContent:"space-evenly"}}>
                                     {/*<Image source = {require('../Images/key.png')} style = {{ width: 45, height: 45,marginTop: 18 }} />*/}
-                                    <Icoon type='MaterialIcons' name='email' size={45} color="#bbbfbc" style = {{marginTop: 18 }}/>
-                                    <View style={styles.loginFormTextInput1}>
+                                    <Icoon type='MaterialIcons' name='email' size={22} color="#bbbfbc" style = {{marginTop: 18 }}/>
+                                    <TextField label="Email-Id"
+                                               lineHeight={30}
+                                        // value={this.state.picked2}
+                                               editable={true}
+                                               fontSize={16}
+                                        // onChangeText={(itemValue) => this.setState({selected2: itemValue})}
+                                               containerStyle={{height:55,width:DEVICE_WIDTH - 120,marginTop:10,marginLeft:10,marginRight:10,justifyContent:'flex-end'}}/>
 
-                                        <TextInput
-                                            placeholder="   Email-Id"
-                                            placeholderTextColor="#2CA8DB"
-                                            underlineColorAndroid="#fafafa"
-                                            returnKeyType={"done"}
-                                            // value={this.state.otp}
-                                            onChangeText={(otp) => this.setState({otp:otp})}
-                                            selectionColor="#2CA8DB"
-                                            maxLength={6}
-                                            style={{justifyContent: 'flex-end',}}/>
-                                        {/*<TouchableOpacity activeOpacity = { 0.8 } style = { styles.visibilityBtn } onPress = { this.managePasswordVisibility }>*/}
-                                            {/*<Image source = { ( this.state.hidePassword ) ? require('../Images/hide.png') : require('../Images/view.png') }*/}
-                                                   {/*style = { styles.btnImage } />*/}
-                                        {/*</TouchableOpacity>*/}
-                                    </View>
+                                    {/*<View style={styles.loginFormTextInput1}>*/}
+
+                                        {/*<TextInput*/}
+                                            {/*placeholder="   Email-Id"*/}
+                                            {/*placeholderTextColor="#2CA8DB"*/}
+                                            {/*underlineColorAndroid="#fafafa"*/}
+                                            {/*returnKeyType={"done"}*/}
+                                            {/*// value={this.state.otp}*/}
+                                            {/*onChangeText={(otp) => this.setState({otp:otp})}*/}
+                                            {/*selectionColor="#2CA8DB"*/}
+                                            {/*maxLength={6}*/}
+                                            {/*style={{justifyContent: 'flex-end',}}/>*/}
+                                        {/*/!*<TouchableOpacity activeOpacity = { 0.8 } style = { styles.visibilityBtn } onPress = { this.managePasswordVisibility }>*!/*/}
+                                            {/*/!*<Image source = { ( this.state.hidePassword ) ? require('../Images/hide.png') : require('../Images/view.png') }*!/*/}
+                                                   {/*/!*style = { styles.btnImage } />*!/*/}
+                                        {/*/!*</TouchableOpacity>*!/*/}
+                                    {/*</View>*/}
                                 </View>
 
                             </View>
@@ -650,5 +675,18 @@ const styles = StyleSheet.create({
         width: 150,
         resizeMode : 'stretch',
         alignItems: 'center'
+    },
+    avatarContainer: {
+        borderColor: '#9B9B9B',
+        borderWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+        marginLeft:60,
+        marginTop:10,
+        alignItems: 'center'
+    },
+    avatar: {
+        borderRadius: 75,
+        width: 150,
+        height: 150
     }
 });
