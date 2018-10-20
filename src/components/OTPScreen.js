@@ -40,7 +40,10 @@ constructor(props) {
     super(props);
     this.state={
         mobile:'',
-        otp: ''
+        password:'',
+        jwtaud:'',
+        otp: '',
+        token:''
     };
 
     // this.state = {
@@ -72,7 +75,13 @@ constructor(props) {
     // }, 2000);
 
     // setTimeout(() => {
-
+      try {
+          AsyncStorage.setItem('jwttoken', this.state.token);
+      }
+      catch(error)
+      {
+          alert(error);
+      }
 
         fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/VERIFY/'+sessionid+'/'+this.state.otp, { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'GET', // USE GET, POST, PUT,ETC
@@ -85,7 +94,7 @@ constructor(props) {
             .then((responseJson) => {
                 if((responseJson.Status==="Success") && (responseJson.Details==="OTP Matched")){
 
-                    fetch('http://35.240.147.215:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                    fetch('http://35.240.147.215:3037/user/register', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                         method: 'POST', // USE GET, POST, PUT,ETC
                         headers: { //MODIFY HEADERS
                             'Accept': 'application/json',
@@ -99,8 +108,36 @@ constructor(props) {
 
                             if (responseJson.message==="user created") {
                                 // Actions.loginScreen({phone:this.props.phone});
-                                Actions.homeScreen(paramsmobile);
-                                BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                                fetch('http://35.240.147.215:3037/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                                    method: 'POST', // USE GET, POST, PUT,ETC
+                                    headers: { //MODIFY HEADERS
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                        //    application/x-www-form-urlencoded
+                                    },
+                                    body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                                                          password: this.state.password,
+                                                          jwtaudience:'SmarTran'  })
+                                })
+                                    .then((response) => response.json())
+                                    .then((responseJson) => {
+
+                                        if (responseJson.message==="user authenticated") {
+                                            // Actions.loginScreen({phone:this.props.phone});
+                                            Actions.homeScreen(paramsmobile);
+                                            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                                        }
+                                        else
+                                        {
+                                            alert("user creation failed");
+                                        }
+
+
+                                    }).catch((error) => {
+                                    alert(error);
+                                });
+                                // Actions.homeScreen(paramsmobile);
+                                // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                             }
                             else
                             {
@@ -314,6 +351,8 @@ constructor(props) {
                                 returnKeyType={"done"}
                                 selectionColor="#2CA8DB"
                                 maxLength={12}
+                                value={this.state.password}
+                                onChangeText={(passwd) => this.setState({password:passwd})}
                                 // Making the Text Input Text Hidden.
                                 secureTextEntry = { this.state.hidePassword }
                                 style={{justifyContent: 'flex-end',}}/>
