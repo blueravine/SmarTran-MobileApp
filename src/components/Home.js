@@ -45,7 +45,7 @@ const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
 import Icoons from 'react-native-vector-icons/FontAwesome';
 var params;
-var favoriteticketdata={mobile: "9999988888",stops:[],routes:[]};
+var favoriteticketdata={mobile: "9999988888",stops:[],routes:[],token:''};
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
@@ -417,6 +417,21 @@ export default class Home extends Component {
                 // alert("all tick"+(favoriteticketdata.mobile));
                 BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
             }).done();
+        await AsyncStorage.getItem('jwttoken')
+            .then((jwttoken) => {
+                // let tempfavticket = favoriteticketdata;
+                // alert("all tick"+favs+"favticket");
+                favoriteticketdata.token = jwttoken;
+                // this.setState({favticket: favoriteticketdata});
+                // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
+                // alert("all tick"+(favoriteticketdata.mobile));
+                Snackbar.show({
+                    title: jwttoken,
+                    duration: Snackbar.LENGTH_SHORT,
+                });
+                BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+            }).done();
+
         // AppState.addEventListener('change',this.handleAppStateChange);
     }
 
