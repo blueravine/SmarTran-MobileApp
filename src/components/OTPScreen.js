@@ -299,7 +299,7 @@ constructor(props) {
                         <TextInput 
                             placeholder="   mobile number"
                             keyboardType='phone-pad'
-                            editable={false} 
+                            editable={false}
                             selectTextOnFocus={false}
                             placeholderTextColor="#2CA8DB" 
                             returnKeyType={"done"} 
@@ -309,7 +309,7 @@ constructor(props) {
                             // onChangeText={(mobile) => this.setState({mobile})}
                             maxLength={10}                           
                           style={{justifyContent: 'flex-end',}}>
-                            {this.props.tempnumber}
+                            {paramsmobile.tempnumber}
                         </TextInput>
                   </View>
                  </View>
@@ -336,7 +336,8 @@ constructor(props) {
                             selectionColor="#2CA8DB"
                             maxLength={6}                           
                           style={{justifyContent: 'flex-end',}}/>
-                  </View>
+
+                    </View>
                  </View>
 
                  </View>
@@ -472,6 +473,12 @@ constructor(props) {
         
         
       },
+      btnImage:
+          {
+              resizeMode: 'contain',
+              height: '100%',
+              width: '100%'
+          },
       orText1:{
           fontSize: 18,
            color:'#2CA8DB',

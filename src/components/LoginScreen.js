@@ -147,7 +147,7 @@ export default class LoginScreen extends Component {
                         <View style={styles.loginFormTextInputnonedit}>
 
                             <TextInput
-                                placeholder="   "
+                                placeholder=" mobile number  "
                                 keyboardType='phone-pad'
                                 editable={false}
                                 selectTextOnFocus={false}
@@ -159,7 +159,7 @@ export default class LoginScreen extends Component {
                                 // value={this.state.phone}
                                 // onChangeText={(phone) => this.setState({phone})}
                                 style={{justifyContent: 'flex-end',}}>
-                                {this.props.tempnumber}
+                                {paramsmobile.tempnumber}
                                 {/*{this.state.phone}*/}
                             </TextInput>
                         </View>
