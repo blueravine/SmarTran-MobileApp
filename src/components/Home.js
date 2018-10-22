@@ -45,7 +45,7 @@ const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
 import Icoons from 'react-native-vector-icons/FontAwesome';
 var params;
-var favoriteticketdata={mobile: "9999988888",stops:[],routes:[],token:''};
+var favoriteticketdata={mobile: "9999988888",stops:[],routes:[],jwttoken:null};
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
@@ -421,14 +421,10 @@ export default class Home extends Component {
             .then((jwttoken) => {
                 // let tempfavticket = favoriteticketdata;
                 // alert("all tick"+favs+"favticket");
-                favoriteticketdata.token = jwttoken;
+                favoriteticketdata.jwttoken = jwttoken;
                 // this.setState({favticket: favoriteticketdata});
                 // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
                 // alert("all tick"+(favoriteticketdata.mobile));
-                Snackbar.show({
-                    title: jwttoken,
-                    duration: Snackbar.LENGTH_SHORT,
-                });
                 BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
             }).done();
 
@@ -510,7 +506,7 @@ export default class Home extends Component {
 
          };
 
-        fetch("http://35.240.147.215:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+        fetch("http://35.240.167.48:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'POST', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
                 'Accept': 'application/json',

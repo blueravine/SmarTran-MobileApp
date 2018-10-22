@@ -75,13 +75,13 @@ constructor(props) {
     // }, 2000);
 
     // setTimeout(() => {
-      try {
-          AsyncStorage.setItem('jwttoken', this.state.token);
-      }
-      catch(error)
-      {
-          alert(error);
-      }
+    //   try {
+    //       AsyncStorage.setItem('jwttoken', this.state.token);
+    //   }
+    //   catch(error)
+    //   {
+    //       alert(error);
+    //   }
 
         fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/VERIFY/'+sessionid+'/'+this.state.otp, { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'GET', // USE GET, POST, PUT,ETC
@@ -94,21 +94,22 @@ constructor(props) {
             .then((responseJson) => {
                 if((responseJson.Status==="Success") && (responseJson.Details==="OTP Matched")){
 
-                    fetch('http://35.240.147.215:3037/user/register', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                    fetch('http://35.240.167.48:3037/user/register', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                         method: 'POST', // USE GET, POST, PUT,ETC
                         headers: { //MODIFY HEADERS
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
                             //    application/x-www-form-urlencoded
                         },
-                        body: JSON.stringify({mobile:paramsmobile.tempnumber})
+                        body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                                              password:this.state.password })
                     })
                         .then((response) => response.json())
                         .then((responseJson) => {
 
                             if (responseJson.message==="user created") {
                                 // Actions.loginScreen({phone:this.props.phone});
-                                fetch('http://35.240.147.215:3037/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                                fetch('http://35.240.167.48:3037/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                                     method: 'POST', // USE GET, POST, PUT,ETC
                                     headers: { //MODIFY HEADERS
                                         'Accept': 'application/json',
@@ -124,6 +125,7 @@ constructor(props) {
 
                                         if (responseJson.message==="user authenticated") {
                                             // Actions.loginScreen({phone:this.props.phone});
+                                            AsyncStorage.setItem('jwttoken', responseJson.token);
                                             Actions.homeScreen(paramsmobile);
                                             BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                                         }
