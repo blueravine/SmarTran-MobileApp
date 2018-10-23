@@ -22,7 +22,7 @@ import Moment from "moment/moment";
 var paramshome;
 var tempnumber;
 var addnumber;
-var paramsmobile={tempnumber:''};
+var paramsmobile={tempnumber:'',jwttoken:null};
 export default class Registration extends Component {
     // public static var=sessionid;
     constructor(props) {
@@ -65,7 +65,7 @@ export default class Registration extends Component {
         }
 
 
-            fetch('http://35.240.147.215:3037/user/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('http://35.240.167.48:3037/user/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
@@ -110,9 +110,46 @@ export default class Registration extends Component {
                         // alert("all tick"+(paramsmobile.tempnumber));
                     }
                     else   {
-                        // Actions.lo({text: this.state.mobiles });
-                        // Actions.loginScreen(paramshome.phone);
-                        Actions.homeScreen(paramsmobile);
+                        AsyncStorage.getItem('jwttoken')
+                            .then((jwttoken) => {
+                                paramsmobile.jwttoken = jwttoken;
+                            }).done(() =>{
+                            if(!(paramsmobile.jwttoken)){
+                                Actions.loginScreen(paramsmobile.tempnumber);
+                            }
+                            else{
+                                fetch('http://35.240.167.48:3037/user/token/verify', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                                    method: 'POST', // USE GET, POST, PUT,ETC
+                                    headers: { //MODIFY HEADERS
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                        'Authorization':'Bearer '+paramsmobile.jwttoken,
+                                        //    application/x-www-form-urlencoded
+                                    },
+                                    body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                                        jwtaudience:'SmarTran'  })
+                                })
+                                    .then((response) => response.json())
+                                    .then((responseJson) => {
+
+                                        if (responseJson.message==="jwt token valid") {
+                                            // Actions.loginScreen({phone:this.props.phone});
+                                            Actions.homeScreen(paramsmobile);
+                                            // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                                        }
+                                        else
+                                        {
+                                            Actions.loginScreen(paramsmobile.tempnumber);
+                                            // alert("user creation failed");
+                                        }
+
+
+                                    }).catch((error) => {
+                                    alert(error);
+                                });
+                            }
+
+                        });
 
                     }
 

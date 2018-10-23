@@ -24,6 +24,7 @@ const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 // var newno;
 var paramshome;
+var paramsmobile={tempnumber:''};
 export default class LoginScreen extends Component {
 
 
@@ -48,53 +49,53 @@ export default class LoginScreen extends Component {
 
     //{ this.props.navigation.state.params.mobiles }
     _onPress() {
-        if (this.state.isLoading) return;
-
-        this.setState({isLoading: true});
-        Animated.timing(this.buttonAnimated, {
-            toValue: 1,
-            duration: 200,
-            easing: Easing.linear,
-        }).start();
-
-        setTimeout(() => {
-            this._onGrow();
-        }, 2000);
+        // if (this.state.isLoading) return;
+        //
+        // this.setState({isLoading: true});
+        // Animated.timing(this.buttonAnimated, {
+        //     toValue: 1,
+        //     duration: 200,
+        //     easing: Easing.linear,
+        // }).start();
+        //
+        // setTimeout(() => {
+        //     this._onGrow();
+        // }, 2000);
 
         setTimeout(() => {
             // Actions.secondScreen();
-            fetch('http://35.240.147.215:3037/users/create', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('http://35.240.167.48:3037/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     //    application/x-www-form-urlencoded
                 },
-                body: JSON.stringify({mobile:this.props.phone})
+                body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                    password: this.state.password,
+                    jwtaudience:'SmarTran'  })
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
-                    // alert(responseJson.message);
-                    if (responseJson.message==="user created"){ //MAKE YOU VALIDATIONS HERE ) {
 
-                        // Actions.loginScreen();
-                        Actions.homeScreen();
-                        // alert('Please check the no')
-
+                    if (responseJson.message==="user authenticated") {
+                        // Actions.loginScreen({phone:this.props.phone});
+                        AsyncStorage.setItem('jwttoken', responseJson.token);
+                        Actions.homeScreen(paramsmobile);
+                        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                     }
-                    else   {
-                        // Actions.lo({text: this.state.mobiles });
-                        // Actions.homeScreen();
-
+                    else
+                    {
+                        alert("user authentication failed");
                     }
 
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-            this.setState({isLoading: false});
-            this.buttonAnimated.setValue(0);
-            this.growAnimated.setValue(0);
+
+                }).catch((error) => {
+                alert(error);
+            });
+            // this.setState({isLoading: false});
+            // this.buttonAnimated.setValue(0);
+            // this.growAnimated.setValue(0);
         }, 2300);
     }
 
@@ -107,9 +108,9 @@ export default class LoginScreen extends Component {
     }
 
     render() {
-        paramshome= {};
-        paramshome = {
-            phone: this.props.phone
+
+        paramsmobile = {
+            tempnumber:this.props.tempnumber,
         };
         const changeWidth = this.buttonAnimated.interpolate({
             inputRange: [0, 1],
@@ -146,7 +147,7 @@ export default class LoginScreen extends Component {
                         <View style={styles.loginFormTextInputnonedit}>
 
                             <TextInput
-                                placeholder="   "
+                                placeholder=" mobile number  "
                                 keyboardType='phone-pad'
                                 editable={false}
                                 selectTextOnFocus={false}
@@ -158,7 +159,7 @@ export default class LoginScreen extends Component {
                                 // value={this.state.phone}
                                 // onChangeText={(phone) => this.setState({phone})}
                                 style={{justifyContent: 'flex-end',}}>
-                                {paramshome.phone}
+                                {paramsmobile.tempnumber}
                                 {/*{this.state.phone}*/}
                             </TextInput>
                         </View>

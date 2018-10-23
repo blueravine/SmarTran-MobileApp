@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet,Dimensions, View, Text, Image,AsyncStorage, TouchableOpacity,StatusBar, Alert } from 'react-native';
 import { Actions, ActionConst } from 'react-native-router-flux';
 // import Registration from "./Registration"; // 4.0.0-beta.31
-var mobiledata={mobile: null};
-var paramsmobile ;
+var mobiledata={mobile: null,jwttoken:null};
+var paramsmobile={tempnumber:'',jwttoken:null};
 export default class SplashScreen extends Component {
     constructor(props) {
         super(props);
@@ -17,20 +17,52 @@ export default class SplashScreen extends Component {
         setTimeout(() => {
              AsyncStorage.getItem('mobileno')
                 .then((mobileno) => {
-                    // let tempfavticket = favoriteticketdata;
-                    // alert("all tick"+favs+"favticket");
-                    mobiledata.mobile = mobileno;
-                    // this.setState({favticket: favoriteticketdata});
-                    // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
-                    // alert("all tick"+(mobiledata.mobile) + 'varvalue' + mobileno);
+                    paramsmobile.tempnumber = mobileno;
                 }).done(() => {
-                 if(!(mobiledata.mobile)) {
+                 if(!(paramsmobile.tempnumber)) {
                      Actions.registerScreen();
-                     // alert("b4reg"+(mobiledata.mobile));
                  }
                  else{
-                     Actions.homeScreen();
-                     // alert("b4home"+(mobiledata.mobile));
+                     AsyncStorage.getItem('jwttoken')
+                         .then((jwttoken) => {
+                             paramsmobile.jwttoken = jwttoken;
+                         }).done(() =>{
+                             if(!(paramsmobile.jwttoken)){
+                                 Actions.loginScreen(paramsmobile.tempnumber);
+                             }
+                             else{
+                                 fetch('http://35.240.167.48:3037/user/token/verify', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                                     method: 'POST', // USE GET, POST, PUT,ETC
+                                     headers: { //MODIFY HEADERS
+                                         'Accept': 'application/json',
+                                         'Content-Type': 'application/json',
+                                         'Authorization':'Bearer '+paramsmobile.jwttoken,
+                                         //    application/x-www-form-urlencoded
+                                     },
+                                     body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                                         jwtaudience:'SmarTran'  })
+                                 })
+                                     .then((response) => response.json())
+                                     .then((responseJson) => {
+
+                                         if (responseJson.message==="jwt token valid") {
+                                             // Actions.loginScreen({phone:this.props.phone});
+                                             Actions.homeScreen();
+                                             // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                                         }
+                                         else
+                                         {
+                                             Actions.loginScreen(paramsmobile.tempnumber);
+                                             // alert("user creation failed");
+                                         }
+
+
+                                     }).catch((error) => {
+                                     alert(error);
+                                 });
+                             }
+
+                     });
                  }
 
              });
