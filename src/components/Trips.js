@@ -16,263 +16,6 @@ const MARGIN = 40;
 import BottomNavigation, {
     ShiftingTab
 } from 'react-native-material-bottom-navigation'
-
-mapStyle=[
-    {
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#f5f5f5"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#616161"
-            }
-        ]
-    },
-    {
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#f5f5f5"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#bdbdbd"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#d59563"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#eeeeee"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#757575"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#e5e5e5"
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#9e9e9e"
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#ffffff"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#212a37"
-            }
-        ]
-    },
-    {
-        "featureType": "road",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#9ca5b3"
-            }
-        ]
-    },
-    {
-        "featureType": "road.arterial",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#757575"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#dadada"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "geometry.stroke",
-        "stylers": [
-            {
-                "color": "#1f2835"
-            }
-        ]
-    },
-    {
-        "featureType": "road.highway",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#616161"
-            }
-        ]
-    },
-    {
-        "featureType": "road.local",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#9e9e9e"
-            }
-        ]
-    },
-    {
-        "featureType": "transit",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#2f3948"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.line",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#e5e5e5"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#eeeeee"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#d59563"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "color": "#c9c9c9"
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.fill",
-        "stylers": [
-            {
-                "color": "#9e9e9e"
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "labels.text.stroke",
-        "stylers": [
-            {
-                "color": "#17263c"
-            },
-            {
-                "visibility": "off"
-            }
-        ]
-    }
-];
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icons from 'react-native-vector-icons/FontAwesome5';
 import Iccon from 'react-native-vector-icons/SimpleLineIcons';
@@ -293,185 +36,82 @@ import carImg from '../Images/car.png';
 import bus from '../Images/bus.png';
 import bus1 from '../Images/bus1.png';
 import bus2 from '../Images/bus2.png';
+import StepIndicator from 'react-native-step-indicator';
+ 
+const labels = ["Miyapur","Alwin X Road","Hafeezpet","Kondapur","Khothaguda","Botanical Garden","Gachibowli"];
+const customStyles = {
+  stepIndicatorSize: 5,
+  currentStepIndicatorSize:30,
+  separatorStrokeWidth: 2,
+  currentStepStrokeWidth: 3,
+  stepStrokeCurrentColor: '#fe7013',
+  stepStrokeWidth: 3,
+  stepStrokeFinishedColor: '#fe7013',
+  stepStrokeUnFinishedColor: '#aaaaaa',
+  separatorFinishedColor: '#fe7013',
+  separatorUnFinishedColor: '#aaaaaa',
+  stepIndicatorFinishedColor: '#fe7013',
+  stepIndicatorUnFinishedColor: '#ffffff',
+  stepIndicatorCurrentColor: '#fe7013',
+  stepIndicatorLabelFontSize: 13,
+  currentStepIndicatorLabelFontSize: 13,
+  stepIndicatorLabelCurrentColor: '#fe7013',
+  stepIndicatorLabelFinishedColor: '#ffffff',
+  stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+  labelColor: '#999999',
+  labelSize: 10,
+  currentStepLabelColor: '#fe7013'
+}
 
-const p = [
-    {
-        latitude : 17.4792724,
-        longitude : 78.3609791,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
+const labels1 = ["BHEL","Seriligampally","Gulmohar Park","University of Hyd","Gachibowli Stadium","IIIT","Indira Nagar","Gachibowli"];
+const customStyles1 = {
+    stepIndicatorSize: 5,
+    currentStepIndicatorSize:30,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 3,
+    stepStrokeCurrentColor: '#fe7013',
+    stepStrokeWidth: 3,
+    stepStrokeFinishedColor: '#fe7013',
+    stepStrokeUnFinishedColor: '#aaaaaa',
+    separatorFinishedColor: '#fe7013',
+    separatorUnFinishedColor: '#aaaaaa',
+    stepIndicatorFinishedColor: '#fe7013',
+    stepIndicatorUnFinishedColor: '#ffffff',
+    stepIndicatorCurrentColor: '#fe7013',
+    stepIndicatorLabelFontSize: 13,
+    currentStepIndicatorLabelFontSize: 13,
+    stepIndicatorLabelCurrentColor: '#fe7013',
+    stepIndicatorLabelFinishedColor: '#ffffff',
+    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    labelColor: '#999999',
+    labelSize: 10,
+    currentStepLabelColor: '#fe7013'
+}
 
-    {
-        latitude : 17.4731989,
-        longitude : 78.3629754,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.4649845,
-        longitude: 78.3663548,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4589479,
-        longitude : 78.3661461,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4524879,
-        longitude : 78.3627797,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4480068,
-        longitude : 78.3622317,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4429904,
-        longitude : 78.361775,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4372881,
-        longitude :78.3646025,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.4365557,
-        longitude : 78.3648835,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-];
-
-const q = [
-    {
-        latitude : 17.4784975,
-        longitude : 78.3200628,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.4749543,
-        longitude : 78.3235076,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.4653694,
-        longitude: 78.3316511,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4604934,
-        longitude : 78.3358261,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4566017,
-        longitude : 78.3386993,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4501808,
-        longitude : 78.3456047,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4440778,
-        longitude : 78.3549546,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4398828,
-        longitude :78.3599709,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.4365557,
-        longitude : 78.3648835,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-];
-const r = [
-    {
-        latitude : 17.3956523,
-        longitude :78.4335872,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.3957154,
-        longitude : 78.428827,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.3964635,
-        longitude: 78.4212145,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.400393,
-        longitude : 78.4133943,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4020964,
-        longitude : 78.4093425,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4067287,
-        longitude : 78.4013428,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.4123072,
-        longitude : 78.3951848,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-    {
-        latitude : 17.434277,
-        longitude :78.367965,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-
-    {
-        latitude : 17.4365557,
-        longitude : 78.3648835,
-        latitudeDelta : LATITUDE_DELTA,
-        longitudeDelta : LONGITUDE_DELTA,
-    },
-];
+const labels2 = ["Waverock","Wipro","ISB","Infosys","IIIT","Indira Nagar","Gachibowli"];
+const customStyles2 = {
+    stepIndicatorSize: 5,
+    currentStepIndicatorSize:30,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 3,
+    stepStrokeCurrentColor: '#fe7013',
+    stepStrokeWidth: 3,
+    stepStrokeFinishedColor: '#fe7013',
+    stepStrokeUnFinishedColor: '#aaaaaa',
+    separatorFinishedColor: '#fe7013',
+    separatorUnFinishedColor: '#aaaaaa',
+    stepIndicatorFinishedColor: '#fe7013',
+    stepIndicatorUnFinishedColor: '#ffffff',
+    stepIndicatorCurrentColor: '#fe7013',
+    stepIndicatorLabelFontSize: 13,
+    currentStepIndicatorLabelFontSize: 13,
+    stepIndicatorLabelCurrentColor: '#fe7013',
+    stepIndicatorLabelFinishedColor: '#ffffff',
+    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    labelColor: '#999999',
+    labelSize: 10,
+    currentStepLabelColor: '#fe7013'
+}
 
 export default class Trips extends Component {
 
@@ -483,25 +123,17 @@ export default class Trips extends Component {
 
     constructor() {
         super();
-        // this.state= {
-        //     activeTab: 'track',
-        // };
         this.state = {
-            latitude: LATITUDE,
-            longitude: LONGITUDE,
-            routeCoordinates: [],
-            distanceTravelled: 0,
-            prevLatLng: {},
-            coordinate: new AnimatedRegion({
-                latitude: LATITUDE,
-                longitude: LONGITUDE,
-            }),
             activeTab: 'track',
+            currentPosition: 0,
+            currentPosition1: 2,
+            currentPosition2: 4,
+            dummystatevar:''
         };
+
+        this.onPageChange = this.onPageChange.bind(this)
     }
-    // state = {
-    //     activeTab: 'track'
-    // }
+    
     tabs = [
         {
             key:"home",
@@ -583,175 +215,44 @@ export default class Trips extends Component {
             renderIcon={this.renderIcon(tab.icon)}
         />
     )
+    sleep(ms){
+        return new Promise(resolve => setTimeout(resolve,ms))
+    }
+    async componentDidMount() {
 
-    componentDidMount() {
-        // console.log(PermissionsAndroid.PERMISSIONS);
-        try {
-            const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-                'title': 'App Location Permission',
-                'message': 'App needs access to your location ' +
-                           'so you that can view map and track.'
-            }
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log("permissions granted", granted);
-            } else {
-            console.log("permissions denied", denied);
-            }
-        } catch (err) {
-            console.warn(err);
+        for(let i=0; i<6;i++) {
+            await this.sleep(10000);
+            this.onPageChange();
+        }
+        for(let j=0; j<7;j++) {
+            await this.sleep(15000);
+            this.onPageChange1();
         }
 
-        let types = Permissions.getTypes()
-        let canOpenSettings = Permissions.canOpenSettings()
-
-        this.setState({ types, canOpenSettings })
-        this._updatePermissions(types)
-        // AppState.addEventListener('change', this._handleAppStateChange)
-
-        this.watchID = navigator.geolocation.watchPosition(
-            position => {
-                const { coordinate, routeCoordinates, distanceTravelled } =   this.state;
-                const { latitude, longitude } = position.coords;
-
-                const newCoordinate = {
-                    latitude,
-                    longitude
-                };
-                // if (Platform.OS === "android") {
-                    if (this.marker) {
-                        this.marker._component.animateMarkerToCoordinate(
-                            newCoordinate,
-                            500
-                        );
-                    }
-                // } else {
-                //     coordinate.timing(newCoordinate).start();
-                // }
-                this.setState({
-                    latitude,
-                    longitude,
-                    routeCoordinates: routeCoordinates.concat([newCoordinate]),
-                    distanceTravelled:
-                    distanceTravelled + this.calcDistance(newCoordinate),
-                    prevLatLng: newCoordinate
-
-
-                });
-                // Toast.show("Latitute"+this.state.latitude+"Longitude"+this.state.longitude);
-            },
-            error => console.log(error),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-        );
-        // Toast.show("Latitute"+this.state.latitude+"Longitude"+this.state.longitude);
+        for(let k=0; k<6;k++) {
+            await this.sleep(20000);
+            this.onPageChange2();
+        }
     }
 
     // componentWillUnmount() {
     //     AppState.removeEventListener('change', this._handleAppStateChange)
     // }
 
-    // //update permissions when app comes back from settings
-    // _handleAppStateChange = appState => {
-    //     if (appState == 'active') {
-    //         this._updatePermissions(this.state.types)
-    //     }
-    // }
-
-    calcDistance = newLatLng => {
-        const { prevLatLng } = this.state;
-        // return haversine(prevLatLng, newLatLng) || 0;
-    };
-    getMapRegion = () => ({
-        latitude: this.state.latitude,
-        longitude: this.state.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-
-    });
-
-    sleepabit (time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
+    onPageChange = () => {
+        let newposition = this.state.currentPosition +1;
+        this.setState({currentPosition: newposition});
     }
 
-    animateMarker(pt){
-
-        this.marker._component.animateMarkerToCoordinate(pt ,15000);
-
-
-
-    }
-    sleep(ms){
-        return new Promise(resolve => setTimeout(resolve,ms))
-    }
-    async locationmove(){
-        await this.animateMarker(p[1]);
-
-        await this.sleep(20000);
-        await this.animateMarker(p[2]);
-        await this.sleep(20000);
-        await this.animateMarker(p[3]);
-        await this.sleep(20000);
-        await this.animateMarker(p[4]);
-        await this.sleep(20000);
-        await this.animateMarker(p[5]);
-        await this.sleep(20000);
-        await this.animateMarker(p[6]);
-        await this.sleep(20000);
-        await this.animateMarker(p[7]);
+    onPageChange1 = () => {
+       let newposition1 = this.state.currentPosition1 +1;
+        this.setState({currentPosition1: newposition1});
     }
 
-    animateMarker1(pq){
-
-        this.marker1._component.animateMarkerToCoordinate(pq ,15000);
+    onPageChange2 = () => {
+       let newposition2 = this.state.currentPosition2 +1;
+        this.setState({currentPosition2: newposition2});
     }
-    sleep(ms){
-        return new Promise(resolve => setTimeout(resolve,ms))
-    }
-    async locationmovenew(){
-        await this.animateMarker1(q[1]);
-
-        await this.sleep(20000);
-        await this.animateMarker1(q[2]);
-        await this.sleep(20000);
-        await this.animateMarker1(q[3]);
-        await this.sleep(20000);
-        await this.animateMarker1(q[4]);
-        await this.sleep(20000);
-        await this.animateMarker1(q[5]);
-        await this.sleep(20000);
-        await this.animateMarker1(q[6]);
-        await this.sleep(20000);
-        await this.animateMarker1(q[7]);
-    }
-    animateMarker2(pr){
-
-        this.marker2._component.animateMarkerToCoordinate(pr ,15000);
-
-
-
-    }
-    sleep(ms){
-        return new Promise(resolve => setTimeout(resolve,ms))
-    }
-    async locationmovenewmarker(){
-        await this.animateMarker2(r[1]);
-
-        await this.sleep(20000);
-        await this.animateMarker2(r[2]);
-        await this.sleep(20000);
-        await this.animateMarker2(r[3]);
-        await this.sleep(20000);
-        await this.animateMarker2(r[4]);
-        await this.sleep(20000);
-        await this.animateMarker2(r[5]);
-        await this.sleep(20000);
-        await this.animateMarker2(r[6]);
-        await this.sleep(20000);
-        await this.animateMarker2(r[7]);
-    }
-
     render() {
 
         return (
@@ -762,108 +263,45 @@ export default class Trips extends Component {
                         hidden={false}
                         backgroundColor='#0c71b7'/>
                 </View>
+                <View style={[styles.headerview]}>
 
-                <MapView
-                    ref = {(ref)=>this.mapView=ref}
-                    style={styles.map}
-                    showUserLocation={true}
-                    followUserLocation={true}
-                    showsPointsOfInterest={false}
-                    showsIndoors={false}
-                    showsBuildings={false}
-                    showsTraffic={false}
-                    provider={"google"}
-                    loadingEnabled
-                    apikey={"AIzaSyD3a7smG62nUL0Wp4jsP4Iv3rNg763HFyQ"}
-                    // strokeWidth={3}
-                    // mapType={"mutedStandard"}
-                    customMapStyle={mapStyle}
-                    zoomEnabled={true}
-                    scrollEnabled={true}
-                    showsScale={true}
-                    zoomControlEnabled={true}
-                    minZoomLevel={5}
-                    maxZoomLevel={11.8}
-                    region={this.getMapRegion()}
-                    moveOnMarkerPress={false}
-                    onMapReady={()=> {this.locationmove(),this.locationmovenew(),this.locationmovenewmarker()}}
-                    // liteMode={true}
-                >
-                    {/*<MapView.Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} strokeColor='#2eacde' />*/}
-                    <MapView.Marker.Animated
-                        ref={marker => {
-                            this.marker = marker;
-                        }}
-                        coordinate={{
-                            latitude: 17.4853033,
-                            longitude: 78.3573451,
-                        }}
-
-                       centerOffset={{ x: -18, y: -60 }}
-                       anchor={{ x: 0.69, y: 1 }}
-                        image={bus2}
-                        title={"645TA"}
-
-                    >
-                    </MapView.Marker.Animated>
-
-                    <MapView.Marker.Animated
-                        ref={marker1 => {
-                            this.marker1 = marker1;
-                        }}
-                        coordinate={{
-                            latitude: 17.483664,
-                            longitude: 78.316619,
-                        }}
-                        centerOffset={{ x: -18, y: -60 }}
-                        anchor={{ x: 0.69, y: 1 }}
-                        image={bus2}
-                        title={"635MA"}
-                        // onPress={()=> {this.marker1._component.animateMarkerToCoordinate(r[3] ,5000)}}
-                    >
-                    </MapView.Marker.Animated>
-
-                    <MapView.Marker.Animated
-                        ref={marker2 => {
-                            this.marker2 = marker2;
-                        }}
-                        coordinate={{
-                            latitude: 17.3950935,
-                            longitude: 78.4384796,
-                        }}
-                        centerOffset={{ x: -18, y: -60 }}
-                        anchor={{ x: 0.69, y: 1 }}
-                        image={bus2}
-                        title={"625M"}
-                        // onPress={()=> {this.marker2._component.animateMarkerToCoordinate(r[3] ,5000)}}
-                    >
-                    </MapView.Marker.Animated>
-
-                    <Marker
-                    coordinate={{
-                        latitude : 17.4365557,
-                        longitude : 78.3648835,
-                    }}
-                    centerOffset={{ x: -18, y: -60 }}
-                    anchor={{ x: 0.69, y: 1 }}
-                    //image={carImg}
-                    />
-                    {/*<Marker*/}
-                    {/*coordinate={{*/}
-                    {/*latitude: LATITUDE - SPACE,*/}
-                    {/*longitude: LONGITUDE - SPACE,*/}
-                    {/*}}*/}
-                    {/*centerOffset={{ x: -42, y: -60 }}*/}
-                    {/*anchor={{ x: 0.84, y: 1 }}*/}
-                    {/*>*/}
-                    {/*<Callout>*/}
-                    {/*<View>*/}
-                    {/*<Text>This is a plain view</Text>*/}
-                    {/*</View>*/}
-                    {/*</Callout>*/}
-                    {/*</Marker>*/}
-                </MapView>
-
+                {/* <Button style={{height:60,width:width-10,backgroundColor: '#2eacde',
+                            marginTop:10,marginBottom:10,justifyContent:'space-evenly'}}
+                                onPress={this.onPageChange}>
+                                <Text style={{fontSize:20,color:'#FFFFFF'
+                                    ,textAlign:'center',paddingLeft:10}}>Change</Text>
+                        </Button> */}
+                        <View style={{flexDirection:"column"}}>
+                        <Text style={{fontSize:20
+                                    ,textAlign:'left',paddingLeft:10,marginBottom:10}}> 625M </Text>
+                 <StepIndicator
+                    customStyles={customStyles}
+                    stepCount={7}
+                    currentPosition={this.state.currentPosition}
+                    labels={labels}
+                />
+                </View>
+                <View style={{flexDirection:"column",marginTop:10}}>
+                        <Text style={{fontSize:20
+                                    ,textAlign:'left',paddingLeft:10,marginBottom:10}}> 635MA </Text>
+                 <StepIndicator
+                    customStyles={customStyles1}
+                    stepCount={8}
+                    currentPosition={this.state.currentPosition1}
+                    labels={labels1}
+                />
+</View>
+ <View style={{flexDirection:"column",marginTop:10}}>
+                        <Text style={{fontSize:20
+                                    ,textAlign:'left',paddingLeft:10,marginBottom:10}}> 645TA </Text>
+                 <StepIndicator
+                    customStyles={customStyles2}
+                    stepCount={7}
+                    currentPosition={this.state.currentPosition2}
+                    labels={labels2}
+                />
+                </View>
+</View>
                 <View style={[styles.footer]}>
 
                     <BottomNavigation

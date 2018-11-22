@@ -5,42 +5,55 @@ import { Actions, ActionConst } from 'react-native-router-flux';
 // import Registration from "./Registration"; // 4.0.0-beta.31
 var mobiledata={mobile: null,jwttoken:null};
 var paramsmobile={tempnumber:'',jwttoken:null};
+var userdata={mobile: null,jwt:null};
+// var userdata={mobile: null,username:null,age:null,gender:null,email:null,name:null,jwt:null,
+//     countrycode:null};
 export default class SplashScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
         }
-    }
+    };
 
     componentDidMount() {
 
         setTimeout(() => {
-             AsyncStorage.getItem('mobileno')
-                .then((mobileno) => {
-                    paramsmobile.tempnumber = mobileno;
+             AsyncStorage.getItem('userInfo')
+                .then((userInfo) => {
+                    let tempuserdata = userdata;
+                    let  jsonuserinfo = userInfo ? JSON.parse(userInfo) : tempuserdata;
+                   
+                     userdata.mobile = jsonuserinfo.mobile;
+                     userdata.jwt = jsonuserinfo.jwt;
+                    //  userdata.countrycode = jsonuserinfo.countrycode;
                 }).done(() => {
-                 if(!(paramsmobile.tempnumber)) {
+                 if(!(userdata.mobile)) {
                      Actions.registerScreen();
                  }
-                 else{
-                     AsyncStorage.getItem('jwttoken')
-                         .then((jwttoken) => {
-                             paramsmobile.jwttoken = jwttoken;
-                         }).done(() =>{
-                             if(!(paramsmobile.jwttoken)){
-                                 Actions.loginScreen(paramsmobile.tempnumber);
-                             }
+                 else if(!(userdata.jwt)){
+                    Actions.loginScreen();
+                }
+                    //  AsyncStorage.getItem('jwttoken')
+                    //      .then((jwttoken) => {
+                    //          paramsmobile.jwttoken = jwttoken;
+                    //      }).done(() =>{
+                            //  if(!(paramsmobile.jwttoken)){
+                            //      Actions.loginScreen();
+                            //  }
                              else{
-                                 fetch('http://35.240.167.48:3037/user/token/verify', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                                 fetch('https://interface.blueravine.in/smartran/user/token/verify', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                                      method: 'POST', // USE GET, POST, PUT,ETC
                                      headers: { //MODIFY HEADERS
                                          'Accept': 'application/json',
                                          'Content-Type': 'application/json',
-                                         'Authorization':'Bearer '+paramsmobile.jwttoken,
+                                         'Authorization':'Bearer '+userdata.jwt,
+                                         'mobile':userdata.mobile,
+                                         'jwtaudience':'SmarTran'
                                          //    application/x-www-form-urlencoded
+                                        
                                      },
-                                     body: JSON.stringify({mobile:paramsmobile.tempnumber,
-                                         jwtaudience:'SmarTran'  })
+                                    //  body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                                    //      jwtaudience:'SmarTran'  })
                                  })
                                      .then((response) => response.json())
                                      .then((responseJson) => {
@@ -52,7 +65,7 @@ export default class SplashScreen extends Component {
                                          }
                                          else
                                          {
-                                             Actions.loginScreen(paramsmobile.tempnumber);
+                                             Actions.loginScreen();
                                              // alert("user creation failed");
                                          }
 
@@ -62,9 +75,6 @@ export default class SplashScreen extends Component {
                                  });
                              }
 
-                     });
-                 }
-
              });
 
         }, 5000)
@@ -72,10 +82,6 @@ export default class SplashScreen extends Component {
     }
 
     render() {
-        paramsmobile = {};
-        paramsmobile = {
-            mobileno :this.props.tempnumber,
-        };
         return (
             <View style={styles.SplashScreen_ChildView}>
                 <View>
