@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MapView, { AnimatedRegion,Polyline,Marker, Callout, ProviderPropType } from 'react-native-maps';
 import { Image,ScrollView,StyleSheet,TouchableOpacity,StatusBar,Alert,
-    TouchableHighlight,Dimensions,Animated,Easing } from 'react-native';
+    TouchableHighlight,Dimensions,Animated,Easing,PermissionsAndroid } from 'react-native';
 import { Container, Header, Content, Card, CardItem, Thumbnail,Picker,DeckSwiper, Text,Item,Input,View,Fab, Button,  Left, Body, Right,
     Footer, FooterTab} from 'native-base';
 
@@ -585,6 +585,24 @@ export default class Trips extends Component {
     )
 
     componentDidMount() {
+        // console.log(PermissionsAndroid.PERMISSIONS);
+        try {
+            const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+                'title': 'App Location Permission',
+                'message': 'App needs access to your location ' +
+                           'so you that can view map and track.'
+            }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log("permissions granted", granted);
+            } else {
+            console.log("permissions denied", denied);
+            }
+        } catch (err) {
+            console.warn(err);
+        }
 
         let types = Permissions.getTypes()
         let canOpenSettings = Permissions.canOpenSettings()
@@ -640,57 +658,6 @@ export default class Trips extends Component {
     //         this._updatePermissions(this.state.types)
     //     }
     // }
-
-    _openSettings = () =>
-        Permissions.openSettings().then(() => alert('back to app!!'))
-    _updatePermissions = types => {
-        Permissions.checkMultiple(types)
-            .then(status => {
-                if (this.state.isAlways) {
-                    return Permissions.check('location', 'always').then(location => ({
-                        ...status,
-                        location,
-                    }))
-                }
-                return status
-            })
-            .then(status => this.setState({ status }))
-    }
-
-    _requestPermission = permission => {
-        var options
-
-        if (permission == 'location') {
-            options = this.state.isAlways ? 'always' : 'whenInUse'
-        }
-
-        Permissions.request(permission, options)
-            .then(res => {
-                this.setState({
-                    status: { ...this.state.status, [permission]: res },
-                })
-                if (res != 'authorized') {
-                    var buttons = [{ text: 'Cancel', style: 'cancel' }]
-                    if (this.state.canOpenSettings)
-                        buttons.push({
-                            text: 'Open Settings',
-                            onPress: this._openSettings,
-                        })
-
-                    Alert.alert(
-                        'Whoops!',
-                        'There was a problem getting your permission. Please enable it from settings.',
-                        buttons,
-                    )
-                }
-            })
-            .catch(e => console.warn(e))
-    }
-
-    _onLocationSwitchChange = () => {
-        this.setState({ isAlways: !this.state.isAlways })
-        this._updatePermissions(this.state.types)
-    }
 
     calcDistance = newLatLng => {
         const { prevLatLng } = this.state;
