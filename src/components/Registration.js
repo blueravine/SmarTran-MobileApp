@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Navigator,
     Platform, StyleSheet, View, Text,text,TextInput, Image, TouchableOpacity, Alert,AsyncStorage,
-    AppRegistry,TouchableHighlight,StatusBar,Dimensions,Button,ScrollView,Animated,
+    AppRegistry,TouchableHighlight,StatusBar,Dimensions,Keyboard,ActivityIndicator,Button,ScrollView,Animated,
     Easing,BackHandler,
 } from 'react-native';
 import {Card,icon} from 'native-base';
@@ -23,11 +23,15 @@ var paramshome;
 var tempnumber;
 var addnumber;
 var paramsmobile={tempnumber:'',jwttoken:null};
+var userdata={mobile: null,jwt:null};
+// var userdata={mobile: null,username:null,age:null,gender:null,email:null,name:null,jwt:null,
+//     countrycode:null};
 export default class Registration extends Component {
     // public static var=sessionid;
     constructor(props) {
         super(props);
         this.state = {
+            loading:false,
             mobiles: ''
         };
 
@@ -39,47 +43,42 @@ export default class Registration extends Component {
         // this.growAnimated = new Animated.Value(0);
         this._onPress = this._onPress.bind(this);
     }
+    ShowHideActivityIndicator = () =>{
+
+        this.setState({loading: true});
+                setTimeout(() => {
+            this._onPress();
+                    // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        }, 500)
+            // this.setState({loading: false})
+    };
 
     _onPress() {
-        // if (this.state.isLoading) return;
-
-        // this.setState({isLoading: true});
-        // Animated.timing(this.buttonAnimated, {
-        //     toValue: 1,
-        //     duration: 200,
-        //     easing: Easing.linear,
-        // }).start();
-        //
-        // setTimeout(() => {
-        //     this._onGrow();
-        // }, 2000);
-
-        // setTimeout(() => {
-
-        try {
-            AsyncStorage.setItem('mobileno', this.state.mobiles);
-        }
-        catch(error)
-        {
-            alert(error);
-        }
+        Keyboard.dismiss();
+        //         try {
+        //     AsyncStorage.setItem('mobileno', this.state.mobiles);
+        // }
+        // catch(error)
+        // {
+        //     alert(error);
+        // }
 
 
-            fetch('http://35.240.167.48:3037/user/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+            fetch('https://interface.blueravine.in/smartran/user/mobile', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     //    application/x-www-form-urlencoded
                 },
-                body: JSON.stringify({mobile:paramsmobile.tempnumber})
+                body: JSON.stringify({mobile:this.state.mobiles})
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
                     // alert(responseJson.message);
                     if (responseJson.message==="user not found"){
 
-                        fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+paramsmobile.tempnumber+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                        fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/'+this.state.mobiles+'/AUTOGEN/Registration', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                             method: 'GET', // USE GET, POST, PUT,ETC
                             headers: { //MODIFY HEADERS
                                 'Accept': 'application/json',
@@ -92,14 +91,30 @@ export default class Registration extends Component {
                             .then((responseJson) => {
                                 if (responseJson.Status === "Success") {
 
-                                    sessionid = responseJson.Details;
+                                    // userdata.name = this.state.name;
+                                    userdata.mobile = this.state.mobiles;
+                                    // userdata.countrycode = this.state.callingCode;
+                                    // userdata.email = this.state.email;
+                                    // userdata.username = this.state.username;
+                                    // userdata.age = this.state.age;
+                                    // userdata.gender = this.state.gender;
+                                    userdata.jwt = null;
+                            AsyncStorage.setItem('userInfo',JSON.stringify(userdata))
+                                    .then((userInfo) => {
+                                        //do nothing
+                                    }).done(() =>{
+                                        // alert("calling inside fetch user");
+                                        // alert("calling inside fetch user");
+                                        sessionid = responseJson.Details;
 
-                                    Actions.otpScreen(paramsmobile);
-                                    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-
+                                        Actions.otpScreen();
+                                        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    
+                                });
+                                   
                                 }
                                 else {
-
+                                    alert(responseJson.message);
                                 }
 
                             })
@@ -110,82 +125,31 @@ export default class Registration extends Component {
                         // alert("all tick"+(paramsmobile.tempnumber));
                     }
                     else   {
-                        AsyncStorage.getItem('jwttoken')
-                            .then((jwttoken) => {
-                                paramsmobile.jwttoken = jwttoken;
+
+                                // userdata.name = responseJson.User.name;
+                                userdata.mobile = responseJson.User.mobile;
+                                // userdata.countrycode = responseJson.User.countrycode;
+                                // userdata.email = responseJson.User.email;
+                                // userdata.username = responseJson.User.username;
+                                // userdata.age = responseJson.User.age;
+                                // userdata.gender = responseJson.User.gender;
+                                userdata.jwt = null;
+                        AsyncStorage.setItem('userInfo',JSON.stringify(userdata))
+                            .then((userInfo) => {
+                                
                             }).done(() =>{
-                            if(!(paramsmobile.jwttoken)){
-                                Actions.loginScreen(paramsmobile.tempnumber);
-                            }
-                            else{
-                                fetch('http://35.240.167.48:3037/user/token/verify', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
-                                    method: 'POST', // USE GET, POST, PUT,ETC
-                                    headers: { //MODIFY HEADERS
-                                        'Accept': 'application/json',
-                                        'Content-Type': 'application/json',
-                                        'Authorization':'Bearer '+paramsmobile.jwttoken,
-                                        //    application/x-www-form-urlencoded
-                                    },
-                                    body: JSON.stringify({mobile:paramsmobile.tempnumber,
-                                        jwtaudience:'SmarTran'  })
-                                })
-                                    .then((response) => response.json())
-                                    .then((responseJson) => {
-
-                                        if (responseJson.message==="jwt token valid") {
-                                            // Actions.loginScreen({phone:this.props.phone});
-                                            Actions.homeScreen(paramsmobile);
-                                            // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-                                        }
-                                        else
-                                        {
-                                            Actions.loginScreen(paramsmobile.tempnumber);
-                                            // alert("user creation failed");
-                                        }
-
-
-                                    }).catch((error) => {
-                                    alert(error);
-                                });
-                            }
-
+                           
+                                Actions.loginScreen();
+                            
+    
                         });
-
                     }
 
                 })
                 .catch((error) => {
                     console.error(error);
                 });
-
-            // this.setState({isLoading: false});
-            // this.buttonAnimated.setValue(0);
-            // this.growAnimated.setValue(0);
-        // }, 2300);
     }
-
-    // _onGrow() {
-    //     Animated.timing(this.growAnimated, {
-    //         toValue: 1,
-    //         duration: 200,
-    //         easing: Easing.linear,
-    //     }).start();
-    // }
-    // savenumber(currentnumber) {
-    //     try {
-    //
-    //         // AsyncStorage.getItem('mobileno')
-    //         //     .then((mobileno) => {
-    //         //         addnumber = mobileno;
-    //                 // Toast.show("tickets " +c ,Toast.LONG);
-    //                 // addnumber.push(currentnumber);
-    //                 AsyncStorage.setItem('mobileno', currentnumber);
-    //             // });
-    //
-    //     }catch(error) {
-    //         alert(error)
-    //     }
-    // }
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
@@ -215,9 +179,9 @@ export default class Registration extends Component {
 
     render() {
         // paramsmobile = {};
-        paramsmobile = {
-            tempnumber:this.state.mobiles,
-    };
+    //     paramsmobile = {
+    //         tempnumber:this.state.mobiles,
+    // };
         // const changeWidth = this.buttonAnimated.interpolate({
         //     inputRange: [0, 1],
         //     outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
@@ -278,7 +242,8 @@ export default class Registration extends Component {
                                 <TouchableOpacity
                                     style={styles.button}
                                     // onPress={this.onButtonPress}
-                                    onPress={this._onPress}>
+                                    // onPress={this._onPress}
+                                    onPress={this.ShowHideActivityIndicator}>
                                     {/*onPress={() => {this.savenumber(tempnumber), (this._onPress)}}>*/}
                                     {/*onPress={() => {this.savenumber(tempnumber), (this._onPress)}}*/}
                                     {/*activeOpacity={1}>*/}
@@ -320,10 +285,12 @@ export default class Registration extends Component {
                         </View>
 
                     </Card>
-
-
-
-
+                    {
+                        // Here the ? Question Mark represent the ternary operator.
+                        //style={{backgroundColor:'#FFFFFF',width:width-220}}
+                        this.state.loading ?  <ActivityIndicator color = '#2eacde'
+                                                                 size = "large" style={{padding: 20}} /> : null
+                    }
 
                 </View>
 

@@ -74,6 +74,7 @@
     "react-native-snap-carousel": "^3.7.2",
     "react-native-spinkit": "^1.1.1",
     "react-native-sqlite-storage": "^3.3.6",
+    "react-native-step-indicator": "0.0.9",
     "react-native-svg": "^6.5.2",
     "react-native-swipe-cards": "^0.1.1",
     "react-native-swiper": "^1.5.13",

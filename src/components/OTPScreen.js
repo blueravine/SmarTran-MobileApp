@@ -9,9 +9,9 @@ import PropTypes from 'prop-types';
     View,
     Image,
      Animated,
-     TouchableOpacity,AsyncStorage,BackHandler,
+     TouchableOpacity,AsyncStorage,BackHandler,ActivityIndicator,
   Easing,
-    TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert
+    TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert,Keyboard
   } from 'react-native';
 import {Card,icon} from 'native-base';
 import Button from 'react-native-button'; // 2.3.0
@@ -32,6 +32,9 @@ const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 import { StackNavigator } from 'react-navigation';
 var paramsmobile={tempnumber:''};
+var userdata={mobile: null,jwt:null};
+// var userdata={mobile: null,username:null,age:null,gender:null,email:null,name:null,jwt:null,
+//     countrycode:null};
 var addmynumber;
 export default class OTPScreen extends Component {
 
@@ -39,7 +42,8 @@ export default class OTPScreen extends Component {
 constructor(props) {
     super(props);
     this.state={
-        mobile:'',
+        loading: false,
+        mobiles:'',
         password:'',
         jwtaud:'',
         otp: '',
@@ -60,30 +64,19 @@ constructor(props) {
         // function used to change password visibility
         this.setState({ hidePassword: !this.state.hidePassword });
     }
+    ShowHideActivityIndicator = () =>{
+
+        this.setState({loading: true});
+        setTimeout(() => {
+            this._onPress()
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        }, 2000)
+        // this.setState({loading: false})
+    };
+
   _onPress() {
-    // if (this.state.isLoading) return;
-    //
-    // this.setState({isLoading: true});
-    // Animated.timing(this.buttonAnimated, {
-    //   toValue: 1,
-    //   duration: 200,
-    //   easing: Easing.linear,
-    // }).start();
-    //
-    // setTimeout(() => {
-    //   this._onGrow();
-    // }, 2000);
-
-    // setTimeout(() => {
-    //   try {
-    //       AsyncStorage.setItem('jwttoken', this.state.token);
-    //   }
-    //   catch(error)
-    //   {
-    //       alert(error);
-    //   }
-
-        fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/VERIFY/'+sessionid+'/'+this.state.otp, { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+    Keyboard.dismiss();
+       fetch('https://2factor.in/API/V1/88712423-890f-11e8-a895-0200cd936042/SMS/VERIFY/'+sessionid+'/'+this.state.otp, { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'GET', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
                 'Accept': 'application/json',
@@ -94,14 +87,14 @@ constructor(props) {
             .then((responseJson) => {
                 if((responseJson.Status==="Success") && (responseJson.Details==="OTP Matched")){
 
-                    fetch('http://35.240.167.48:3037/user/register', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                    fetch('https://interface.blueravine.in/smartran/user/register', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                         method: 'POST', // USE GET, POST, PUT,ETC
                         headers: { //MODIFY HEADERS
                             'Accept': 'application/json',
                             'Content-Type': 'application/json',
                             //    application/x-www-form-urlencoded
                         },
-                        body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                        body: JSON.stringify({mobile:userdata.mobile,
                                               password:this.state.password })
                     })
                         .then((response) => response.json())
@@ -109,14 +102,14 @@ constructor(props) {
 
                             if (responseJson.message==="user created") {
                                 // Actions.loginScreen({phone:this.props.phone});
-                                fetch('http://35.240.167.48:3037/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+                                fetch('https://interface.blueravine.in/smartran/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                                     method: 'POST', // USE GET, POST, PUT,ETC
                                     headers: { //MODIFY HEADERS
                                         'Accept': 'application/json',
                                         'Content-Type': 'application/json',
                                         //    application/x-www-form-urlencoded
                                     },
-                                    body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                                    body: JSON.stringify({mobile:userdata.mobile,
                                                           password: this.state.password,
                                                           jwtaudience:'SmarTran'  })
                                 })
@@ -124,14 +117,18 @@ constructor(props) {
                                     .then((responseJson) => {
 
                                         if (responseJson.message==="user authenticated") {
-                                            // Actions.loginScreen({phone:this.props.phone});
-                                            AsyncStorage.setItem('jwttoken', responseJson.token);
-                                            Actions.homeScreen(paramsmobile);
-                                            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                                            userdata.jwt = responseJson.token;
+                                            AsyncStorage.setItem('userInfo',JSON.stringify(userdata))
+                                                .then((userInfo) => {
+                                                    
+                                                }).done(() =>{
+                                                    Actions.homeScreen();
+                                        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                                    });
                                         }
                                         else
                                         {
-                                            alert("user creation failed");
+                                            alert(responseJson.message);
                                         }
 
 
@@ -143,7 +140,7 @@ constructor(props) {
                             }
                             else
                             {
-                                alert("user creation failed");
+                                alert("An error occurred while authenticating user! Please try again..");
                             }
 
 
@@ -169,35 +166,7 @@ constructor(props) {
             .catch((error) => {
                 console.error(error);
             });
-
-    //     this.setState({isLoading: false});
-    //   this.buttonAnimated.setValue(0);
-    //   this.growAnimated.setValue(0);
-    // }, 2300);
   }
-
-  // _onGrow() {
-  //   Animated.timing(this.growAnimated, {
-  //     toValue: 1,
-  //     duration: 200,
-  //     easing: Easing.linear,
-  //   }).start();
-  // }
-    // savemynumber(currentmobnumber) {
-    //     try {
-    //
-    //         // AsyncStorage.getItem('mobileno')
-    //         //     .then((mobileno) => {
-    //         //         addmynumber = mobileno;
-    //         // Toast.show("tickets " +c ,Toast.LONG);
-    //         // addmynumber.push(currentmobnumber);
-    //         AsyncStorage.setItem('mobileno', currentmobnumber);
-    //         // });
-    //
-    //     } catch (error) {
-    //         alert(error)
-    //     }
-    // }
     _onLinkPress(phone){
         // Actions.otpScreen({texts: this.state.mobiles });
         // Toast.show('my no'+this.state.mobile);
@@ -230,7 +199,26 @@ constructor(props) {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
+        await AsyncStorage.getItem('userInfo')
+        .then((userInfo) => {
+            let tempuserdata = userdata;
+            let  jsonuserinfo = userInfo ? JSON.parse(userInfo) : tempuserdata;
+            // userdata.name = jsonuserinfo.name;
+            userdata.mobile = jsonuserinfo.mobile;
+            this.setState({mobiles : jsonuserinfo.mobile});
+            // this.setState({countrycode : jsonuserinfo.countrycode});
+            // this.setState({username : jsonuserinfo.username});
+            // userdata.countrycode = jsonuserinfo.countrycode;
+            // userdata.email = jsonuserinfo.email;
+            // userdata.username = jsonuserinfo.username;
+            // userdata.age = jsonuserinfo.age;
+            // userdata.gender = jsonuserinfo.gender;
+            userdata.jwt = jsonuserinfo.jwt;
+            // alert(userdata.mobile);
+        }).done(() => {
+            // alert((this.state.phone));
+        });
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
 
@@ -258,9 +246,9 @@ constructor(props) {
 
    render() {
        // paramsmobile = {};
-       paramsmobile = {
-           tempnumber:this.props.tempnumber,
-       };
+    //    paramsmobile = {
+    //        tempnumber:this.props.tempnumber,
+    //    };
  // const changeWidth = this.buttonAnimated.interpolate({
  //      inputRange: [0, 1],
  //      outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
@@ -303,13 +291,11 @@ constructor(props) {
                             selectTextOnFocus={false}
                             placeholderTextColor="#2CA8DB" 
                             returnKeyType={"done"} 
+                            value={this.state.mobiles}
                             selectionColor="#2CA8DB"
-                            underlineColorAndroid="#fafafa"
-                            // value={this.state.mobile}
-                            // onChangeText={(mobile) => this.setState({mobile})}
-                            maxLength={10}                           
+                            underlineColorAndroid="#fafafa"                    
                           style={{justifyContent: 'flex-end',}}>
-                            {paramsmobile.tempnumber}
+                            {/* {paramsmobile.tempnumber} */}
                         </TextInput>
                   </View>
                  </View>
@@ -381,7 +367,8 @@ constructor(props) {
         {/*<Animated.View style={{width: changeWidth}}>*/}
           <TouchableOpacity
             style={styles.button}
-            onPress={this._onPress}>
+            // onPress={this._onPress}
+            onPress={this.ShowHideActivityIndicator}>
             {/*activeOpacity={1}>*/}
             {/*{this.state.isLoading ? (*/}
               {/*<Image source={spinner} style={styles.image} />*/}
@@ -407,6 +394,12 @@ constructor(props) {
         {/*</Animated.View>*/}
       {/*</View>*/}
                </View>
+               {
+                        // Here the ? Question Mark represent the ternary operator.
+                        //style={{backgroundColor:'#FFFFFF',width:width-220}}
+                        this.state.loading ?  <ActivityIndicator color = '#2eacde'
+                                                                 size = "large" style={{padding: 20}} /> : null
+                    }
            </Card>
        </View>
             </View>

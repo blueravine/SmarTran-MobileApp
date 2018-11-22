@@ -9,7 +9,7 @@ import {
     View,
     Image,
     TouchableOpacity,
-    TouchableHighlight,StatusBar,TextInput,Dimensions,ScrollView,Alert,Animated,Easing
+    TouchableHighlight,StatusBar,BackHandler,AsyncStorage,TextInput,Dimensions,ScrollView,Alert,Animated,Easing,Keyboard,ActivityIndicator
 } from 'react-native';
 import {Card,icon} from 'native-base';
 import Button from 'react-native-button'; // 2.3.0
@@ -25,6 +25,9 @@ const MARGIN = 40;
 // var newno;
 var paramshome;
 var paramsmobile={tempnumber:''};
+var userdata={mobile: null,jwt:null};
+// var userdata={mobile: null,username:null,age:null,gender:null,email:null,name:null,jwt:null,
+//     countrycode:null};
 export default class LoginScreen extends Component {
 
 
@@ -33,12 +36,14 @@ export default class LoginScreen extends Component {
         super();
 
         this.state = {
-            isLoading: false
+            loading:false,
+            mobiles:'',
+            password: '',
         };
 
-        this.buttonAnimated = new Animated.Value(0);
-        this.growAnimated = new Animated.Value(0);
-        this._onPress = this._onPress.bind(this);
+        // this.buttonAnimated = new Animated.Value(0);
+        // this.growAnimated = new Animated.Value(0);
+        this._onPressLogin = this._onPressLogin.bind(this);
         this.state = { hidePassword: true }
     }
     managePasswordVisibility = () =>
@@ -46,47 +51,47 @@ export default class LoginScreen extends Component {
         // function used to change password visibility
         this.setState({ hidePassword: !this.state.hidePassword });
     }
+    ShowHideActivityIndicator = () =>{
+
+        this.setState({loading: true});
+        setTimeout(() => {
+            this._onPressLogin();
+            BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        }, 500)
+        // this.setState({loading: false})
+    };
 
     //{ this.props.navigation.state.params.mobiles }
-    _onPress() {
-        // if (this.state.isLoading) return;
-        //
-        // this.setState({isLoading: true});
-        // Animated.timing(this.buttonAnimated, {
-        //     toValue: 1,
-        //     duration: 200,
-        //     easing: Easing.linear,
-        // }).start();
-        //
-        // setTimeout(() => {
-        //     this._onGrow();
-        // }, 2000);
-
-        setTimeout(() => {
-            // Actions.secondScreen();
-            fetch('http://35.240.167.48:3037/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+    _onPressLogin() {
+        Keyboard.dismiss();
+            fetch('https://interface.blueravine.in/smartran/user/login', { // USE THE LINK TO THE SERVER YOU'RE USING mobile
                 method: 'POST', // USE GET, POST, PUT,ETC
                 headers: { //MODIFY HEADERS
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     //    application/x-www-form-urlencoded
                 },
-                body: JSON.stringify({mobile:paramsmobile.tempnumber,
+                body: JSON.stringify({mobile:userdata.mobile,
                     password: this.state.password,
-                    jwtaudience:'SmarTran'  })
+                    jwtaudience:"SmarTran"  })
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
 
                     if (responseJson.message==="user authenticated") {
-                        // Actions.loginScreen({phone:this.props.phone});
-                        AsyncStorage.setItem('jwttoken', responseJson.token);
-                        Actions.homeScreen(paramsmobile);
-                        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+                        userdata.jwt = responseJson.token;
+                        AsyncStorage.setItem('userInfo',JSON.stringify(userdata))
+                        .then((userInfo) => {
+                            
+                        }).done(() =>{
+                            Actions.homeScreen();
+                        });
+                        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
                     }
                     else
                     {
-                        alert("user authentication failed");
+                        // alert("user authentication failed");
+                        alert(responseJson.message);
                     }
 
 
@@ -96,32 +101,36 @@ export default class LoginScreen extends Component {
             // this.setState({isLoading: false});
             // this.buttonAnimated.setValue(0);
             // this.growAnimated.setValue(0);
-        }, 2300);
+     
     }
-
-    _onGrow() {
-        Animated.timing(this.growAnimated, {
-            toValue: 1,
-            duration: 200,
-            easing: Easing.linear,
-        }).start();
+    async componentDidMount(){
+        await AsyncStorage.getItem('userInfo')
+        .then((userInfo) => {
+            let tempuserdata = userdata;
+            let  jsonuserinfo = userInfo ? JSON.parse(userInfo) : tempuserdata;
+            // userdata.name = jsonuserinfo.name;
+            this.setState({
+                mobiles: jsonuserinfo.mobile.toString()
+            });
+            // alert(this.state.mobiles);
+            userdata.mobile = jsonuserinfo.mobile;
+            // this.setState({countrycode : jsonuserinfo.countrycode});
+            // this.setState({username : jsonuserinfo.username});
+            // userdata.countrycode = jsonuserinfo.countrycode;
+            // userdata.email = jsonuserinfo.email;
+            // userdata.username = jsonuserinfo.username;
+            // userdata.age = jsonuserinfo.age;
+            // userdata.gender = jsonuserinfo.gender;
+            userdata.jwt = jsonuserinfo.jwt;
+            // alert(jsonuserinfo.mobile);
+        }).done(() => {
+            // alert((this.state.phone));
+            // alert(userdata.mobile);
+        });
     }
 
     render() {
 
-        paramsmobile = {
-            tempnumber:this.props.tempnumber,
-        };
-        const changeWidth = this.buttonAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [DEVICE_WIDTH - MARGIN, MARGIN],
-        });
-        const changeScale = this.growAnimated.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, MARGIN],
-        });
-        //     var width = Dimensions.get('window').width; //full width
-        // var height = Dimensions.get('window').height; //full height
         return (
             <View style={styles.container}>
                 <View>
@@ -150,17 +159,15 @@ export default class LoginScreen extends Component {
                                 placeholder=" mobile number  "
                                 keyboardType='phone-pad'
                                 editable={false}
+                                value={this.state.mobiles}
                                 selectTextOnFocus={false}
                                 placeholderTextColor="#2CA8DB"
                                 returnKeyType={"done"}
                                 selectionColor="#2CA8DB"
                                 underlineColorAndroid="#fafafa"
-                                maxLength={10}
-                                // value={this.state.phone}
-                                // onChangeText={(phone) => this.setState({phone})}
+                                // maxLength={10}
                                 style={{justifyContent: 'flex-end',}}>
-                                {paramsmobile.tempnumber}
-                                {/*{this.state.phone}*/}
+                               
                             </TextInput>
                         </View>
                     </View>
@@ -184,6 +191,7 @@ export default class LoginScreen extends Component {
                                     returnKeyType={"done"}
                                     selectionColor="#2CA8DB"
                                     maxLength={12}
+                                    onChangeText={(password) => this.setState({password})}
                                     // Making the Text Input Text Hidden.
                                     secureTextEntry = { this.state.hidePassword }
                                     style={{justifyContent: 'flex-end',}}/>
@@ -195,11 +203,11 @@ export default class LoginScreen extends Component {
                         </View>
                     </View>
 
-                    <Animated.View >
+                    {/* <Animated.View > */}
                         <TouchableOpacity
                             style={styles.button}
                             // onPress={this.onButtonPress}
-                            onPress={this._onPress}>
+                            onPress={this.ShowHideActivityIndicator}>
                             {/*activeOpacity={1}>*/}
                             {/*{*/}
 
@@ -213,11 +221,16 @@ export default class LoginScreen extends Component {
                             </View>
                             {/*}*/}
                         </TouchableOpacity>
-                        <Animated.View
+                        {/* <Animated.View
                             style={[styles.circle, {transform: [{scale: changeScale}]}]}
-                        />
-                    </Animated.View>
-
+                        /> */}
+                    {/* </Animated.View> */}
+                    {
+                        // Here the ? Question Mark represent the ternary operator.
+                        //style={{backgroundColor:'#FFFFFF',width:width-220}}
+                        this.state.loading ?  <ActivityIndicator color = '#2eacde'
+                                                                 size = "large" style={{padding: 20}} /> : null
+                    }
                     {/*<Text style={styles.fbLoginButton} onPress={this._onPress}*/}
                     {/*>Login</Text>*/}
 

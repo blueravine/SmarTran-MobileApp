@@ -45,7 +45,11 @@ const search_magnifier_black = require('../Images/search_magnifier_black.png');
 const search_magnifier_blue = require('../Images/search_magnifier_blue.png');
 import Icoons from 'react-native-vector-icons/FontAwesome';
 var params;
-var favoriteticketdata={mobile: "9999988888",stops:[],routes:[],jwttoken:null};
+var favoriteticketdata={stops:[],routes:[]};
+// var favoriteticketdata={mobile: "9999988888",stops:[],routes:[],jwttoken:null};
+var userdata={mobile: null,jwt:null};
+// var userdata={mobile: null,username:null,age:null,gender:null,email:null,name:null,jwt:null,
+//     countrycode:null};
 const drawerStyles = {
     drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
     main: {paddingLeft: 3},
@@ -200,55 +204,6 @@ export default class Home extends Component {
         }
     ];
 
-    // renderBottomComponent(){
-    //
-    // if(this.state.viewSection) {
-    //         return (
-    //             <ScrollView
-    //                 style={styles.container1}
-    //                 ref={(scrollView) => { this.scrollView = scrollView; }}
-    //                 //pagingEnabled={true}
-    //                 horizontal= {true}
-    //                 decelerationRate={0}
-    //                 snapToInterval={width - 60}
-    //                 snapToAlignment={"center"}
-    //                 contentInset={{
-    //                     top:0,
-    //                     left: 30,
-    //                     bottom:0,
-    //                     right: 30,
-    //                 }}>
-    //                 <Card style={styles.view} >
-    //                     <Text style={{textAlign:'center'}}>
-    //                         Date:date
-    //                     </Text>
-    //                     <Text style={{textAlign:'center'}}>
-    //                         From:Location
-    //                     </Text>
-    //                     <Text style={{textAlign:'center'}}>
-    //                         To:Location
-    //                     </Text>
-    //                 </Card>
-    //                 <Card style={styles.view2} >
-    //                 </Card>
-    //                 <Card style={styles.view} >
-    //                 </Card>
-    //                 <Card style={styles.view2} >
-    //                 </Card>
-    //             </ScrollView>
-    //         );
-    //     }
-    // }
-    // buttonPress=()=>{
-    //     // this.scrollView.scrollTo({x: -30},1);
-    //     this.setState({viewSection:true})
-    //     // this.setState({viewSection: !this.state.viewSection})
-    // };
-
-
-    // state = {
-    //     activeTab: this.tabs[0].key
-    // }
     renderIcon = icon => ({ isActive }) => (
         <Icon size={24} color="white" name={icon} />
 
@@ -264,12 +219,12 @@ export default class Home extends Component {
         />
     );
 
-    onValueChange (value: string) {
+    onValueChange (value) {
         this.setState({
             selected1 : value
         });
     }
-    onChangeValue (value: string) {
+    onChangeValue (value) {
         this.setState({
             selected2 : value
         });
@@ -286,7 +241,7 @@ export default class Home extends Component {
         this._hideDateTimePicker();
     };
 
-    handleChange(value: string) {
+    handleChange(value) {
         this.setState({
             selected: value
         });
@@ -296,21 +251,6 @@ export default class Home extends Component {
         let temploc=this.state.picked1;
         this.setState({picked1: this.state.picked2, picked2:temploc});
     };
-
-
-    // sendSMSFunction() {
-    //     SendSMS.send(9885638104, "9885638104", "Hello.. Thank you for using SmarTran booking service ! \nYour ticket for Jedimetla to mehdipatnam for 18 Aug 2018\n" +
-    //         "at 5:30 have been generated open the link fro seeing th qr code for scanning\n" +
-    //         "  Have a nice day.",
-    //         (msg)=>{
-    //             Toast.show(msg, Toast.SHORT);
-    //         }
-    //     );
-    // Actions.ticketScreen();
-    // }
-    // setFromLoc(){
-    //     this.setState({selected1: ''});
-    // }
     _handleTabPress(pressedKey) {
         switch (pressedKey) {
             case 'home':
@@ -366,23 +306,7 @@ export default class Home extends Component {
             pickervisible2: false
         });
     };
-
-    // favouritedata(recivedindex){
-    //     // this.setState({
-    //     //     picked1: favoriteticketdata.routes[recivedindex].from
-    //     // });
-    //     // this.setState({
-    //     //     picked2: favoriteticketdata.routes[recivedindex].to
-    //     // });
-    //     params.fromLoc= favoriteticketdata.routes[recivedindex].from;
-    //     params.toLoc= favoriteticketdata.routes[recivedindex].to;
-    //
-    //     alert("all tick"+recivedindex+"from"+params.fromLoc+"to"+params.toLoc+"date"+params.tripdte);
-    //
-    // };
-
-
-    ShowHideActivityIndicator = () =>{
+     ShowHideActivityIndicator = () =>{
 
         this.setState({loading: true});
                 setTimeout(() => {
@@ -407,26 +331,44 @@ export default class Home extends Component {
                 // this.setState({favticket: favoriteticketdata});
                 // alert("all tick"+JSON.stringify(favoriteticketdata.routes));
             }).done();
-        await AsyncStorage.getItem('mobileno')
-            .then((mobileno) => {
-                // let tempfavticket = favoriteticketdata;
-                // alert("all tick"+favs+"favticket");
-                favoriteticketdata.mobile = mobileno;
-                // this.setState({favticket: favoriteticketdata});
-                // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
-                // alert("all tick"+(favoriteticketdata.mobile));
+            await  AsyncStorage.getItem('userInfo')
+            .then((userInfo) => {
+                // alert(JSON.stringify(userInfo));
+                let tempuserdata = userdata;
+               let  jsonuserinfo = userInfo ? JSON.parse(userInfo) : tempuserdata;
+              
+               userdata =jsonuserinfo;
+            //    userdata.name = jsonuserinfo.name;
+            //     userdata.mobile = jsonuserinfo.mobile;
+            //     userdata.jwt = jsonuserinfo.jwt;
+            //     userdata.countrycode = jsonuserinfo.countrycode;
+            //     userdata.email = jsonuserinfo.email;
+            //     userdata.username = jsonuserinfo.username;
+            //     userdata.age = jsonuserinfo.age;
+            //     userdata.gender = jsonuserinfo.gender;
+                // alert((userdata.mobile)+(userdata.jwt))
                 BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
             }).done();
-        await AsyncStorage.getItem('jwttoken')
-            .then((jwttoken) => {
-                // let tempfavticket = favoriteticketdata;
-                // alert("all tick"+favs+"favticket");
-                favoriteticketdata.jwttoken = jwttoken;
-                // this.setState({favticket: favoriteticketdata});
-                // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
-                // alert("all tick"+(favoriteticketdata.mobile));
-                BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-            }).done();
+        // await AsyncStorage.getItem('mobileno')
+        //     .then((mobileno) => {
+        //         // let tempfavticket = favoriteticketdata;
+        //         // alert("all tick"+favs+"favticket");
+        //         favoriteticketdata.mobile = mobileno;
+        //         // this.setState({favticket: favoriteticketdata});
+        //         // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
+        //         // alert("all tick"+(favoriteticketdata.mobile));
+        //         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        //     }).done();
+        // await AsyncStorage.getItem('jwttoken')
+        //     .then((jwttoken) => {
+        //         // let tempfavticket = favoriteticketdata;
+        //         // alert("all tick"+favs+"favticket");
+        //         favoriteticketdata.jwttoken = jwttoken;
+        //         // this.setState({favticket: favoriteticketdata});
+        //         // AsyncStorage.setItem('number', (favoriteticketdata.mobile));
+        //         // alert("all tick"+(favoriteticketdata.mobile));
+        //         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        //     }).done();
 
         // AppState.addEventListener('change',this.handleAppStateChange);
     }
@@ -506,7 +448,7 @@ export default class Home extends Component {
 
          };
 
-        fetch("http://35.240.167.48:3037/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
+        fetch("https://interface.blueravine.in/smartran/poi/name", { // USE THE LINK TO THE SERVER YOU'RE USING mobile
             method: 'POST', // USE GET, POST, PUT,ETC
             headers: { //MODIFY HEADERS
                 'Accept': 'application/json',
