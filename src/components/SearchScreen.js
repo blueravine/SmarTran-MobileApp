@@ -568,7 +568,7 @@ export default class SearchScreen extends Component {
                                 <View style={{
                                     flexDirection: "column",
                                     justifyContent: 'space-evenly',
-                                    marginLeft: 40,
+                                    marginLeft: 45,
                                     marginTop: 8
                                 }}>
 
@@ -588,7 +588,7 @@ export default class SearchScreen extends Component {
                                 <View style={{
                                     flexDirection: "column",
                                     justifyContent: 'space-evenly',
-                                    marginLeft: 18,
+                                    marginLeft: 28,
                                     marginTop: 8
                                 }}>
                                     {(currentroutetiming.acroute) &&
