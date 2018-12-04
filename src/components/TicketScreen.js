@@ -345,10 +345,10 @@ export default class TicketScreen extends Component {
                                     marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
                                 }}>{ticketkeys[4]}</Text>
                                 <Text note style={{
-                                    marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
+                                    marginTop: 5, fontSize: 18, color: '#000', justifyContent: 'flex-start'
                                 }}>{ticketkeys[5]}</Text>
                                 <Text note style={{
-                                    marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
+                                    marginTop: 5, fontSize: 18, color: '#000', justifyContent: 'flex-start'
                                 }}>{ticketkeys[6]}</Text>
                                 {/*<Text note style={{*/}
                                 {/*marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'*/}
@@ -380,7 +380,7 @@ export default class TicketScreen extends Component {
                                     }}>{":\u20B9" + AllTicket[ticketkeys[3]]}/-</Text>
                                     <Text note style={{
                                         marginTop: 5, fontSize: 14, color: '#000', justifyContent: 'flex-start'
-                                    }}>{"    :  " + AllTicket[ticketkeys[4]]}</Text>
+                                    }}>{":  " + AllTicket[ticketkeys[4]]}</Text>
                                     <Text note style={{
                                         marginTop: 5, fontSize: 18, color: '#53b73a', justifyContent: 'flex-start'
                                     }}>{":" + AllTicket[ticketkeys[5]]}</Text>
